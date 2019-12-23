@@ -18,7 +18,7 @@
       <v-toolbar-items>
         <v-btn text :to="{ name: '2read' }">2Read</v-btn>
         <v-divider vertical></v-divider>
-        <v-btn text>Reading</v-btn>
+        <v-btn text :to="{ name: 'reading' }">Reading</v-btn>
         <v-divider vertical></v-divider>
         <v-btn text>Finished</v-btn>
       </v-toolbar-items>
