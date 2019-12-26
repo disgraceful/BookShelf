@@ -5,6 +5,7 @@
 <script>
 import AuthComponent from "./AuthComponent";
 export default {
+  methods: {},
   components: {
     "my-auth-component": AuthComponent
   }

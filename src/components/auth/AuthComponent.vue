@@ -50,10 +50,14 @@
               </v-col>
               <v-col>
                 <v-flex xs12>
-                  <v-btn class="mr-3" :disabled="!valid" @click="onSignUp()"
+                  <v-btn class="mr-3" :disabled="!valid" @click="onSubmit()"
                     >Submit</v-btn
                   >
-                  <v-btn class="mr-3" color="primary" @click="toLogin()"
+                  <v-btn
+                    class="mr-3"
+                    color="primary"
+                    :to="isRegister ? '/login' : '/register'"
+                    v-text="isRegister ? 'Login' : 'Register'"
                     >Login</v-btn
                   >
                   <v-btn
@@ -67,6 +71,7 @@
               </v-col>
             </v-form>
           </v-container>
+          {{ response }}
         </v-card>
       </v-flex>
     </v-row>
@@ -88,13 +93,31 @@ export default {
           value.length >= 6 || "Passwords must be 6 characters or longer",
         confirmPassword: value =>
           value === this.password || "Passwords do not match"
-      }
+      },
+      response: ""
     };
   },
   props: ["loginInfo"],
   methods: {
-    onSignUp() {},
-    toLogin() {}
+    toLogin() {},
+    onSubmit() {
+      if (this.isRegister) {
+        this.signUp();
+      } else {
+        this.signIn();
+      }
+    },
+    signIn() {
+      this.$http
+        .post("http://localhost:4200/auth/login", {
+          email: this.email,
+          password: this.password
+        })
+        .then(response => {
+          this.response = response.body;
+        });
+    },
+    signUp() {}
   },
   computed: {
     isRegister() {
