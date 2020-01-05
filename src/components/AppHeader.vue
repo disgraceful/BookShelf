@@ -6,7 +6,13 @@
         >BookShelf
       </v-btn>
       <v-spacer></v-spacer>
-      <v-flex sm6 md3 align-self="center" class="search-bar">
+      <v-flex
+        sm6
+        md3
+        align-self="center"
+        class="search-bar"
+        v-if="userIsAuthenticated"
+      >
         <v-text-field
           dense
           outlined
@@ -16,15 +22,19 @@
       </v-flex>
       <v-spacer></v-spacer>
       <v-toolbar-items>
-        <v-btn text :to="{ name: '2read' }">2Read</v-btn>
-        <v-divider vertical></v-divider>
-        <v-btn text :to="{ name: 'reading' }">Reading</v-btn>
-        <v-divider vertical></v-divider>
-        <v-btn text>Finished</v-btn>
+        <div
+          class="link-wrapper"
+          v-for="(link, index) in headerLinks"
+          :key="link.name"
+        >
+          <v-btn class="link" text v-text="link.name" :to="{ name: link.to }">
+          </v-btn>
+          <v-divider vertical v-if="index < headerLinks.length - 1"></v-divider>
+        </div>
       </v-toolbar-items>
-      <v-spacer></v-spacer>
-      <v-menu v-model="menuActive" offset-y>
-        <template v-slot:activator="{ on }" v-if="userIsAuthenticated">
+      <v-spacer v-if="userIsAuthenticated"></v-spacer>
+      <v-menu v-model="menuActive" offset-y v-if="userIsAuthenticated">
+        <template v-slot:activator="{ on }">
           <v-btn text v-on="on">
             <v-icon class="user-icon"> mdi-account</v-icon>
             {{ user.email }}
@@ -52,18 +62,25 @@ export default {
     };
   },
   computed: {
+    headerLinks() {
+      let headerLinks = [
+        { name: "SignUp", to: "register" },
+        { name: "SignIn", to: "login" }
+      ];
+      if (this.userIsAuthenticated) {
+        headerLinks = [
+          { name: "2Read", to: "2read" },
+          { name: "Reading", to: "reading" },
+          { name: "Finished", to: "finished" }
+        ];
+      }
+      return headerLinks;
+    },
     user() {
       return this.$store.getters.getAuthUser;
     },
     userIsAuthenticated() {
       return this.user !== null && this.user !== undefined;
-    }
-  },
-  watch: {
-    user(value) {
-      if (!value) {
-        console.log("changed");
-      }
     }
   }
 };
@@ -79,5 +96,12 @@ export default {
 .search-bar {
   min-width: 280px !important;
   padding-top: 1.6rem;
+}
+.link-wrapper {
+  display: flex;
+  align-items: center;
+}
+.link-wrapper > .link {
+  height: 100% !important;
 }
 </style>
