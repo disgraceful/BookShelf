@@ -3,9 +3,11 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify';
-import vueresource from "vue-resource"
+import VueResource from "vue-resource"
 
-Vue.use(vueresource);
+
+Vue.use(VueResource);
+Vue.http.options.root = 'http://localhost:4200/';
 
 Vue.config.productionTip = false
 

@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-toolbar elevation="2" color="teal" dark>
-      <v-btn text large class="subtitle-1">
+      <v-btn text large class="subtitle-1" to="/">
         <v-icon left large class="title-icon">mdi-book-open-outline</v-icon
         >BookShelf
       </v-btn>
@@ -24,10 +24,10 @@
       </v-toolbar-items>
       <v-spacer></v-spacer>
       <v-menu v-model="menuActive" offset-y>
-        <template v-slot:activator="{ on }">
+        <template v-slot:activator="{ on }" v-if="userIsAuthenticated">
           <v-btn text v-on="on">
             <v-icon class="user-icon"> mdi-account</v-icon>
-            {{ user.login }}
+            {{ user.email }}
             <v-icon
               v-text="menuActive ? 'mdi-menu-up' : 'mdi-menu-down'"
             ></v-icon>
@@ -47,10 +47,24 @@
 export default {
   data() {
     return {
-      user: { email: "hatemyself393@gmail.com", login: "hatemyself" },
       menuActive: false,
       menuList: ["Statistics", "Logout"]
     };
+  },
+  computed: {
+    user() {
+      return this.$store.getters.getAuthUser;
+    },
+    userIsAuthenticated() {
+      return this.user !== null && this.user !== undefined;
+    }
+  },
+  watch: {
+    user(value) {
+      if (!value) {
+        console.log("changed");
+      }
+    }
   }
 };
 </script>

@@ -58,20 +58,17 @@
                     color="primary"
                     :to="isRegister ? '/login' : '/register'"
                     v-text="isRegister ? 'Login' : 'Register'"
-                    >Login</v-btn
-                  >
+                  ></v-btn>
                   <v-btn
                     color="primary"
                     v-text="
                       isRegister ? 'SignUp with Google' : 'SignIn with Google'
                     "
-                    >Login</v-btn
-                  >
+                  ></v-btn>
                 </v-flex>
               </v-col>
             </v-form>
           </v-container>
-          {{ response }}
         </v-card>
       </v-flex>
     </v-row>
@@ -117,11 +114,26 @@ export default {
           this.response = response.body;
         });
     },
-    signUp() {}
+    signUp() {
+      this.$store.dispatch("signUpUser", {
+        email: this.email,
+        password: this.password
+      });
+    }
   },
   computed: {
     isRegister() {
       return this.loginInfo == "SignUp";
+    },
+    user() {
+      return this.$store.getters.getAuthUser;
+    }
+  },
+  watch: {
+    user(value) {
+      if (value !== null && value !== undefined) {
+        this.$router.push("/");
+      }
     }
   }
 };
