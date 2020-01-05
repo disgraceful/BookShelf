@@ -105,14 +105,10 @@ export default {
       }
     },
     signIn() {
-      this.$http
-        .post("http://localhost:4200/auth/login", {
-          email: this.email,
-          password: this.password
-        })
-        .then(response => {
-          this.response = response.body;
-        });
+      this.$store.dispatch("signInUser", {
+        email: this.email,
+        password: this.password
+      });
     },
     signUp() {
       this.$store.dispatch("signUpUser", {

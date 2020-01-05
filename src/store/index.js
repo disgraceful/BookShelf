@@ -24,6 +24,16 @@ export default new Vuex.Store({
           console.log(user.id)
           commit('setUser', user);
         })
+    },
+    signInUser({ commit }, payload) {
+      Vue.http.post('http://localhost:4200/auth/login', {
+        email: payload.email,
+        password: payload.password
+      }).then(response => {
+        const user = response.body;
+        console.log(user.id)
+        commit('setUser', user);
+      })
     }
   },
   getters: {
