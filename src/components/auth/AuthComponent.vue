@@ -48,17 +48,17 @@
                   ></v-text-field>
                 </v-flex>
               </v-col>
+              <v-col v-if="error">
+                <app-alert
+                  :message="error.message"
+                  @dismissed="dismissError"
+                ></app-alert>
+              </v-col>
               <v-col>
                 <v-flex xs12>
                   <v-btn class="mr-3" :disabled="!valid" @click="onSubmit()"
                     >Submit</v-btn
                   >
-                  <v-btn
-                    class="mr-3"
-                    color="primary"
-                    :to="isRegister ? '/login' : '/register'"
-                    v-text="isRegister ? 'Login' : 'Register'"
-                  ></v-btn>
                   <v-btn
                     color="primary"
                     v-text="
@@ -76,6 +76,7 @@
 </template>
 
 <script>
+import Alert from "../shared/Alert";
 export default {
   data() {
     return {
@@ -115,6 +116,9 @@ export default {
         email: this.email,
         password: this.password
       });
+    },
+    dismissError() {
+      this.$store.dispatch("clearError");
     }
   },
   computed: {
@@ -123,6 +127,9 @@ export default {
     },
     user() {
       return this.$store.getters.getAuthUser;
+    },
+    error() {
+      return this.$store.getters.getError;
     }
   },
   watch: {
@@ -131,6 +138,9 @@ export default {
         this.$router.push("/");
       }
     }
+  },
+  components: {
+    "app-alert": Alert
   }
 };
 </script>

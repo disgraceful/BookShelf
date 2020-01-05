@@ -6,11 +6,18 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    authUser: null
+    authUser: null,
+    error: null,
   },
   mutations: {
     setUser(state, payload) {
       state.authUser = payload;
+    },
+    setError(state, payload) {
+      state.error = payload;
+    },
+    clearError(state) {
+      state.error = null;
     }
   },
   actions: {
@@ -21,8 +28,10 @@ export default new Vuex.Store({
       })
         .then(response => {
           const user = response.body;
-          console.log(user.id)
           commit('setUser', user);
+        })
+        .catch(error => {
+          commit('setError', error.body);
         })
     },
     signInUser({ commit }, payload) {
@@ -31,14 +40,21 @@ export default new Vuex.Store({
         password: payload.password
       }).then(response => {
         const user = response.body;
-        console.log(user.id)
         commit('setUser', user);
+      }).catch(error => {
+        commit('setError', error.body);
       })
+    },
+    clearError({ commit }) {
+      commit('clearError');
     }
   },
   getters: {
     getAuthUser(state) {
       return state.authUser;
+    },
+    getError(state) {
+      return state.error;
     }
   }
 })
