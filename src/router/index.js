@@ -5,6 +5,8 @@ import ToRead from '../components/ToReadPage.vue'
 import Reading from "../components/ReadingPage.vue"
 import Register from "../components/auth/RegisterPage"
 import Login from "../components/auth/LoginPage"
+import BookPage from "../components/bookviews/BookPage"
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -40,6 +42,10 @@ const routes = [
     path: "/login",
     name: "login",
     component: Login
+  }, {
+    path: "/book/:id",
+    name: "book",
+    component: BookPage
   }
 
   // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')

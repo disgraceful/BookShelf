@@ -4,12 +4,15 @@ import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify';
 import VueResource from "vue-resource"
-
+import "./css/style.css"
+import "@/css/style.css"
 
 Vue.use(VueResource);
 Vue.http.options.root = 'http://localhost:4200/';
 
 Vue.config.productionTip = false
+
+
 
 new Vue({
   router,

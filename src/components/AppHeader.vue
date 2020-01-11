@@ -6,20 +6,47 @@
         >BookShelf
       </v-btn>
       <v-spacer></v-spacer>
-      <v-flex
+      <v-col
         sm6
         md3
         align-self="center"
-        class="search-bar"
+        class="pb-0 pr-0 pl-0 search-bar"
+        :style="{ top: searchActive ? '146px' : 0 }"
         v-if="userIsAuthenticated"
       >
         <v-text-field
+          ref="search"
           dense
           outlined
-          label="Search"
+          label="Search books"
+          v-model="searchQuery"
           append-icon="mdi-magnify"
+          @input="search()"
         ></v-text-field>
-      </v-flex>
+
+        <v-list class="search-results pa-0" light>
+          <template v-for="(item, index) in searchResults">
+            <v-divider :key="index"></v-divider>
+            <v-list-item
+              :key="item.title"
+              :to="{ name: 'book', params: { id: item.id } }"
+            >
+              <v-list-item-avatar tile height="56px" width="46px">
+                <v-img :src="item.smallImageUrl"></v-img>
+              </v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title
+                  v-text="`${item.title} ${item.seriesTitle}`"
+                ></v-list-item-title>
+                <v-list-item-subtitle
+                  v-text="`by ${item.authorName}`"
+                ></v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+          </template>
+        </v-list>
+      </v-col>
+
       <v-spacer></v-spacer>
       <v-toolbar-items>
         <div
@@ -58,10 +85,15 @@ export default {
   data() {
     return {
       menuActive: false,
-      menuList: ["Statistics", "Logout"]
+      menuList: ["Statistics", "Logout"],
+      searchQuery: "",
+      searchResults: []
     };
   },
   computed: {
+    searchActive() {
+      return this.searchResults.length > 0;
+    },
     headerLinks() {
       let headerLinks = [
         { name: "SignUp", to: "register" },
@@ -82,6 +114,25 @@ export default {
     userIsAuthenticated() {
       return this.user !== null && this.user !== undefined;
     }
+  },
+  methods: {
+    search() {
+      if (this.searchQuery === undefined || this.searchQuery === "") {
+        this.searchResults = [];
+      }
+
+      this.$http
+        .get("books/search", { params: { search: this.searchQuery } })
+        .then(
+          response => {
+            this.searchResults = response.body.slice(0, 4);
+          },
+          error => {
+            console.error(error);
+            this.searchResults = [];
+          }
+        );
+    }
   }
 };
 </script>
@@ -95,7 +146,8 @@ export default {
 }
 .search-bar {
   min-width: 280px !important;
-  padding-top: 1.6rem;
+  padding-top: 1.5rem;
+  position: relative;
 }
 .link-wrapper {
   display: flex;
@@ -103,5 +155,9 @@ export default {
 }
 .link-wrapper > .link {
   height: 100% !important;
+}
+.search-results {
+  position: relative;
+  top: -27px;
 }
 </style>
