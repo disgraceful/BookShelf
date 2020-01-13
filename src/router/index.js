@@ -42,9 +42,11 @@ const routes = [
     path: "/login",
     name: "login",
     component: Login
-  }, {
+  },
+  {
     path: "/book/:id",
     name: "book",
+    props: true,
     component: BookPage
   }
 

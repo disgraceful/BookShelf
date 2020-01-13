@@ -63,6 +63,13 @@ export default {
       return this.searchResults.length > 0;
     }
   },
+  watch: {
+    $route() {
+      console.log("route was changed");
+      this.searchQuery = "";
+      this.searchResults = [];
+    }
+  },
   mounted() {
     const input$ = fromEvent(this.$refs.search.$refs.input, "input");
     input$
