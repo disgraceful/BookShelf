@@ -6,7 +6,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    authUser: null,
+    authUser: JSON.parse(localStorage.getItem('user')) || null,
     error: null,
   },
   mutations: {
@@ -28,6 +28,7 @@ export default new Vuex.Store({
       })
         .then(response => {
           const user = response.body;
+          localStorage.setItem('user', JSON.stringify(user));
           commit('setUser', user);
         })
         .catch(error => {
@@ -40,6 +41,7 @@ export default new Vuex.Store({
         password: payload.password
       }).then(response => {
         const user = response.body;
+        localStorage.setItem('user', JSON.stringify(user));
         commit('setUser', user);
       }).catch(error => {
         commit('setError', error.body);
