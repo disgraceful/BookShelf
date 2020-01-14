@@ -4,23 +4,52 @@
       <v-row>
         <v-col cols="auto">
           <v-img :src="book.imageUrl" content></v-img>
-          <v-rating v-model="rating"></v-rating>
-          <div>My rating {{ rating > 0 ? rating : "" }}</div>
+          <v-rating class="pt-2" v-model="rating" hover></v-rating>
+          <div class="text-center title font-weight-regular">
+            My rating: {{ rating > 0 ? rating : "" }}
+          </div>
         </v-col>
         <v-col>
-          <v-card-title class="pt-0 ">{{ book.title }}</v-card-title>
+          <v-card-title class="pt-0 headline font-weight-medium">{{
+            book.title
+          }}</v-card-title>
           <v-card-subtitle
+            class="title"
             v-text="`(${book.seriesName} #${book.positionInSeries})`"
           ></v-card-subtitle>
-          <v-card-text v-text="`by ${book.authorName}`"></v-card-text>
-          <v-card-text>{{ book.description }}</v-card-text>
+          <v-card-text
+            class="pb-0 subtitle-1"
+            v-text="`by ${book.authorName}`"
+          ></v-card-text>
+          <v-card-text
+            class="pb-0 subtitle-1 "
+            v-text="`Goodreads rating: ${book.goodreadsRating}`"
+          >
+          </v-card-text>
+          <v-card-text
+            class="pb-0 pt-1 subtitle-1"
+            v-text="`Published in: ${book.publishedYear}`"
+          >
+          </v-card-text>
+          <v-card-text
+            class="pb-0 pt-1 subtitle-1"
+            v-text="`Pages: ${book.pages}`"
+          >
+          </v-card-text>
+          <v-card-text class="pb-0 pt-1 subtitle-1">
+            <span>Genres: </span>
+            <span
+              v-for="(genre, i) in book.genres"
+              :key="genre"
+              v-text="i < book.genres.length - 1 ? `${genre}, ` : genre"
+            ></span>
+          </v-card-text>
+          <v-card-text class="subtitle-1 text-justify mb-2">{{
+            book.description
+          }}</v-card-text>
           <v-divider></v-divider>
-          <v-card-text v-text="`Goodreads rating: ${book.goodreadsRating}`">
-          </v-card-text>
-          <v-card-text v-text="`Published in: ${book.publishedYear}`">
-          </v-card-text>
-          <v-card-text v-text="`Pages: ${book.pages}`"> </v-card-text>
-          <v-toolbar flat dense>
+
+          <v-toolbar flat dense class="justify-center">
             <v-toolbar-items>
               <template v-for="(item, index) in bookStatusButtons">
                 <v-btn
