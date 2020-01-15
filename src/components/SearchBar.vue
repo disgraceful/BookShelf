@@ -65,7 +65,6 @@ export default {
   },
   watch: {
     $route() {
-      console.log("route was changed");
       this.searchQuery = "";
       this.searchResults = [];
     }
