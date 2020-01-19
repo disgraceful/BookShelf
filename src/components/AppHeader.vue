@@ -6,7 +6,7 @@
         >BookShelf
       </v-btn>
       <v-spacer></v-spacer>
-      <bs-search-bar></bs-search-bar>
+      <bs-search-bar v-if="userIsAuthenticated"></bs-search-bar>
 
       <v-spacer></v-spacer>
       <v-toolbar-items>
@@ -32,8 +32,11 @@
           </v-btn>
         </template>
         <v-list>
-          <v-list-item v-for="item in menuList" :key="item"
-            >{{ item }}
+          <v-list-item
+            v-for="item in menuList"
+            :key="item.name"
+            @click="item.action"
+            >{{ item.name }}
           </v-list-item>
         </v-list>
       </v-menu>
@@ -47,7 +50,10 @@ export default {
   data() {
     return {
       menuActive: false,
-      menuList: ["Statistics", "Logout"]
+      menuList: [
+        { name: "Statistics", action: () => console.log("test") }, //go to user/stats for detailed stats
+        { name: "Logout", action: this.logOut }
+      ]
     };
   },
   components: {
@@ -75,7 +81,12 @@ export default {
       return this.user !== null && this.user !== undefined;
     }
   },
-  methods: {}
+  methods: {
+    logOut() {
+      this.$store.dispatch("logOutUser");
+      this.$router.push({ name: "login" });
+    }
+  }
 };
 </script>
 

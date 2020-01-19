@@ -1,7 +1,9 @@
-import bookService from "./bookService"
+import bookService from "./bookService";
+import authService from "./authService";
 
 const services = {
-    book: bookService
+    book: bookService,
+    auth: authService
 };
 
 export const ServiceFactory = {
