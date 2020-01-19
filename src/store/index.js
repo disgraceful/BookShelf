@@ -11,6 +11,7 @@ export default new Vuex.Store({
   state: {
     authUser: null,
     error: null,
+    isUserLoaded: false,
   },
   mutations: {
     setUser(state, payload) {
@@ -21,6 +22,8 @@ export default new Vuex.Store({
     },
     clearError(state) {
       state.error = null;
+    }, setUserLoaded(state, payload) {
+      state.isUserLoaded = payload;
     }
   },
   actions: {
@@ -29,6 +32,7 @@ export default new Vuex.Store({
         .then(user => {
           localStorage.setItem("user", JSON.stringify({ id: user.id, email: user.email }))
           commit("setUser", user);
+          commit("setUserLoaded", true);
         }).catch(error => {
           commit("setError", error.body);
         })
@@ -39,18 +43,20 @@ export default new Vuex.Store({
         .then(user => {
           localStorage.setItem("user", JSON.stringify({ id: user.id, email: user.email }))
           commit("setUser", user);
+          commit("setUserLoaded", true);
         }).catch(error => {
           commit("setError", error.body);
         })
     },
 
-    validateUser({ commit }) {
+    async validateUser({ commit }) {
       let user = JSON.parse(localStorage.getItem("user"));
       if (user) {
         userService.getUser(user.id).then(
           dbUser => {
             console.log(dbUser);
             commit("setUser", dbUser);
+            commit("setUserLoaded", true);
           }
         ).catch(error => {
           commit("setError", error.body);
@@ -72,6 +78,9 @@ export default new Vuex.Store({
     },
     getError(state) {
       return state.error;
+    },
+    getUserLoaded(state) {
+      return state.isUserLoaded;
     }
   }
 })

@@ -51,7 +51,11 @@ export default {
     return {
       menuActive: false,
       menuList: [
-        { name: "Statistics", action: () => console.log("test") }, //go to user/stats for detailed stats
+        {
+          name: "Statistics",
+          action: () =>
+            this.$router.push({ name: "user", params: { id: this.user.id } })
+        },
         { name: "Logout", action: this.logOut }
       ]
     };
