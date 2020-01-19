@@ -1,14 +1,15 @@
 
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from "vue"
+import Vuex from "vuex"
 import { ServiceFactory } from "../services/serviceFactory";
 const authService = ServiceFactory.get("auth");
+const userService = ServiceFactory.get("user");
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    authUser: JSON.parse(localStorage.getItem('user')) || null,
+    authUser: null,
     error: null,
   },
   mutations: {
@@ -29,7 +30,7 @@ export default new Vuex.Store({
           localStorage.setItem("user", JSON.stringify({ id: user.id, email: user.email }))
           commit("setUser", user);
         }).catch(error => {
-          commit('setError', error.body);
+          commit("setError", error.body);
         })
     },
 
@@ -39,16 +40,30 @@ export default new Vuex.Store({
           localStorage.setItem("user", JSON.stringify({ id: user.id, email: user.email }))
           commit("setUser", user);
         }).catch(error => {
-          commit('setError', error.body);
+          commit("setError", error.body);
         })
     },
-    
+
+    validateUser({ commit }) {
+      let user = JSON.parse(localStorage.getItem("user"));
+      if (user) {
+        userService.getUser(user.id).then(
+          dbUser => {
+            console.log(dbUser);
+            commit("setUser", dbUser);
+          }
+        ).catch(error => {
+          commit("setError", error.body);
+        })
+      }
+    },
+
     logOutUser({ commit }) {
       localStorage.removeItem("user");
       commit("setUser", null);
     },
     clearError({ commit }) {
-      commit('clearError');
+      commit("clearError");
     }
   },
   getters: {

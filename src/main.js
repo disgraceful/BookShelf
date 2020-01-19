@@ -12,11 +12,12 @@ Vue.http.options.root = 'http://localhost:4200/';
 
 Vue.config.productionTip = false
 
-
-
 new Vue({
   router,
   store,
   vuetify,
-  render: h => h(App)
+  render: h => h(App),
+  created() {
+    this.$store.dispatch("validateUser");
+  }
 }).$mount('#app')
