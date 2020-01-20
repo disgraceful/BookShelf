@@ -1,7 +1,7 @@
 <template>
   <v-card flat>
-    <v-container>
-      <v-row>
+    <!-- <v-container> -->
+    <!-- <v-row>
         <v-col cols="auto">
           <v-img
             :src="book.imgUrl"
@@ -27,7 +27,7 @@
         </v-col>
       </v-row>
     </v-container>
-    <v-divider></v-divider>
+    <v-divider></v-divider> -->
   </v-card>
 </template>
 
