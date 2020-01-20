@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card style="z-index:50">
     <v-toolbar elevation="2" color="teal" dark>
       <v-btn text large class="subtitle-1" to="/">
         <v-icon left large class="title-icon">mdi-book-open-outline</v-icon
@@ -112,9 +112,5 @@ export default {
 }
 .link-wrapper > .link {
   height: 100% !important;
-}
-.search-results {
-  position: relative;
-  top: -27px;
 }
 </style>

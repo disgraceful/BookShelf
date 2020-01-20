@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import { ServiceFactory } from "../services/serviceFactory";
 import { fromEvent, from, Subject } from "rxjs";
 import {
   debounceTime,
@@ -49,6 +50,7 @@ import {
   flatMap,
   takeUntil
 } from "rxjs/operators";
+const bookService = ServiceFactory.get("book");
 
 export default {
   data() {
@@ -77,13 +79,11 @@ export default {
         debounceTime(500),
         distinctUntilChanged(),
         map(input => input.target.value),
-        flatMap(text =>
-          from(this.$http.get("books/search", { params: { search: text } }))
-        )
+        flatMap(text => from(bookService.searchBook(text)))
       )
       .subscribe(
         response => {
-          this.searchResults = response.body.slice(0, 4);
+          this.searchResults = response.slice(0, 4);
         },
         error => {
           console.error(error);
@@ -105,7 +105,8 @@ export default {
   position: relative;
 }
 .search-results {
-  position: relative;
+  position: relative !important;
   top: -27px;
+  z-index: 9999;
 }
 </style>

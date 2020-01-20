@@ -1,5 +1,5 @@
 <template>
-  <v-card flat class="progress" :style="{ backgroundColor: progress.bgcolor }">
+  <div flat class="progress" :style="{ backgroundColor: progress.bgcolor }">
     <div class="progress-text">
       <v-card-text class="display-3 pb-0 font-weight-regular">{{
         progress.value
@@ -9,7 +9,7 @@
       }}</v-card-text>
     </div>
     <div class="filler" :style="fillerStyle"></div>
-  </v-card>
+  </div>
 </template>
 
 <script>
@@ -42,13 +42,14 @@ export default {
   min-height: 100px;
   min-width: 100px;
   position: relative !important;
+  z-index: auto;
 }
 
 .progress-text {
   padding-top: 20%;
-  position: relative;
+  position: inherit;
   color: #fff;
-  z-index: 33;
+  z-index: 1;
   text-align: center;
 }
 
