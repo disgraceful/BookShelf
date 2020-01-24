@@ -29,11 +29,11 @@
         <v-tabs v-model="tab" grow>
           <v-tab v-for="item in tabItems" :key="item.name">
             <v-badge color="deep-purple accent-4" icon="mdi-vuetify">
-              {{ item.name }} <sup>4</sup>
+              {{ item.name }} <sup>{{ item.books.length }}</sup>
             </v-badge>
           </v-tab>
           <v-tabs-items v-model="tab">
-            <bs-book></bs-book>
+            <bs-book-list :books="tabItems[tab]"></bs-book-list>
           </v-tabs-items>
         </v-tabs>
       </v-col>
@@ -43,7 +43,7 @@
 
 <script>
 import UserProgress from "../shared/UserProgress";
-import BookProgress from "../bookviews/BookProgress";
+import UserBookList from "../bookviews/UserBookList";
 import { ServiceFactory } from "../../services/serviceFactory";
 const userService = ServiceFactory.get("user");
 export default {
@@ -51,29 +51,27 @@ export default {
     return {
       user: {},
       tab: null,
-      tabItems: [
-        { name: "Reading", books: this.reading },
-        { name: "2Read", books: this.toread },
-        { name: "Stopped", books: this.stopped },
-        { name: "Finished", books: this.finished }
-      ],
-      reading: [],
-      toread: [],
-      stopped: [],
-      finished: []
+      tabItems: []
     };
   },
   props: ["id"],
+  watch: {
+    tab() {
+      console.log(this.tab);
+    }
+  },
   components: {
     "bs-progress": UserProgress,
-    "bs-book": BookProgress
+    "bs-book-list": UserBookList
   },
   async created() {
     this.user = await userService.getUser(this.id);
-    this.reading = [];
-    this.toread = [];
-    this.stopped = [];
-    this.finished = [];
+    this.tabItems = [
+      { name: "Reading", books: this.user.reading },
+      { name: "2Read", books: this.user.toread },
+      { name: "Stopped", books: this.user.stopped },
+      { name: "Finished", books: this.user.finished }
+    ];
   }
 };
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <v-card style="z-index:50">
+  <v-card style="z-index:50c">
     <v-toolbar elevation="2" color="teal" dark>
       <v-btn text large class="subtitle-1" to="/">
         <v-icon left large class="title-icon">mdi-book-open-outline</v-icon

@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import BookProgress from "./bookviews/BookProgress";
+// import BookProgress from "./bookviews/BookProgress";
 export default {
   data() {
     return {
@@ -30,7 +30,7 @@ export default {
     };
   },
   components: {
-    "my-book-progress": BookProgress
+    // "my-book-progress": BookProgress
   }
 };
 </script>
