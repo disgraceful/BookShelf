@@ -33,7 +33,10 @@
             </v-badge>
           </v-tab>
           <v-tabs-items v-model="tab">
-            <bs-book-list :books="tabItems[tab]"></bs-book-list>
+            <bs-book-list
+              v-if="tab"
+              :books="tabItems[tab].books"
+            ></bs-book-list>
           </v-tabs-items>
         </v-tabs>
       </v-col>
@@ -64,7 +67,7 @@ export default {
     "bs-progress": UserProgress,
     "bs-book-list": UserBookList
   },
-  async created() {
+  async beforeMount() {
     this.user = await userService.getUser(this.id);
     this.tabItems = [
       { name: "Reading", books: this.user.reading },
@@ -72,6 +75,7 @@ export default {
       { name: "Stopped", books: this.user.stopped },
       { name: "Finished", books: this.user.finished }
     ];
+    this.tab = 1;
   }
 };
 </script>
