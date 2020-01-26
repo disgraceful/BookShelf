@@ -81,6 +81,7 @@
                   text
                   :key="item.title"
                   :class="[item.active ? activeClass : '']"
+                  @click="addToUserCollection(item.collection)"
                   >{{ item.title }}
                 </v-btn>
                 <v-divider
@@ -91,6 +92,19 @@
               </template>
             </v-toolbar-items>
           </v-toolbar>
+        </v-col>
+      </v-row>
+      <v-row class="pt-10" justify="center">
+        <v-col cols="8">
+          <v-slider
+            label="I read pages"
+            min="0"
+            :max="book.pages"
+            v-model="pagesRead"
+            thumb-label="always"
+            :thumb-size="24"
+          >
+          </v-slider>
         </v-col>
       </v-row>
     </v-container>
@@ -107,24 +121,36 @@ export default {
       book: {},
       rating: 0,
       isFavorited: false,
+      isReading: false,
+      pagesRead: 0,
       bookStatusButtons: [
         {
+          title: "Finished",
+          collection: "finished",
+          to: "",
+          active: false
+        },
+        {
           title: "Reading",
+          collection: "reading",
           to: "",
           active: false
         },
         {
           title: "2Read",
+          collection: "toread",
           to: "",
           active: false
         },
         {
           title: "Stopped",
+          collection: "stopped",
           to: "",
           active: false
         },
         {
           title: "Not Reading",
+          collection: null,
           to: "",
           active: true
         }
@@ -138,9 +164,31 @@ export default {
       if (to.path.includes("/book")) this.getBookInfo();
     }
   },
+  computed: {
+    user() {
+      return this.$store.getters.getAuthUser;
+    }
+  },
   methods: {
     async getBookInfo() {
       this.book = await bookService.getBookById(this.id);
+      this.isFavorited = this.book.favorited || false;
+      this.pagesRead = this.book.pagesRead || 0;
+    },
+
+    createBookRecord() {
+      this.book.isFavorited = this.isFavorited;
+      this.book.pagesRead = this.pagesRead;
+      this.book.rating = this.rating;
+    },
+
+    async addToUserCollection(collection) {
+      if (!collection) return;
+      await bookService.addToUserCollection(
+        this.user.id,
+        this.book,
+        collection
+      );
     }
   },
   created() {

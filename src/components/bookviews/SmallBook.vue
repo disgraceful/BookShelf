@@ -14,7 +14,7 @@
         <v-rating medium v-model="book.rating" hover></v-rating>
       </v-col>
       <v-col cols="4">
-        <v-row no-gutters="">
+        <v-row no-gutters>
           <v-col>
             <div class="body-2">Pages read</div>
           </v-col>
@@ -48,9 +48,5 @@ export default {
 <style scoped>
 .smallImg {
   flex-grow: 0 !important;
-}
-
-.progressBarText {
-  display: flex;
 }
 </style>
