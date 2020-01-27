@@ -24,13 +24,11 @@ export default {
     };
   },
   props: ["books"],
-  watch: {
-    books() {
-      console.log(this.books);
-    }
-  },
   components: {
     "bs-smallbook": SmallBook
+  },
+  beforeUpdate() {
+    console.log("prop: ", this.books);
   }
 };
 </script>

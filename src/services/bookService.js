@@ -1,8 +1,8 @@
 import Vue from "vue";
 
 export default {
-    getBookById(id) {
-        return Vue.http.get("books", { params: { id: id } })
+    getBookById(bookId, userId) {
+        return Vue.http.get(`books/${bookId}-${userId}`)
             .then((response) => Promise.resolve(response.data))
             .catch((error) => Promise.reject(error));
     },

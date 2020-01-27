@@ -27,16 +27,13 @@
       <v-divider></v-divider>
       <v-col>
         <v-tabs v-model="tab" grow>
-          <v-tab v-for="item in tabItems" :key="item.name">
+          <v-tab v-for="item in tabItems" :key="item.name" @click="test2()">
             <v-badge color="deep-purple accent-4" icon="mdi-vuetify">
               {{ item.name }} <sup>{{ item.books.length }}</sup>
             </v-badge>
           </v-tab>
-          <v-tabs-items v-model="tab">
-            <bs-book-list
-              v-if="tab"
-              :books="tabItems[tab].books"
-            ></bs-book-list>
+          <v-tabs-items v-model="tab" v-if="tabItems.length > 0">
+            <bs-book-list :books="tabItems[tab].books"></bs-book-list>
           </v-tabs-items>
         </v-tabs>
       </v-col>
@@ -53,16 +50,11 @@ export default {
   data() {
     return {
       user: {},
-      tab: null,
+      tab: 0,
       tabItems: []
     };
   },
   props: ["id"],
-  watch: {
-    tab() {
-      console.log(this.tab);
-    }
-  },
   components: {
     "bs-progress": UserProgress,
     "bs-book-list": UserBookList
@@ -70,12 +62,24 @@ export default {
   async beforeMount() {
     this.user = await userService.getUser(this.id);
     this.tabItems = [
-      { name: "Reading", books: this.user.reading },
-      { name: "2Read", books: this.user.toread },
-      { name: "Stopped", books: this.user.stopped },
-      { name: "Finished", books: this.user.finished }
+      {
+        name: "Reading",
+        books: this.user.books.filter(book => book.status === "reading")
+      },
+      {
+        name: "2Read",
+        books: this.user.books.filter(book => book.status === "toread")
+      },
+      {
+        name: "Stopped",
+        books: this.user.books.filter(book => book.status === "stopped")
+      },
+      {
+        name: "Finished",
+        books: this.user.books.filter(book => book.status === "finished")
+      }
     ];
-    this.tab = 1;
+    console.log(this.tabItems);
   }
 };
 </script>

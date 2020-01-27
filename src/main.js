@@ -17,7 +17,8 @@ new Vue({
   store,
   vuetify,
   render: h => h(App),
-  created() {
-    this.$store.dispatch("validateUser");
+  async beforeCreate() {
+    console.log("validating user");
+    await this.$store.dispatch("validateUser");
   }
 }).$mount('#app')

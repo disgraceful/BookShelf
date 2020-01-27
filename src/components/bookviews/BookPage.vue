@@ -1,6 +1,6 @@
 <template>
   <v-card flat>
-    <v-container>
+    <v-container v-if="!loading">
       <v-row>
         <v-col cols="auto">
           <div style="position:relative">
@@ -80,7 +80,7 @@
                 <v-btn
                   text
                   :key="item.title"
-                  :class="[item.active ? activeClass : '']"
+                  :class="[item.collection === bookStatus ? activeClass : '']"
                   @click="addToUserCollection(item.collection)"
                   >{{ item.title }}
                 </v-btn>
@@ -115,44 +115,40 @@
 <script>
 import { ServiceFactory } from "../../services/serviceFactory";
 const bookService = ServiceFactory.get("book");
+const userService = ServiceFactory.get("user");
 export default {
   data() {
     return {
       book: {},
       rating: 0,
       isFavorited: false,
-      isReading: false,
       pagesRead: 0,
+      bookStatus: "",
       bookStatusButtons: [
         {
           title: "Finished",
           collection: "finished",
-          to: "",
-          active: false
+          to: ""
         },
         {
           title: "Reading",
           collection: "reading",
-          to: "",
-          active: false
+          to: ""
         },
         {
           title: "2Read",
           collection: "toread",
-          to: "",
-          active: false
+          to: ""
         },
         {
           title: "Stopped",
           collection: "stopped",
-          to: "",
-          active: false
+          to: ""
         },
         {
           title: "Not Reading",
           collection: null,
-          to: "",
-          active: true
+          to: ""
         }
       ],
       activeClass: "active"
@@ -167,31 +163,48 @@ export default {
   computed: {
     user() {
       return this.$store.getters.getAuthUser;
+    },
+    loading() {
+      return this.$store.getters.loading;
     }
   },
   methods: {
     async getBookInfo() {
-      this.book = await bookService.getBookById(this.id);
-      this.isFavorited = this.book.favorited || false;
+      this.book = await bookService.getBookById(this.id, this.user.id);
+      this.isFavorited = this.book.favorited || false; //temporary
       this.pagesRead = this.book.pagesRead || 0;
+      this.bookStatus = this.book.status || null;
+      console.log(this.book);
     },
 
     createBookRecord() {
-      this.book.isFavorited = this.isFavorited;
-      this.book.pagesRead = this.pagesRead;
-      this.book.rating = this.rating;
+      return {
+        id: this.book.id,
+        title: this.book.title,
+        imageUrl: this.book.imageUrl,
+        author: this.book.authors[0].name,
+        series: this.book.series.fullName,
+        genres: this.book.genres,
+        pagesRead: this.pagesRead,
+        rating: this.rating
+      };
     },
 
     async addToUserCollection(collection) {
-      if (!collection) return;
-      await bookService.addToUserCollection(
+      if (!collection || this.bookStatus === collection) return;
+      const bookRecord = this.createBookRecord();
+      bookRecord.status = collection;
+      const result = await userService.addToUserCollection(
         this.user.id,
-        this.book,
+        bookRecord,
         collection
       );
+      this.bookStatus = result.status;
+      console.log(result);
     }
   },
-  created() {
+  mounted() {
+    console.log("fetching book");
     this.getBookInfo();
   }
 };

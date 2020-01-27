@@ -3,7 +3,6 @@ import Vue from "vue"
 import Vuex from "vuex"
 import { ServiceFactory } from "../services/serviceFactory";
 const authService = ServiceFactory.get("auth");
-const userService = ServiceFactory.get("user");
 
 Vue.use(Vuex)
 
@@ -11,10 +10,12 @@ export default new Vuex.Store({
   state: {
     authUser: null,
     error: null,
-    isUserLoaded: false,
+    loading: false,
   },
+
   mutations: {
     setUser(state, payload) {
+      console.log("state init");
       state.authUser = payload;
     },
     setError(state, payload) {
@@ -22,8 +23,9 @@ export default new Vuex.Store({
     },
     clearError(state) {
       state.error = null;
-    }, setUserLoaded(state, payload) {
-      state.isUserLoaded = payload;
+    },
+    setLoading(state, payload) {
+      state.loading = payload;
     }
   },
   actions: {
@@ -49,18 +51,11 @@ export default new Vuex.Store({
         })
     },
 
-    async validateUser({ commit }) {
+    validateUser({ commit }) {
+      commit("setLoading", true);
       let user = JSON.parse(localStorage.getItem("user"));
       if (user) {
-        userService.getUser(user.id).then(
-          dbUser => {
-            console.log(dbUser);
-            commit("setUser", dbUser);
-            commit("setUserLoaded", true);
-          }
-        ).catch(error => {
-          commit("setError", error.body);
-        })
+        commit("setUser", user);
       }
     },
 
@@ -79,8 +74,8 @@ export default new Vuex.Store({
     getError(state) {
       return state.error;
     },
-    getUserLoaded(state) {
-      return state.isUserLoaded;
+    getLoading(state) {
+      return state.loading;
     }
   }
 })
