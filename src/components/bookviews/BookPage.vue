@@ -1,6 +1,6 @@
 <template>
   <v-card flat>
-    <v-container v-if="!loading">
+    <v-container>
       <v-row>
         <v-col cols="auto">
           <div style="position:relative">
@@ -156,8 +156,10 @@ export default {
   },
   props: ["id"],
   watch: {
-    $route(to) {
-      if (to.path.includes("/book")) this.getBookInfo();
+    $route(to, from) {
+      if (to.path.includes("/book") || to.path === from.path) {
+        this.getBookInfo();
+      }
     }
   },
   computed: {
@@ -165,12 +167,12 @@ export default {
       return this.$store.getters.getAuthUser;
     },
     loading() {
-      return this.$store.getters.loading;
+      return this.$store.getters.getLoading;
     }
   },
   methods: {
     async getBookInfo() {
-      this.book = await bookService.getBookById(this.id, this.user.id);
+      this.book = await bookService.getBookById(this.id, this.user.token);
       this.isFavorited = this.book.favorited || false; //temporary
       this.pagesRead = this.book.pagesRead || 0;
       this.bookStatus = this.book.status || null;

@@ -18,7 +18,6 @@ new Vue({
   vuetify,
   render: h => h(App),
   async beforeCreate() {
-    console.log("validating user");
     await this.$store.dispatch("validateUser");
   }
 }).$mount('#app')

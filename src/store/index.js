@@ -11,6 +11,7 @@ export default new Vuex.Store({
     authUser: null,
     error: null,
     loading: false,
+    token: JSON.parse(localStorage.getItem("user")).token
   },
 
   mutations: {
@@ -30,11 +31,14 @@ export default new Vuex.Store({
   },
   actions: {
     signUpUser({ commit }, payload) {
+      commit("setLoading", true);
       authService.signUp(payload.email, payload.password)
-        .then(user => {
-          localStorage.setItem("user", JSON.stringify({ id: user.id, email: user.email }))
+        .then(response => {
+          const user = response.user;
+          const token = response.token;
+          localStorage.setItem("user", JSON.stringify({ id: user.id, email: user.email, token: token }));
           commit("setUser", user);
-          commit("setUserLoaded", true);
+          commit("setLoading", false);
         }).catch(error => {
           commit("setError", error.body);
         })
@@ -42,10 +46,12 @@ export default new Vuex.Store({
 
     signInUser({ commit }, payload) {
       authService.signIn(payload.email, payload.password)
-        .then(user => {
-          localStorage.setItem("user", JSON.stringify({ id: user.id, email: user.email }))
+        .then(response => {
+          const user = response.user;
+          const token = response.token;
+          localStorage.setItem("user", JSON.stringify({ id: user.id, email: user.email, token: token }));
           commit("setUser", user);
-          commit("setUserLoaded", true);
+          //commit("setLoading", false);
         }).catch(error => {
           commit("setError", error.body);
         })
@@ -55,6 +61,7 @@ export default new Vuex.Store({
       commit("setLoading", true);
       let user = JSON.parse(localStorage.getItem("user"));
       if (user) {
+        console.log("validating user");
         commit("setUser", user);
       }
     },
@@ -76,6 +83,9 @@ export default new Vuex.Store({
     },
     getLoading(state) {
       return state.loading;
+    },
+    getToken(state) {
+      return state.token;
     }
   }
 })

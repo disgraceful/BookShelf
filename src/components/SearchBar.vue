@@ -63,6 +63,9 @@ export default {
   computed: {
     searchActive() {
       return this.searchResults.length > 0;
+    },
+    user() {
+      return this.$store.getters.getAuthUser;
     }
   },
   watch: {
@@ -79,7 +82,7 @@ export default {
         debounceTime(500),
         distinctUntilChanged(),
         map(input => input.target.value),
-        flatMap(text => from(bookService.searchBook(text)))
+        flatMap(text => from(bookService.searchBook(text, this.user.token)))
       )
       .subscribe(
         response => {
