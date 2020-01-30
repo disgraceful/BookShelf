@@ -173,7 +173,7 @@ export default {
   methods: {
     async getBookInfo() {
       this.book = await bookService.getBookById(this.id, this.user.token);
-      this.isFavorited = this.book.favorited || false; //temporary
+      this.isFavorited = this.book.isFavorited || false; //temporary
       this.pagesRead = this.book.pagesRead || 0;
       this.bookStatus = this.book.status || null;
       console.log(this.book);
@@ -188,7 +188,9 @@ export default {
         series: this.book.series.fullName,
         genres: this.book.genres,
         pagesRead: this.pagesRead,
-        rating: this.rating
+        pages: this.pages,
+        rating: this.rating,
+        isFavorited: this.isFavorited
       };
     },
 
@@ -197,7 +199,7 @@ export default {
       const bookRecord = this.createBookRecord();
       bookRecord.status = collection;
       const result = await userService.addToUserCollection(
-        this.user.id,
+        this.user.token,
         bookRecord,
         collection
       );

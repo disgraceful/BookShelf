@@ -11,7 +11,6 @@ export default new Vuex.Store({
     authUser: null,
     error: null,
     loading: false,
-    token: JSON.parse(localStorage.getItem("user")).token
   },
 
   mutations: {
@@ -83,9 +82,6 @@ export default new Vuex.Store({
     },
     getLoading(state) {
       return state.loading;
-    },
-    getToken(state) {
-      return state.token;
     }
   }
 })

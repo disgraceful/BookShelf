@@ -27,7 +27,7 @@
       <v-divider></v-divider>
       <v-col>
         <v-tabs v-model="tab" grow>
-          <v-tab v-for="item in tabItems" :key="item.name" @click="test2()">
+          <v-tab v-for="item in tabItems" :key="item.name">
             <v-badge color="deep-purple accent-4" icon="mdi-vuetify">
               {{ item.name }} <sup>{{ item.books.length }}</sup>
             </v-badge>
@@ -55,12 +55,18 @@ export default {
     };
   },
   props: ["id"],
+  computed: {
+    userState() {
+      return this.$store.getters.getAuthUser;
+    }
+  },
   components: {
     "bs-progress": UserProgress,
     "bs-book-list": UserBookList
   },
   async beforeMount() {
-    this.user = await userService.getUser(this.id);
+    this.user = await userService.getUser(this.userState.token);
+    console.log(this.user);
     this.tabItems = [
       {
         name: "Reading",

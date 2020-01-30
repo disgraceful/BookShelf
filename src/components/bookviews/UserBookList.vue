@@ -1,7 +1,7 @@
 <template>
   <v-card flat>
     <v-row v-for="(book, i) in books" :key="book.id">
-      <bs-smallbook :book="test">
+      <bs-smallbook :book="book">
         <v-divider v-if="i < books.length - 1"></v-divider>
       </bs-smallbook>
     </v-row>
@@ -26,9 +26,6 @@ export default {
   props: ["books"],
   components: {
     "bs-smallbook": SmallBook
-  },
-  beforeUpdate() {
-    console.log("prop: ", this.books);
   }
 };
 </script>

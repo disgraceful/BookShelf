@@ -79,7 +79,7 @@ export default {
     input$
       .pipe(
         takeUntil(this.destroyed$),
-        debounceTime(500),
+        debounceTime(500), 
         distinctUntilChanged(),
         map(input => input.target.value),
         flatMap(text => from(bookService.searchBook(text, this.user.token)))

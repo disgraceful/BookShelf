@@ -1,14 +1,14 @@
 import Vue from "vue";
 
 export default {
-    getUser(id) {
-        return Vue.http.get("user", { params: { id } })
+    getUser(token) {
+        return Vue.http.get("user", { headers: { 'X-Access-Token': token } })
             .then((response) => Promise.resolve(response.data))
             .catch((error) => Promise.reject(error));
     },
 
-    addToUserCollection(id, book, collection) {
-        return Vue.http.post(`user/${collection}`, { userId: id, book: book })
+    addToUserCollection(token, book, collection) {
+        return Vue.http.post(`user/${collection}`, { book: book }, { headers: { 'X-Access-Token': token } })
             .then((response) => Promise.resolve(response.data))
             .catch((error) => Promise.reject(error));
     }
