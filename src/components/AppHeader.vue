@@ -21,7 +21,7 @@
         </div>
       </v-toolbar-items>
       <v-spacer v-if="userIsAuthenticated"></v-spacer>
-      <v-menu v-model="menuActive" offset-y v-if="userIsAuthenticated">
+      <v-menu v-model="menuActive" offset-y v-if="user">
         <template v-slot:activator="{ on }">
           <v-btn text v-on="on">
             <v-icon class="user-icon"> mdi-account</v-icon>
@@ -87,6 +87,7 @@ export default {
   },
   methods: {
     logOut() {
+      this.menuActive = false;
       this.$store.dispatch("logOutUser");
       this.$router.push({ name: "login" });
     }

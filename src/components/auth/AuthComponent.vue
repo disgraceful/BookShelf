@@ -56,11 +56,16 @@
               </v-col>
               <v-col>
                 <v-flex xs12>
-                  <v-btn class="mr-3" :disabled="!valid" @click="onSubmit()"
+                  <v-btn
+                    class="mr-3"
+                    :loading="loading"
+                    :disabled="!valid && !loading"
+                    @click="onSubmit()"
                     >Submit</v-btn
                   >
                   <v-btn
                     color="primary"
+                    :disabled="true"
                     v-text="
                       isRegister ? 'SignUp with Google' : 'SignIn with Google'
                     "
@@ -130,6 +135,9 @@ export default {
     },
     error() {
       return this.$store.getters.getError;
+    },
+    loading() {
+      return this.$store.getters.getLoading;
     }
   },
   watch: {

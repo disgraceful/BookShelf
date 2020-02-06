@@ -15,7 +15,6 @@ export default new Vuex.Store({
 
   mutations: {
     setUser(state, payload) {
-      console.log("state init");
       state.authUser = payload;
     },
     setError(state, payload) {
@@ -40,19 +39,22 @@ export default new Vuex.Store({
           commit("setLoading", false);
         }).catch(error => {
           commit("setError", error.body);
+          commit("setLoading", false);
         })
     },
 
     signInUser({ commit }, payload) {
+      commit("setLoading", true);
       authService.signIn(payload.email, payload.password)
         .then(response => {
           const user = response.user;
           const token = response.token;
           localStorage.setItem("user", JSON.stringify({ id: user.id, email: user.email, token: token }));
           commit("setUser", user);
-          //commit("setLoading", false);
+          commit("setLoading", false);
         }).catch(error => {
           commit("setError", error.body);
+          commit("setLoading", false);
         })
     },
 
@@ -63,6 +65,7 @@ export default new Vuex.Store({
         console.log("validating user");
         commit("setUser", user);
       }
+      commit("setLoading", false);
     },
 
     logOutUser({ commit }) {

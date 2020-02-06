@@ -6,8 +6,8 @@
         <v-row>
           <bs-progress
             :progress="{
-              value: 92,
-              max: 200,
+              value: tabItems[3].books.length,
+              max: 20,
               text: 'Books',
               color: '#cc0000',
               bgcolor: '#ff9999'
@@ -32,7 +32,7 @@
               {{ item.name }} <sup>{{ item.books.length }}</sup>
             </v-badge>
           </v-tab>
-          <v-tabs-items v-model="tab" v-if="tabItems.length > 0">
+          <v-tabs-items v-model="tab" v-if="loading">
             <bs-book-list :books="tabItems[tab].books"></bs-book-list>
           </v-tabs-items>
         </v-tabs>
@@ -51,7 +51,8 @@ export default {
     return {
       user: {},
       tab: 0,
-      tabItems: []
+      tabItems: [],
+      loading: false
     };
   },
   props: ["id"],
@@ -85,7 +86,7 @@ export default {
         books: this.user.books.filter(book => book.status === "finished")
       }
     ];
-    console.log(this.tabItems);
+    this.loading = true;
   }
 };
 </script>
