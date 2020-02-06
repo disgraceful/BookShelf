@@ -12,7 +12,6 @@ export default new Vuex.Store({
     error: null,
     loading: false,
   },
-
   mutations: {
     setUser(state, payload) {
       state.authUser = payload;

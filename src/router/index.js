@@ -9,16 +9,10 @@ import BookPage from "../components/bookviews/BookPage"
 import UserPage from "../components/userviews/UserPage"
 
 Vue.use(VueRouter)
-
-//when page is reloading request is sending to server validating user data in localstorage
-//until request is done, it is null. so first user get send to login, then user gets loaded and it's redirected to '/' => '/home'
-//need to be fixed
 const authGard = (to, from, next) => {
-  if (localStorage.getItem("user")) {//rewrite
-    console.log(to);
+  if (localStorage.getItem("user")) {
     next();
   } else {
-    console.log("unathorized", to);
     next({
       name: "login"
     });
