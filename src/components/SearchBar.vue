@@ -59,13 +59,14 @@
 
 <script>
 import { ServiceFactory } from "../services/serviceFactory";
-import { fromEvent, from, Subject } from "rxjs";
+import { fromEvent, from, Subject, of } from "rxjs";
 import {
   debounceTime,
   distinctUntilChanged,
   map,
   flatMap,
-  takeUntil
+  takeUntil,
+  catchError
 } from "rxjs/operators";
 const bookService = ServiceFactory.get("book");
 
@@ -109,9 +110,20 @@ export default {
         distinctUntilChanged(),
         map(input => input.target.value),
         flatMap(text => {
-          this.loading = true;
-          console.log("loading");
-          return from(bookService.searchBook(text, this.user.token));
+          if (text) {
+            this.loading = true;
+            this.error = null;
+            console.log("loading");
+            return from(bookService.searchBook(text, this.user.token));
+          } else {
+            return of([]);
+          }
+        }),
+        catchError((error, curThread) => {
+          this.loading = false;
+          this.error = "Book not found";
+          this.searchResults = [];
+          return curThread;
         })
       )
       .subscribe(
@@ -120,11 +132,7 @@ export default {
           console.log("finished");
           this.searchResults = response.slice(0, 4);
         },
-        error => {
-          this.loading = false;
-          this.error = error.body.message;
-          this.searchResults = [];
-        }
+        error => {}
       );
   },
   beforeDestroy() {

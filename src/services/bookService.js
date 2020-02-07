@@ -8,7 +8,7 @@ export default {
     },
 
     searchBook(text, token) {
-        return Vue.http.get(`books/search/${text}`, { headers: { 'X-Access-Token': token } })
+        return Vue.http.get(`books/search`, { params: { 'query': text }, headers: { 'X-Access-Token': token } })
             .then(response => Promise.resolve(response.data))
             .catch(error => Promise.reject(error));
     }
