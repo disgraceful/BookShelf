@@ -97,7 +97,6 @@ export default {
   },
   methods: {
     clearSearch() {
-      console.log("triggered");
       this.visibleResults = false;
     }
   },

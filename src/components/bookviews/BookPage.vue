@@ -69,12 +69,18 @@
               v-text="i < book.genres.length - 1 ? `${genre}, ` : genre"
             ></span>
           </v-card-text>
-          <v-card-text class="subtitle-1 text-justify mb-2">{{
-            book.description
-          }}</v-card-text>
+          <v-card-text
+            class="subtitle-1 text-justify mb-2"
+            style="white-space: pre-line"
+            >{{ shrinkedDescription }}
+            <a @click="shortenDesc = !shortenDesc">
+              {{ expandLink }}</a
+            ></v-card-text
+          >
           <v-divider></v-divider>
-          <v-toolbar flat dense class="justify-center">
+          <v-toolbar flat dense color="#fafafa">
             <v-toolbar-items>
+              <v-spacer></v-spacer>
               <template v-for="(item, index) in bookStatusButtons">
                 <v-btn
                   text
@@ -89,6 +95,7 @@
                   v-if="index < bookStatusButtons.length - 1"
                 ></v-divider>
               </template>
+              <v-spacer></v-spacer>
             </v-toolbar-items>
           </v-toolbar>
         </v-col>
@@ -157,7 +164,8 @@ export default {
       ],
       activeClass: "active",
       loaderWrapper: "loader-wrapper",
-      loading: false
+      loading: false,
+      shortenDesc: false
     };
   },
   props: ["id"],
@@ -174,6 +182,19 @@ export default {
   computed: {
     user() {
       return this.$store.getters.getAuthUser;
+    },
+    expandLink() {
+      return this.shortenDesc ? " ...more" : " less ";
+    },
+
+    shrinkedDescription() {
+      let words = this.book.description.split(" ");
+      if (this.shortenDesc) {
+        let shortDesc = words.splice(0, 70).join(" ");
+        return shortDesc;
+      } else {
+        return this.book.description;
+      }
     }
   },
   methods: {
@@ -183,8 +204,8 @@ export default {
       this.isFavorited = this.book.isFavorited || false;
       this.pagesRead = this.book.pagesRead || 0;
       this.bookStatus = this.book.status || null;
-      console.log(this.book);
       this.loading = true;
+      this.shortenDesc = this.book.description.split(" ").length > 100;
     },
 
     createBookRecord() {
@@ -216,7 +237,6 @@ export default {
     }
   },
   mounted() {
-    console.log("fetching book");
     this.getBookInfo();
   }
 };
@@ -227,6 +247,7 @@ export default {
   background-color: teal;
   color: #fff;
 }
+
 .tooltip {
   background-color: #f1f1f1;
   color: #000;
@@ -238,5 +259,12 @@ export default {
   position: relative;
   top: 240px;
   justify-content: center;
+}
+
+.v-toolbar__content {
+  justify-content: center !important;
+}
+a:hover {
+  text-decoration: underline;
 }
 </style>
