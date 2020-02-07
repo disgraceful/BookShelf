@@ -1,15 +1,9 @@
 <template>
-  <v-col
-    sm6
-    md3
-    align-self="center"
-    class="pb-0 pr-0 pl-0 search-bar"
-    :style="{ top: searchActive ? '146px' : 0 }"
-  >
+  <v-col sm6 md3 class="search-wrapper">
     <div v-click-outside="clearSearch">
       <v-text-field
         ref="search"
-        id="search"
+        class="search-bar"
         dense
         outlined
         label="Search books"
@@ -33,8 +27,13 @@
         light
         :style="{ visibility: visibleResults ? 'visible' : 'hidden' }"
       >
-        <template v-for="(item, index) in searchResults">
-          <v-divider :key="index"></v-divider>
+        <template v-if="error">
+          <v-list-item>
+            {{ error }}
+          </v-list-item>
+          <v-divider></v-divider>
+        </template>
+        <template v-else v-for="(item, index) in searchResults">
           <v-list-item
             :key="item.title"
             :to="{ name: 'book', params: { id: item.id } }"
@@ -51,6 +50,7 @@
               ></v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
+          <v-divider :key="index"></v-divider>
         </template>
       </v-list>
     </div>
@@ -76,7 +76,8 @@ export default {
       searchResults: [],
       loading: false,
       destroyed$: new Subject(),
-      visibleResults: true
+      visibleResults: true,
+      error: null
     };
   },
   computed: {
@@ -95,9 +96,8 @@ export default {
   },
   methods: {
     clearSearch() {
-      if (this.searchActive) {
-        this.visibleResults = false;
-      }
+      console.log("triggered");
+      this.visibleResults = false;
     }
   },
   mounted() {
@@ -121,8 +121,8 @@ export default {
           this.searchResults = response.slice(0, 4);
         },
         error => {
-          console.error(error);
           this.loading = false;
+          this.error = error.body.message;
           this.searchResults = [];
         }
       );
@@ -136,13 +136,18 @@ export default {
 
 <style scoped>
 .search-bar {
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+.search-wrapper {
   min-width: 280px !important;
   padding-top: 1.5rem;
   position: relative;
 }
 .search-results {
-  position: relative !important;
-  top: -27px;
-  z-index: 9999;
+  position: absolute !important;
+  width: 100%;
+  margin-top: 14px;
 }
 </style>
