@@ -1,6 +1,6 @@
 <template>
   <v-card flat>
-    <v-container>
+    <v-container v-if="loading" class="pa-6">
       <v-row>
         <v-col cols="auto">
           <div style="position:relative">
@@ -73,7 +73,6 @@
             book.description
           }}</v-card-text>
           <v-divider></v-divider>
-
           <v-toolbar flat dense class="justify-center">
             <v-toolbar-items>
               <template v-for="(item, index) in bookStatusButtons">
@@ -108,12 +107,22 @@
         </v-col>
       </v-row>
     </v-container>
-    <v-divider></v-divider>
+    <bs-loader
+      v-if="!loading"
+      :options="{
+        isDetermined: true,
+        color: 'teal',
+        size: '100',
+        width: '10',
+        wrapperClass: loaderWrapper
+      }"
+    ></bs-loader>
   </v-card>
 </template>
 
 <script>
 import { ServiceFactory } from "../../services/serviceFactory";
+import Preloader from "../shared/Preloader";
 const bookService = ServiceFactory.get("book");
 const userService = ServiceFactory.get("user");
 export default {
@@ -127,34 +136,34 @@ export default {
       bookStatusButtons: [
         {
           title: "Finished",
-          collection: "finished",
-          to: ""
+          collection: "finished"
         },
         {
           title: "Reading",
-          collection: "reading",
-          to: ""
+          collection: "reading"
         },
         {
           title: "2Read",
-          collection: "toread",
-          to: ""
+          collection: "toread"
         },
         {
           title: "Stopped",
-          collection: "stopped",
-          to: ""
+          collection: "stopped"
         },
         {
           title: "Not Reading",
-          collection: null,
-          to: ""
+          collection: null
         }
       ],
-      activeClass: "active"
+      activeClass: "active",
+      loaderWrapper: "loader-wrapper",
+      loading: false
     };
   },
   props: ["id"],
+  components: {
+    "bs-loader": Preloader
+  },
   watch: {
     $route(to, from) {
       if (to.path.includes("/book") || to.path === from.path) {
@@ -165,18 +174,17 @@ export default {
   computed: {
     user() {
       return this.$store.getters.getAuthUser;
-    },
-    loading() {
-      return this.$store.getters.getLoading;
     }
   },
   methods: {
     async getBookInfo() {
+      this.loading = false;
       this.book = await bookService.getBookById(this.id, this.user.token);
-      this.isFavorited = this.book.isFavorited || false; //temporary
+      this.isFavorited = this.book.isFavorited || false;
       this.pagesRead = this.book.pagesRead || 0;
       this.bookStatus = this.book.status || null;
       console.log(this.book);
+      this.loading = true;
     },
 
     createBookRecord() {
@@ -223,5 +231,12 @@ export default {
   background-color: #f1f1f1;
   color: #000;
   font-weight: 500;
+}
+
+.loader-wrapper {
+  display: flex;
+  position: relative;
+  top: 240px;
+  justify-content: center;
 }
 </style>

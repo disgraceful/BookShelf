@@ -113,7 +113,6 @@ export default {
           if (text) {
             this.loading = true;
             this.error = null;
-            console.log("loading");
             return from(bookService.searchBook(text, this.user.token));
           } else {
             return of([]);
@@ -126,14 +125,10 @@ export default {
           return curThread;
         })
       )
-      .subscribe(
-        response => {
-          this.loading = false;
-          console.log("finished");
-          this.searchResults = response.slice(0, 4);
-        },
-        error => {}
-      );
+      .subscribe(response => {
+        this.loading = false;
+        this.searchResults = response.slice(0, 4);
+      });
   },
   beforeDestroy() {
     this.destroyed$.next(true);
