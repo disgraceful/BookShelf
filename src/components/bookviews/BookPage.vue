@@ -4,7 +4,7 @@
       <v-row>
         <v-col cols="auto">
           <div style="position:relative">
-            <v-img :src="book.imageUrl" content> </v-img>
+            <v-img :src="book.imageUrl || defaultImg" content> </v-img>
             <v-tooltip bottom content-class="tooltip">
               <template v-slot:activator="{ on }">
                 <v-btn
@@ -24,8 +24,8 @@
               <span v-text="isFavorited ? 'Favorite' : 'Unfavorite'"></span>
             </v-tooltip>
           </div>
-          <v-rating class="pt-2" v-model="rating" hover></v-rating>
-          <div class="text-center title font-weight-regular">
+          <v-rating class="pt-4" v-model="rating" hover></v-rating>
+          <div v-if="rating > 0" class="text-center title font-weight-regular">
             My rating: {{ rating > 0 ? rating : "" }}
           </div>
         </v-col>
@@ -47,11 +47,13 @@
             ></span>
           </v-card-text>
           <v-card-text
+            v-if="book.goodreadsRating"
             class="pb-0 subtitle-1 "
             v-text="`Goodreads rating: ${book.goodreadsRating}`"
           >
           </v-card-text>
           <v-card-text
+            v-if="book.publishedYear"
             class="pb-0 pt-1 subtitle-1"
             v-text="`Published in: ${book.publishedYear}`"
           >
@@ -70,6 +72,7 @@
             ></span>
           </v-card-text>
           <v-card-text
+            v-if="book.description"
             class="subtitle-1 text-justify mb-2"
             style="white-space: pre-line"
             >{{ shrinkedDescription }}
@@ -98,19 +101,19 @@
               <v-spacer></v-spacer>
             </v-toolbar-items>
           </v-toolbar>
-        </v-col>
-      </v-row>
-      <v-row class="pt-10" justify="center">
-        <v-col cols="8">
-          <v-slider
-            label="I read pages"
-            min="0"
-            :max="book.pages"
-            v-model="pagesRead"
-            thumb-label="always"
-            :thumb-size="24"
-          >
-          </v-slider>
+          <v-row class="pt-10" v-if="bookStatus == 'reading'">
+            <v-col>
+              <v-slider
+                label="I read pages: "
+                min="0"
+                :max="book.pages"
+                v-model="pagesRead"
+                thumb-label="always"
+                :thumb-size="24"
+              >
+              </v-slider>
+            </v-col>
+          </v-row>
         </v-col>
       </v-row>
     </v-container>
@@ -136,6 +139,7 @@ export default {
   data() {
     return {
       book: {},
+      defaultImg: "../../assets/goodreads.png",
       rating: 0,
       isFavorited: false,
       pagesRead: 0,
@@ -159,7 +163,7 @@ export default {
         },
         {
           title: "Not Reading",
-          collection: null
+          collection: "not reading"
         }
       ],
       activeClass: "active",
@@ -203,7 +207,7 @@ export default {
       this.book = await bookService.getBookById(this.id, this.user.token);
       this.isFavorited = this.book.isFavorited || false;
       this.pagesRead = this.book.pagesRead || 0;
-      this.bookStatus = this.book.status || null;
+      this.bookStatus = this.book.status || "not reading";
       this.loading = true;
       this.shortenDesc = this.book.description.split(" ").length > 100;
     },
@@ -225,15 +229,28 @@ export default {
 
     async addToUserCollection(collection) {
       if (!collection || this.bookStatus === collection) return;
-      const bookRecord = this.createBookRecord();
-      bookRecord.status = collection;
-      const result = await userService.addToUserCollection(
+      if (collection === "not reading") {
+        await this.removeFromCollection();
+      } else {
+        const bookRecord = this.createBookRecord();
+        bookRecord.status = collection;
+        const result = await userService.addToUserCollection(
+          this.user.token,
+          bookRecord,
+          collection
+        );
+        this.bookStatus = result.status;
+        console.log(result);
+      }
+    },
+
+    async removeFromCollection() {
+      const result = await userService.removeFromUserCollection(
         this.user.token,
-        bookRecord,
-        collection
+        this.book.id
       );
-      this.bookStatus = result.status;
       console.log(result);
+      if (result) this.bookStatus = result.status;
     }
   },
   mounted() {
