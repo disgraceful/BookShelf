@@ -14,12 +14,15 @@
                   top
                   right
                   v-on="on"
-                  @click="isFavorited = !isFavorited"
+                  color="white"
+                  @click="favoriteBook"
                 >
-                  <v-icon :color="isFavorited ? 'red' : 'grey'"
-                    >mdi-star</v-icon
-                  ></v-btn
-                >
+                  <v-icon
+                    :color="isFavorited ? 'red' : 'grey'"
+                    v-text="isFavorited ? 'mdi-heart' : 'mdi-heart-outline'"
+                  >
+                  </v-icon
+                ></v-btn>
               </template>
               <span v-text="isFavorited ? 'Favorite' : 'Unfavorite'"></span>
             </v-tooltip>
@@ -89,7 +92,7 @@
                   text
                   :key="item.title"
                   :class="[item.collection === bookStatus ? activeClass : '']"
-                  @click="addToUserCollection(item.collection)"
+                  @click="item.clickHandler(item.collection)"
                   >{{ item.title }}
                 </v-btn>
                 <v-divider
@@ -104,7 +107,7 @@
           <v-row class="pt-10" v-if="bookStatus == 'reading'">
             <v-col>
               <v-slider
-                label="I read pages: "
+                label="I'm on page': "
                 min="0"
                 :max="book.pages"
                 v-model="pagesRead"
@@ -118,7 +121,7 @@
       </v-row>
     </v-container>
     <bs-loader
-      v-if="!loading"
+      v-if="!loading && !error"
       :options="{
         isDetermined: true,
         color: 'teal',
@@ -127,12 +130,14 @@
         wrapperClass: loaderWrapper
       }"
     ></bs-loader>
+    <component v-if="error" :is="errorComponent" :error="error"></component>
   </v-card>
 </template>
 
 <script>
 import { ServiceFactory } from "../../services/serviceFactory";
 import Preloader from "../shared/Preloader";
+import ErrorPage from "../shared/ErrorPage";
 const bookService = ServiceFactory.get("book");
 const userService = ServiceFactory.get("user");
 export default {
@@ -147,34 +152,41 @@ export default {
       bookStatusButtons: [
         {
           title: "Finished",
-          collection: "finished"
+          collection: "finished",
+          clickHandler: this.addToUserCollection
         },
         {
           title: "Reading",
-          collection: "reading"
+          collection: "reading",
+          clickHandler: this.addToUserCollection
         },
         {
           title: "2Read",
-          collection: "toread"
+          collection: "toread",
+          clickHandler: this.addToUserCollection
         },
         {
           title: "Stopped",
-          collection: "stopped"
+          collection: "stopped",
+          clickHandler: this.addToUserCollection
         },
         {
           title: "Not Reading",
-          collection: "not reading"
+          collection: "not reading",
+          clickHandler: this.removeFromCollection
         }
       ],
       activeClass: "active",
       loaderWrapper: "loader-wrapper",
       loading: false,
-      shortenDesc: false
+      shortenDesc: false,
+      error: false
     };
   },
   props: ["id"],
   components: {
-    "bs-loader": Preloader
+    "bs-loader": Preloader,
+    "bs-error": ErrorPage
   },
   watch: {
     $route(to, from) {
@@ -190,7 +202,9 @@ export default {
     expandLink() {
       return this.shortenDesc ? " ...more" : " less ";
     },
-
+    errorComponent() {
+      return this.error ? "bs-error" : "";
+    },
     shrinkedDescription() {
       let words = this.book.description.split(" ");
       if (this.shortenDesc) {
@@ -203,13 +217,18 @@ export default {
   },
   methods: {
     async getBookInfo() {
-      this.loading = false;
-      this.book = await bookService.getBookById(this.id, this.user.token);
-      this.isFavorited = this.book.isFavorited || false;
-      this.pagesRead = this.book.pagesRead || 0;
-      this.bookStatus = this.book.status || "not reading";
-      this.loading = true;
-      this.shortenDesc = this.book.description.split(" ").length > 100;
+      try {
+        this.loading = false;
+        this.book = await bookService.getBookById(this.id, this.user.token);
+        this.isFavorited = this.book.isFavorited || false;
+        this.pagesRead = this.book.pagesRead || 0;
+        this.bookStatus = this.book.status || "not reading";
+        this.loading = true;
+        this.shortenDesc = this.book.description.split(" ").length > 100;
+      } catch (error) {
+        this.loading = false;
+        this.error = error.body;
+      }
     },
 
     createBookRecord() {
@@ -229,9 +248,7 @@ export default {
 
     async addToUserCollection(collection) {
       if (!collection || this.bookStatus === collection) return;
-      if (collection === "not reading") {
-        await this.removeFromCollection();
-      } else {
+      try {
         const bookRecord = this.createBookRecord();
         bookRecord.status = collection;
         const result = await userService.addToUserCollection(
@@ -241,16 +258,41 @@ export default {
         );
         this.bookStatus = result.status;
         console.log(result);
+      } catch (error) {
+        this.loading = false;
+        this.error = error.body;
       }
     },
 
-    async removeFromCollection() {
-      const result = await userService.removeFromUserCollection(
-        this.user.token,
-        this.book.id
-      );
-      console.log(result);
-      if (result) this.bookStatus = result.status;
+    async removeFromCollection(collection) {
+      if (!collection || this.bookStatus === collection) return;
+      try {
+        const result = await userService.removeFromUserCollection(
+          this.user.token,
+          this.book.id
+        );
+        console.log(result);
+        if (result) this.bookStatus = result.status;
+      } catch (error) {
+        this.loading = false;
+        this.error = error.body;
+      }
+    },
+
+    async favoriteBook() {
+      this.isFavorited = !this.isFavorited;
+      try {
+        const bookRecord = this.createBookRecord();
+        bookRecord.isFavorited = this.isFavorited;
+        const result = await userService.setFavorite(
+          this.user.token,
+          bookRecord
+        );
+      } catch (error) {
+        console.log(error);
+        this.loading = false;
+        this.error = error.body;
+      }
     }
   },
   mounted() {

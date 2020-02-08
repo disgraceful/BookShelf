@@ -17,5 +17,17 @@ export default {
         return Vue.http.delete("user/collection", { params: { bookId: bookId }, headers: { 'X-Access-Token': token } })
             .then((response) => Promise.resolve(response.data))
             .catch((error) => Promise.reject(error));
+    },
+
+    getFavorites(token) {
+        return Vue.http.get("user/favorite", { headers: { 'X-Access-Token': token } })
+            .then((response) => Promise.resolve(response.data))
+            .catch((error) => Promise.reject(error));
+    },
+
+    setFavorite(token, book) {
+        return Vue.http.post("user/favorite", { book: book }, { headers: { 'X-Access-Token': token } })
+            .then((response) => Promise.resolve(response.data))
+            .catch((error) => Promise.reject(error));
     }
 }
