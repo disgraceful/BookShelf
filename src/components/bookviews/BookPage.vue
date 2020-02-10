@@ -27,7 +27,12 @@
               <span v-text="isFavorited ? 'Favorite' : 'Unfavorite'"></span>
             </v-tooltip>
           </div>
-          <v-rating class="pt-4" v-model="rating" hover></v-rating>
+          <v-rating
+            class="pt-4"
+            v-model="rating"
+            hover
+            @input="updateBook"
+          ></v-rating>
           <div v-if="rating > 0" class="text-center title font-weight-regular">
             My rating: {{ rating > 0 ? rating : "" }}
           </div>
@@ -223,6 +228,7 @@ export default {
         this.isFavorited = this.book.isFavorited || false;
         this.pagesRead = this.book.pagesRead || 0;
         this.bookStatus = this.book.status || "not reading";
+        this.rating = this.book.rating || 0;
         this.loading = true;
         this.shortenDesc = this.book.description.split(" ").length > 100;
       } catch (error) {
@@ -242,7 +248,8 @@ export default {
         pagesRead: this.pagesRead,
         pages: this.pages,
         rating: this.rating,
-        isFavorited: this.isFavorited
+        isFavorited: this.isFavorited,
+        status: this.bookStatus
       };
     },
 
@@ -283,11 +290,24 @@ export default {
       this.isFavorited = !this.isFavorited;
       try {
         const bookRecord = this.createBookRecord();
-        bookRecord.isFavorited = this.isFavorited;
         const result = await userService.setFavorite(
           this.user.token,
           bookRecord
         );
+      } catch (error) {
+        console.log(error);
+        this.loading = false;
+        this.error = error.body;
+      }
+    },
+    async updateBook() {
+      try {
+        const bookRecord = this.createBookRecord();
+        const result = await userService.updateBook(
+          this.user.token,
+          bookRecord
+        );
+        console.log(result);
       } catch (error) {
         console.log(error);
         this.loading = false;

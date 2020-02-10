@@ -29,5 +29,11 @@ export default {
         return Vue.http.post("user/favorite", { book: book }, { headers: { 'X-Access-Token': token } })
             .then((response) => Promise.resolve(response.data))
             .catch((error) => Promise.reject(error));
+    },
+
+    updateBook(token, book) {
+        return Vue.http.put("user/collection", { book: book }, { headers: { 'X-Access-Token': token } })
+            .then((response) => Promise.resolve(response.data))
+            .catch((error) => Promise.reject(error));
     }
 }
