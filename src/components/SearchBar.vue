@@ -58,6 +58,7 @@
 </template>
 
 <script>
+import ClickOutside from "vue-click-outside";
 import { ServiceFactory } from "../services/serviceFactory";
 import { fromEvent, from, Subject, of } from "rxjs";
 import {
@@ -100,6 +101,7 @@ export default {
       this.visibleResults = false;
     }
   },
+  directives: { ClickOutside },
   mounted() {
     const input$ = fromEvent(this.$refs.search.$refs.input, "input");
     input$

@@ -15,7 +15,7 @@
           ></bs-progress>
           <bs-progress
             :progress="{
-              value: 1960,
+              value: pagesReadTotal,
               max: 5000,
               text: 'Pages',
               color: '#009878',
@@ -52,38 +52,45 @@ export default {
       user: {},
       tab: 0,
       tabItems: [],
-      loading: false
+      loading: false,
+      userBooks: null
     };
   },
   props: ["id"],
   computed: {
     userState() {
       return this.$store.getters.getAuthUser;
+    },
+    pagesReadTotal() {
+      return this.userBooks.reduce(
+        (prevValue, curValue) => prevValue + curValue.pagesRead,
+        0
+      );
     }
   },
   components: {
     "bs-progress": UserProgress,
     "bs-book-list": UserBookList
   },
-  async beforeMount() {
+  async created() {
     this.user = await userService.getUser(this.userState.token);
-    console.log(this.user);
+    this.userBooks = this.user.books;
     this.tabItems = [
       {
         name: "Reading",
-        books: this.user.books.filter(book => book.status === "reading")
+        books: this.userBooks.filter(book => book.status === "reading")
       },
       {
         name: "2Read",
-        books: this.user.books.filter(book => book.status === "toread")
+        books: this.userBooks.filter(book => book.status === "toread")
       },
       {
         name: "Stopped",
-        books: this.user.books.filter(book => book.status === "stopped")
+        books: this.userBooks.filter(book => book.status === "stopped")
       },
       {
         name: "Finished",
-        books: this.user.books.filter(book => book.status === "finished")
+        books: this.userBooks.filter(book => book.status === "finished")
       }
     ];
     this.loading = true;
