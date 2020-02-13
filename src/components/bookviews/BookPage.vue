@@ -109,106 +109,10 @@
               <v-spacer></v-spacer>
             </v-toolbar-items>
           </v-toolbar>
-          <v-dialog v-model="finishReadingDialog" max-width="600">
-            <v-card>
-              <v-container>
-                <v-card-title
-                  >{{ book.title }} {{ book.series.fullName }}
-                </v-card-title>
-                <v-card-text class="pb-0 subtitle-1">
-                  <span>by </span>
-                  <span
-                    v-for="(author, i) in book.authors"
-                    :key="i"
-                    v-text="
-                      i < book.authors.length - 1
-                        ? `${author.name}, `
-                        : author.name
-                    "
-                  ></span>
-                </v-card-text>
-                <v-divider></v-divider>
-                <v-card-text>
-                  What do you think?
-                </v-card-text>
-                <v-textarea
-                  outlined
-                  auto-grow
-                  label="Write your notes, review, etc (optional)"
-                ></v-textarea>
-                <v-divider></v-divider>
-                <v-card-text>
-                  Reading dates (optional)
-                </v-card-text>
-                <v-row>
-                  <v-col>
-                    <v-menu
-                      v-model="dialogMenu"
-                      :close-on-content-click="false"
-                      transition="scale-transition"
-                      offset-y
-                      min-width="250px"
-                    >
-                      <template v-slot:activator="{ on }">
-                        <v-text-field
-                          v-model="startDate"
-                          label="Start date "
-                          prepend-icon="mdi-calendar-range"
-                          autocomplete="off"
-                          v-on="on"
-                        ></v-text-field>
-                      </template>
-                      <v-date-picker
-                        v-model="startDate"
-                        no-title
-                        @input="dialogMenu = false"
-                      >
-                      </v-date-picker>
-                    </v-menu>
-                  </v-col>
-                  <v-col>
-                    <v-menu
-                      v-model="dialogMenu2"
-                      :close-on-content-click="false"
-                      transition="scale-transition"
-                      offset-y
-                      min-width="250px"
-                    >
-                      <template v-slot:activator="{ on }">
-                        <v-text-field
-                          v-model="endDate"
-                          label="End date"
-                          prepend-icon="mdi-calendar-range"
-                          autocomplete="off"
-                          v-on="on"
-                        ></v-text-field>
-                      </template>
-                      <v-date-picker
-                        v-model="endDate"
-                        no-title
-                        @input="dialogMenu2 = false"
-                      >
-                      </v-date-picker>
-                    </v-menu>
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col cols="auto">
-                    My rating:
-                  </v-col>
-                  <v-col class="pa-1" cols="auto">
-                    <v-rating hover v-model="rating"></v-rating>
-                  </v-col>
-                  <v-col class="pa-2">
-                    <v-btn text>Clear</v-btn>
-                  </v-col>
-                </v-row>
-                <v-card-actions class="justify-end">
-                  <v-btn text>Submit</v-btn>
-                </v-card-actions>
-              </v-container>
-            </v-card>
+          <v-dialog v-model="finishDialog" max-width="600">
+            <bs-finish-dialog :book="book"></bs-finish-dialog>
           </v-dialog>
+
           <v-row class="pt-10" v-if="bookStatus == 'reading'">
             <v-col>
               <v-slider
@@ -252,6 +156,7 @@
 import { ServiceFactory } from "../../services/serviceFactory";
 import Preloader from "../shared/Preloader";
 import ErrorPage from "../shared/ErrorPage";
+import FinishBookDialog from "./FinishBookDialog";
 const bookService = ServiceFactory.get("book");
 const userService = ServiceFactory.get("user");
 export default {
@@ -295,24 +200,14 @@ export default {
       loading: false,
       shortenDesc: false,
       error: false,
-      finishReadingDialog: true,
-      dialogMenu: false,
-      dialogMenu2: false,
-      startDate: "",
-      endDate: new Date().toISOString().substr(0, 10),
-      ratingValues: [
-        "Not worth reading",
-        "Mediocre",
-        "Okay book",
-        "Good book",
-        "Great book"
-      ]
+      finishDialog: true
     };
   },
   props: ["id"],
   components: {
     "bs-loader": Preloader,
-    "bs-error": ErrorPage
+    "bs-error": ErrorPage,
+    "bs-finish-dialog": FinishBookDialog
   },
   watch: {
     $route(to, from) {
@@ -437,7 +332,7 @@ export default {
     },
 
     finishBook() {
-      this.finishReadingDialog = true;
+      this.finishDialog = true;
       const bookRecord = this.createBookRecord();
       bookRecord.status = "finished";
       bookRecord.pagesRead = bookRecord.pages;
