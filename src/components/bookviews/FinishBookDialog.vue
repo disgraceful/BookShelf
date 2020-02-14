@@ -55,7 +55,7 @@
           auto-grow
           label="Write your notes, review, etc (optional)"
         ></v-textarea>
-        <v-card-text class="pt-0">
+        <v-card-text class="pt-0 pb-0">
           Reading dates (optional)
         </v-card-text>
         <v-row justify="space-between" class="pr-3 pl-3">
@@ -178,7 +178,7 @@ export default {
         startDate: this.startDate,
         endDate: this.endDate
       };
-      console.log(post);
+      this.$emit("posted", post);
     }
   }
 };

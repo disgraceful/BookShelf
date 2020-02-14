@@ -2,39 +2,54 @@
   <v-card flat>
     <v-container v-if="loading" class="pa-6">
       <v-row>
-        <v-col cols="auto">
-          <div style="position:relative">
-            <v-img :src="book.imageUrl || defaultImg" content> </v-img>
-            <v-tooltip bottom content-class="tooltip">
-              <template v-slot:activator="{ on }">
-                <v-btn
-                  fab
-                  small
-                  absolute
-                  top
-                  right
-                  v-on="on"
-                  color="white"
-                  @click="favoriteBook"
-                >
-                  <v-icon
-                    :color="isFavorited ? 'red' : 'grey'"
-                    v-text="isFavorited ? 'mdi-heart' : 'mdi-heart-outline'"
+        <v-col cols="4" md="3">
+          <v-col>
+            <div style="position:relative">
+              <v-img :src="book.imageUrl || defaultImg" content> </v-img>
+              <v-tooltip bottom content-class="tooltip">
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    fab
+                    small
+                    absolute
+                    top
+                    right
+                    v-on="on"
+                    color="white"
+                    @click="favoriteBook"
                   >
-                  </v-icon
-                ></v-btn>
-              </template>
-              <span v-text="isFavorited ? 'Favorite' : 'Unfavorite'"></span>
-            </v-tooltip>
-          </div>
-          <v-rating
-            class="pt-4"
-            v-model="rating"
-            hover
-            @input="updateBook"
-          ></v-rating>
-          <div v-if="rating > 0" class="text-center title font-weight-regular">
-            My rating: {{ rating > 0 ? rating : "" }}
+                    <v-icon
+                      :color="book.isFavorited ? 'red' : 'grey'"
+                      v-text="
+                        book.isFavorited ? 'mdi-heart' : 'mdi-heart-outline'
+                      "
+                    >
+                    </v-icon
+                  ></v-btn>
+                </template>
+                <span
+                  v-text="book.isFavorited ? 'Unfavorite' : 'Favorite'"
+                ></span>
+              </v-tooltip>
+            </div>
+          </v-col>
+          <div
+            class="d-flex justify-center flex-column"
+            v-if="book.status === 'reading'"
+          >
+            <v-rating
+              class="pt-4"
+              v-model="book.rating"
+              hover
+              medium
+              @input="updateBook"
+            ></v-rating>
+            <div
+              v-if="book.rating > 0"
+              class="text-center title font-weight-regular"
+            >
+              My rating: {{ book.rating > 0 ? book.rating : "" }}
+            </div>
           </div>
         </v-col>
         <v-col>
@@ -96,7 +111,7 @@
                 <v-btn
                   text
                   :key="item.title"
-                  :class="[item.collection === bookStatus ? activeClass : '']"
+                  :class="[item.collection === book.status ? activeClass : '']"
                   @click="item.clickHandler(item.collection)"
                   >{{ item.title }}
                 </v-btn>
@@ -110,16 +125,18 @@
             </v-toolbar-items>
           </v-toolbar>
           <v-dialog v-model="finishDialog" max-width="600">
-            <bs-finish-dialog :book="book"></bs-finish-dialog>
+            <bs-finish-dialog
+              :book="book"
+              @posted="postBook"
+            ></bs-finish-dialog>
           </v-dialog>
-
-          <v-row class="pt-10" v-if="bookStatus == 'reading'">
+          <v-row class="pt-10" v-if="book.status == 'reading'">
             <v-col>
               <v-slider
                 label="I'm on page: "
                 min="0"
                 :max="book.pages"
-                v-model="pagesRead"
+                v-model="book.pagesRead"
                 thumb-label="always"
                 :thumb-size="24"
               >
@@ -164,15 +181,11 @@ export default {
     return {
       book: {},
       defaultImg: "../../assets/goodreads.png",
-      rating: 0,
-      isFavorited: false,
-      pagesRead: 0,
-      bookStatus: "",
       bookStatusButtons: [
         {
           title: "Finished",
           collection: "finished",
-          clickHandler: this.finishBook
+          clickHandler: () => (this.finishDialog = true)
         },
         {
           title: "Reading",
@@ -200,7 +213,7 @@ export default {
       loading: false,
       shortenDesc: false,
       error: false,
-      finishDialog: true
+      finishDialog: false
     };
   },
   props: ["id"],
@@ -241,10 +254,6 @@ export default {
       try {
         this.loading = false;
         this.book = await bookService.getBookById(this.id, this.user.token);
-        this.isFavorited = this.book.isFavorited || false;
-        this.pagesRead = this.book.pagesRead || 0;
-        this.bookStatus = this.book.status || "not reading";
-        this.rating = this.book.rating || 0;
         this.loading = true;
         this.shortenDesc = this.book.description.split(" ").length > 100;
       } catch (error) {
@@ -261,16 +270,16 @@ export default {
         author: this.book.authors[0].name,
         series: this.book.series.fullName,
         genres: this.book.genres,
-        pagesRead: this.pagesRead,
+        pagesRead: this.book.pagesRead,
         pages: +this.book.pages,
-        rating: this.rating,
-        isFavorited: this.isFavorited,
-        status: this.bookStatus
+        rating: this.book.rating,
+        isFavorited: this.book.isFavorited,
+        status: this.book.status
       };
     },
 
     async addToUserCollection(collection) {
-      if (!collection || this.bookStatus === collection) return;
+      if (!collection || this.book.status === collection) return;
       try {
         const bookRecord = this.createBookRecord();
         bookRecord.status = collection;
@@ -279,7 +288,7 @@ export default {
           bookRecord,
           collection
         );
-        this.bookStatus = result.status;
+        this.book.status = result.status;
         console.log(result);
       } catch (error) {
         this.loading = false;
@@ -288,14 +297,14 @@ export default {
     },
 
     async removeFromCollection(collection) {
-      if (!collection || this.bookStatus === collection) return;
+      if (!collection || this.book.status === collection) return;
       try {
         const result = await userService.removeFromUserCollection(
           this.user.token,
           this.book.id
         );
         console.log(result);
-        if (result) this.bookStatus = result.status;
+        if (result) this.book.status = result.status;
       } catch (error) {
         this.loading = false;
         this.error = error.body;
@@ -303,13 +312,14 @@ export default {
     },
 
     async favoriteBook() {
-      this.isFavorited = !this.isFavorited;
+      this.book.isFavorited = !this.book.isFavorited;
       try {
         const bookRecord = this.createBookRecord();
         const result = await userService.setFavorite(
           this.user.token,
           bookRecord
         );
+        if (result) this.book.isFavorited = result.isFavorited;
       } catch (error) {
         console.log(error);
         this.loading = false;
@@ -333,9 +343,11 @@ export default {
 
     finishBook() {
       this.finishDialog = true;
-      const bookRecord = this.createBookRecord();
-      bookRecord.status = "finished";
-      bookRecord.pagesRead = bookRecord.pages;
+    },
+    async postBook(event) {
+      this.finishDialog = false;
+      this.book = event.book;
+      console.log(event);
     }
   },
   mounted() {
