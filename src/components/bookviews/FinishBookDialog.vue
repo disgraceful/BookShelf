@@ -172,14 +172,17 @@ export default {
       this.book.rating = 0;
     },
     post() {
-      let post = {
-        book: this.book,
+      let post = this.book;
+      post.userData = {
         notes: this.notes,
         startDate: this.startDate,
         endDate: this.endDate
       };
       this.$emit("posted", post);
     }
+  },
+  mounted() {
+    this.hovered = this.book.rating;
   }
 };
 </script>

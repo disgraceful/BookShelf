@@ -18,14 +18,10 @@
                     color="white"
                     @click="favoriteBook"
                   >
-                    <v-icon
-                      :color="book.isFavorited ? 'red' : 'grey'"
-                      v-text="
-                        book.isFavorited ? 'mdi-heart' : 'mdi-heart-outline'
-                      "
-                    >
-                    </v-icon
-                  ></v-btn>
+                    <v-icon :color="book.isFavorited ? 'red' : 'grey'">
+                      {{ book.isFavorited ? "mdi-heart" : "mdi-heart-outline" }}
+                    </v-icon></v-btn
+                  >
                 </template>
                 <span
                   v-text="book.isFavorited ? 'Unfavorite' : 'Favorite'"
@@ -35,7 +31,7 @@
           </v-col>
           <div
             class="d-flex justify-center flex-column"
-            v-if="book.status === 'reading'"
+            v-if="book.status !== 'not reading' && book.status !== 'toread'"
           >
             <v-rating
               class="pt-4"
@@ -44,12 +40,6 @@
               medium
               @input="updateBook"
             ></v-rating>
-            <div
-              v-if="book.rating > 0"
-              class="text-center title font-weight-regular"
-            >
-              My rating: {{ book.rating > 0 ? book.rating : "" }}
-            </div>
           </div>
         </v-col>
         <v-col>
@@ -127,7 +117,7 @@
           <v-dialog v-model="finishDialog" max-width="600">
             <bs-finish-dialog
               :book="book"
-              @posted="postBook"
+              @posted="finishBook"
             ></bs-finish-dialog>
           </v-dialog>
           <v-row class="pt-10" v-if="book.status == 'reading'">
@@ -278,6 +268,17 @@ export default {
       };
     },
 
+    async finishBook(event) {
+      this.finishDialog = false;
+      this.book = event;
+      const bookRecord = this.createBookRecord();
+      bookRecord.userData = event.userData;
+      bookRecord.status = "finished";
+      bookRecord.pagesRead = this.book.pages;
+      const result = await userService.updateBook(this.user.token, bookRecord);
+      this.book = result;
+    },
+
     async addToUserCollection(collection) {
       if (!collection || this.book.status === collection) return;
       try {
@@ -339,15 +340,6 @@ export default {
         this.loading = false;
         this.error = error.body;
       }
-    },
-
-    finishBook() {
-      this.finishDialog = true;
-    },
-    async postBook(event) {
-      this.finishDialog = false;
-      this.book = event.book;
-      console.log(event);
     }
   },
   mounted() {
