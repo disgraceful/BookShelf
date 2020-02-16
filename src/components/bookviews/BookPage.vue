@@ -88,8 +88,12 @@
             v-if="book.description"
             class="subtitle-1 text-justify mb-2"
             style="white-space: pre-line"
-            >{{ shrinkedDescription }}
-            <a @click="shortenDesc = !shortenDesc">
+          >
+            {{ shrinkedDescription }}
+            <a
+              @click="shrinked = !shrinked"
+              v-if="splitDescription.length > 100"
+            >
               {{ expandLink }}</a
             ></v-card-text
           >
@@ -201,9 +205,10 @@ export default {
       activeClass: "active",
       loaderWrapper: "loader-wrapper",
       loading: false,
-      shortenDesc: false,
       error: false,
-      finishDialog: false
+      finishDialog: false,
+      splitDescription: "",
+      shrinked: true
     };
   },
   props: ["id"],
@@ -224,16 +229,18 @@ export default {
       return this.$store.getters.getAuthUser;
     },
     expandLink() {
-      return this.shortenDesc ? " ...more" : " less ";
+      return this.shrinked ? "...more" : "less";
     },
     errorComponent() {
       return this.error ? "bs-error" : "";
     },
+    isShrinked() {
+      return this.splitDescription.length > 100;
+    },
     shrinkedDescription() {
-      let words = this.book.description.split(" ");
-      if (this.shortenDesc) {
-        let shortDesc = words.splice(0, 70).join(" ");
-        return shortDesc;
+      if (this.shrinked && this.splitDescription.length > 100) {
+        let shortDesc = this.splitDescription;
+        return shortDesc.slice(0, 70).join(" ");
       } else {
         return this.book.description;
       }
@@ -245,7 +252,7 @@ export default {
         this.loading = false;
         this.book = await bookService.getBookById(this.id, this.user.token);
         this.loading = true;
-        this.shortenDesc = this.book.description.split(" ").length > 100;
+        this.splitDescription = this.book.description.split(" ");
       } catch (error) {
         this.loading = false;
         this.error = error.body;
@@ -276,7 +283,6 @@ export default {
       bookRecord.status = "finished";
       bookRecord.pagesRead = this.book.pages;
       const result = await userService.updateBook(this.user.token, bookRecord);
-      this.book = result;
     },
 
     async addToUserCollection(collection) {
