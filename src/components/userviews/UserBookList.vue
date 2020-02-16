@@ -9,19 +9,10 @@
 </template>
 
 <script>
-import SmallBook from "./SmallBook";
+import SmallBook from "../bookviews/SmallBook";
 export default {
   data() {
-    return {
-      test: {
-        smallImageUrl:
-          "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1408303130l/375802._SY160_.jpg",
-        title: "Immortal Guard",
-        author: { name: "N. R. Kash" },
-        pages: 556,
-        rating: 4.5
-      }
-    };
+    return {};
   },
   props: ["books"],
   components: {

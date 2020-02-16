@@ -6,8 +6,14 @@
       </v-col>
       <v-col>
         <v-card-text class="pa-1 subtitle-1">
-          {{ book.title }}
+          <router-link
+            :to="{ name: 'book', params: { id: book.id } }"
+            class="name-link"
+          >
+            {{ book.title }}
+          </router-link>
         </v-card-text>
+
         <v-card-text class="pa-1"> by {{ book.author }} </v-card-text>
       </v-col>
       <v-col auto>
@@ -43,5 +49,11 @@ export default {
 <style scoped>
 .smallImg {
   flex-grow: 0 !important;
+}
+.name-link {
+  text-decoration: none;
+}
+.name-link:hover {
+  text-decoration: underline;
 }
 </style>

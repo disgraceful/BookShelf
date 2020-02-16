@@ -1,6 +1,6 @@
 <template>
   <v-card flat>
-    <v-container
+    <v-container v-if="!loading"
       ><v-card-title>{{ user.email }}</v-card-title>
       <v-col>
         <v-row>
@@ -26,24 +26,35 @@
       </v-col>
       <v-divider></v-divider>
       <v-col>
-        <v-tabs v-model="tab" grow>
+        <v-tabs v-model="tab" grow background-color="#fafafa">
           <v-tab v-for="item in tabItems" :key="item.name">
             <v-badge color="deep-purple accent-4" icon="mdi-vuetify">
               {{ item.name }} <sup>{{ item.books.length }}</sup>
             </v-badge>
           </v-tab>
-          <v-tabs-items v-model="tab" v-if="loading">
+          <v-tabs-items v-model="tab">
             <bs-book-list :books="tabItems[tab].books"></bs-book-list>
           </v-tabs-items>
         </v-tabs>
       </v-col>
     </v-container>
+    <bs-loader
+      v-else
+      :options="{
+        isDetermined: true,
+        color: 'teal',
+        size: '100',
+        width: '10'
+      }"
+    >
+    </bs-loader>
   </v-card>
 </template>
 
 <script>
+import Preloader from "../shared/Preloader";
 import UserProgress from "../shared/UserProgress";
-import UserBookList from "../bookviews/UserBookList";
+import UserBookList from "./UserBookList";
 import { ServiceFactory } from "../../services/serviceFactory";
 const userService = ServiceFactory.get("user");
 export default {
@@ -70,11 +81,14 @@ export default {
   },
   components: {
     "bs-progress": UserProgress,
-    "bs-book-list": UserBookList
+    "bs-book-list": UserBookList,
+    "bs-loader": Preloader
   },
   async created() {
+    this.loading = true;
     this.user = await userService.getUser(this.userState.token);
     this.userBooks = this.user.books;
+
     this.tabItems = [
       {
         name: "Reading",
@@ -93,7 +107,7 @@ export default {
         books: this.userBooks.filter(book => book.status === "finished")
       }
     ];
-    this.loading = true;
+    this.loading = false;
   }
 };
 </script>
