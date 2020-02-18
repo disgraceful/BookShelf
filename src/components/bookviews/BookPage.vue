@@ -1,6 +1,6 @@
 <template>
   <v-card flat>
-    <v-container v-if="loading" class="pa-6">
+    <v-container v-if="book" class="pa-6">
       <v-row>
         <v-col cols="4" md="3">
           <v-col>
@@ -18,24 +18,31 @@
                     color="white"
                     @click="favoriteBook"
                   >
-                    <v-icon :color="book.isFavorited ? 'red' : 'grey'">
-                      {{ book.isFavorited ? "mdi-heart" : "mdi-heart-outline" }}
-                    </v-icon></v-btn
-                  >
+                    <v-icon :color="book.userData.isFavorited ? 'red' : 'grey'">
+                      {{
+                        book.userData.isFavorited
+                          ? "mdi-heart"
+                          : "mdi-heart-outline"
+                      }}
+                    </v-icon>
+                  </v-btn>
                 </template>
                 <span
-                  v-text="book.isFavorited ? 'Unfavorite' : 'Favorite'"
+                  v-text="book.userData.isFavorited ? 'Unfavorite' : 'Favorite'"
                 ></span>
               </v-tooltip>
             </div>
           </v-col>
           <div
             class="d-flex justify-center flex-column"
-            v-if="book.status !== 'not reading' && book.status !== 'toread'"
+            v-if="
+              book.userData.status !== 'not reading' &&
+                book.userData.status !== 'toread'
+            "
           >
             <v-rating
               class="pt-4"
-              v-model="book.rating"
+              v-model="book.userData.rating"
               hover
               medium
               @input="updateBook"
@@ -105,7 +112,9 @@
                 <v-btn
                   text
                   :key="item.title"
-                  :class="[item.collection === book.status ? activeClass : '']"
+                  :class="[
+                    item.collection === book.userData.status ? activeClass : ''
+                  ]"
                   @click="item.clickHandler(item.collection)"
                   >{{ item.title }}
                 </v-btn>
@@ -124,13 +133,13 @@
               @posted="finishBook"
             ></bs-finish-dialog>
           </v-dialog>
-          <v-row class="pt-10" v-if="book.status == 'reading'">
+          <v-row class="pt-10" v-if="book.userData.status == 'reading'">
             <v-col>
               <v-slider
                 label="I'm on page: "
                 min="0"
                 :max="book.pages"
-                v-model="book.pagesRead"
+                v-model="book.userData.pagesRead"
                 thumb-label="always"
                 :thumb-size="24"
               >
@@ -150,7 +159,7 @@
       </v-row>
     </v-container>
     <bs-loader
-      v-if="!loading && !error"
+      v-if="loading && !error"
       :options="{
         isDetermined: true,
         color: 'teal',
@@ -173,7 +182,7 @@ const userService = ServiceFactory.get("user");
 export default {
   data() {
     return {
-      book: {},
+      book: null,
       defaultImg: "../../assets/goodreads.png",
       bookStatusButtons: [
         {
@@ -204,7 +213,7 @@ export default {
       ],
       activeClass: "active",
       loaderWrapper: "loader-wrapper",
-      loading: false,
+      loading: true,
       error: false,
       finishDialog: false,
       splitDescription: "",
@@ -249,9 +258,10 @@ export default {
   methods: {
     async getBookInfo() {
       try {
-        this.loading = false;
-        this.book = await bookService.getBookById(this.id, this.user.token);
         this.loading = true;
+        this.book = await bookService.getBookById(this.id, this.user.token);
+        console.log(this.book);
+        this.loading = false;
         this.splitDescription = this.book.description.split(" ");
       } catch (error) {
         this.loading = false;
@@ -319,14 +329,15 @@ export default {
     },
 
     async favoriteBook() {
-      this.book.isFavorited = !this.book.isFavorited;
+      this.book.userData.isFavorited = !this.book.userData.isFavorited;
       try {
         const bookRecord = this.createBookRecord();
         const result = await userService.setFavorite(
           this.user.token,
           bookRecord
         );
-        if (result) this.book.isFavorited = result.isFavorited;
+        if (result)
+          this.book.userData.isFavorited = result.userData.isFavorited;
       } catch (error) {
         console.log(error);
         this.loading = false;
