@@ -160,24 +160,22 @@ export default {
     },
     unhoverMe() {
       if (!this.clicked) {
-        this.hovered = this.book.rating || 0;
+        this.hovered = this.book.userData.rating || 0;
       }
     },
     clickMe() {
       this.clicked = true;
-      this.book.rating = this.hovered;
+      this.book.userData.rating = this.hovered;
     },
     clear() {
       this.hovered = 0;
-      this.book.rating = 0;
+      this.book.userData.rating = 0;
     },
     post() {
       let post = this.book;
-      post.userData = {
-        notes: this.notes,
-        startDate: this.startDate,
-        endDate: this.endDate
-      };
+      post.userData.notes = this.notes;
+      post.userData.startDate = this.startDate;
+      post.userData.endDate = this.endDate;
       this.$emit("posted", post);
     }
   },

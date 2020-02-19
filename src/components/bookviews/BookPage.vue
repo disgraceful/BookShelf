@@ -50,60 +50,7 @@
           </div>
         </v-col>
         <v-col>
-          <v-card-title class="pt-0 headline font-weight-medium">{{
-            book.title
-          }}</v-card-title>
-          <v-card-subtitle v-if="book.series" class="title">{{
-            book.series.fullName
-          }}</v-card-subtitle>
-          <v-card-text class="pb-0 subtitle-1">
-            <span>by </span>
-            <span
-              v-for="(author, i) in book.authors"
-              :key="i"
-              v-text="
-                i < book.authors.length - 1 ? `${author.name}, ` : author.name
-              "
-            ></span>
-          </v-card-text>
-          <v-card-text
-            v-if="book.goodreadsRating"
-            class="pb-0 subtitle-1 "
-            v-text="`Goodreads rating: ${book.goodreadsRating}`"
-          >
-          </v-card-text>
-          <v-card-text
-            v-if="book.publishedYear"
-            class="pb-0 pt-1 subtitle-1"
-            v-text="`Published in: ${book.publishedYear}`"
-          >
-          </v-card-text>
-          <v-card-text
-            class="pb-0 pt-1 subtitle-1"
-            v-text="`Pages: ${book.pages}`"
-          >
-          </v-card-text>
-          <v-card-text class="pb-0 pt-1 subtitle-1">
-            <span>Genres: </span>
-            <span
-              v-for="(genre, i) in book.genres"
-              :key="i"
-              v-text="i < book.genres.length - 1 ? `${genre}, ` : genre"
-            ></span>
-          </v-card-text>
-          <v-card-text
-            v-if="book.description"
-            class="subtitle-1 text-justify mb-2"
-            style="white-space: pre-line"
-          >
-            {{ shrinkedDescription }}
-            <a
-              @click="shrinked = !shrinked"
-              v-if="splitDescription.length > 100"
-            >
-              {{ expandLink }}</a
-            ></v-card-text
-          >
+          <bs-book-info :book="book"></bs-book-info>
           <v-divider></v-divider>
           <v-toolbar flat dense color="#fafafa">
             <v-toolbar-items>
@@ -133,7 +80,7 @@
               @posted="finishBook"
             ></bs-finish-dialog>
           </v-dialog>
-          <v-row class="pt-10" v-if="book.userData.status == 'reading'">
+          <v-row class="pt-10" v-if="book.userData.status === 'reading'">
             <v-col>
               <v-slider
                 label="I'm on page: "
@@ -177,6 +124,7 @@ import { ServiceFactory } from "../../services/serviceFactory";
 import Preloader from "../shared/Preloader";
 import ErrorPage from "../shared/ErrorPage";
 import FinishBookDialog from "./FinishBookDialog";
+import BookInfo from "./BookInfo";
 const bookService = ServiceFactory.get("book");
 const userService = ServiceFactory.get("user");
 export default {
@@ -215,16 +163,15 @@ export default {
       loaderWrapper: "loader-wrapper",
       loading: true,
       error: false,
-      finishDialog: false,
-      splitDescription: "",
-      shrinked: true
+      finishDialog: false
     };
   },
   props: ["id"],
   components: {
     "bs-loader": Preloader,
     "bs-error": ErrorPage,
-    "bs-finish-dialog": FinishBookDialog
+    "bs-finish-dialog": FinishBookDialog,
+    "bs-book-info": BookInfo
   },
   watch: {
     $route(to, from) {
@@ -237,22 +184,8 @@ export default {
     user() {
       return this.$store.getters.getAuthUser;
     },
-    expandLink() {
-      return this.shrinked ? "...more" : "less";
-    },
     errorComponent() {
       return this.error ? "bs-error" : "";
-    },
-    isShrinked() {
-      return this.splitDescription.length > 100;
-    },
-    shrinkedDescription() {
-      if (this.shrinked && this.splitDescription.length > 100) {
-        let shortDesc = this.splitDescription;
-        return shortDesc.slice(0, 70).join(" ");
-      } else {
-        return this.book.description;
-      }
     }
   },
   methods: {
@@ -260,53 +193,30 @@ export default {
       try {
         this.loading = true;
         this.book = await bookService.getBookById(this.id, this.user.token);
-        console.log(this.book);
         this.loading = false;
-        this.splitDescription = this.book.description.split(" ");
       } catch (error) {
         this.loading = false;
         this.error = error.body;
       }
     },
-
-    createBookRecord() {
-      return {
-        id: this.book.id,
-        title: this.book.title,
-        imageUrl: this.book.imageUrl,
-        author: this.book.authors[0].name,
-        series: this.book.series.fullName,
-        genres: this.book.genres,
-        pagesRead: this.book.pagesRead,
-        pages: +this.book.pages,
-        rating: this.book.rating,
-        isFavorited: this.book.isFavorited,
-        status: this.book.status
-      };
-    },
-
-    async finishBook(event) {
+    async finishBook(eventBook) {
       this.finishDialog = false;
-      this.book = event;
-      const bookRecord = this.createBookRecord();
-      bookRecord.userData = event.userData;
-      bookRecord.status = "finished";
-      bookRecord.pagesRead = this.book.pages;
-      const result = await userService.updateBook(this.user.token, bookRecord);
+      this.book = eventBook;
+      console.log(this.book);
+      this.book.userData.pagesRead = this.book.pages;
+      await this.addToUserCollection("finished");
     },
-
     async addToUserCollection(collection) {
       if (!collection || this.book.status === collection) return;
       try {
-        const bookRecord = this.createBookRecord();
-        bookRecord.status = collection;
         const result = await userService.addToUserCollection(
           this.user.token,
-          bookRecord,
+          this.book,
           collection
         );
-        this.book.status = result.status;
         console.log(result);
+        this.book.userData.status = result.userData.status;
+        console.log(this.book);
       } catch (error) {
         this.loading = false;
         this.error = error.body;
@@ -314,14 +224,13 @@ export default {
     },
 
     async removeFromCollection(collection) {
-      if (!collection || this.book.status === collection) return;
+      if (this.book.userData.status === collection) return;
       try {
         const result = await userService.removeFromUserCollection(
           this.user.token,
           this.book.id
         );
-        console.log(result);
-        if (result) this.book.status = result.status;
+        if (result) this.book.userData = result.userData;
       } catch (error) {
         this.loading = false;
         this.error = error.body;
@@ -387,6 +296,7 @@ export default {
 .v-toolbar__content {
   justify-content: center !important;
 }
+
 a:hover {
   text-decoration: underline;
 }
