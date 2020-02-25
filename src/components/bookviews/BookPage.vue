@@ -198,6 +198,7 @@ export default {
   methods: {
     async getBookInfo() {
       try {
+        this.book = null;
         this.loading = true;
         this.book = await bookService.getBookById(this.id, this.user.token);
         this.loading = false;
@@ -298,9 +299,5 @@ export default {
 
 .v-toolbar__content {
   justify-content: center !important;
-}
-
-a:hover {
-  text-decoration: underline;
 }
 </style>

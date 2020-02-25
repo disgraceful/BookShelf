@@ -2,3 +2,9 @@
   background-color: #fafafa !important;
 }
 
+a {
+  text-decoration: none !important;
+}
+a:hover {
+  text-decoration: underline !important;
+}

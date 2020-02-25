@@ -39,14 +39,14 @@
             :to="{ name: 'book', params: { id: item.id } }"
           >
             <v-list-item-avatar tile height="56px" width="46px">
-              <v-img :src="item.smallImageUrl"></v-img>
+              <v-img :src="item.imageUrl"></v-img>
             </v-list-item-avatar>
             <v-list-item-content>
               <v-list-item-title
-                v-text="`${item.title} ${item.seriesTitle}`"
-              ></v-list-item-title>
+                >{{ item.title }} {{ item.series }}</v-list-item-title
+              >
               <v-list-item-subtitle
-                v-text="`by ${item.authorName}`"
+                v-text="`by ${item.author}`"
               ></v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>

@@ -15,8 +15,7 @@
           v-for="(link, index) in headerLinks"
           :key="link.name"
         >
-          <v-btn class="link" text v-text="link.name" :to="{ name: link.to }">
-          </v-btn>
+          <v-btn class="link" text v-text="link.name"> </v-btn>
           <v-divider vertical v-if="index < headerLinks.length - 1"></v-divider>
         </div>
       </v-toolbar-items>

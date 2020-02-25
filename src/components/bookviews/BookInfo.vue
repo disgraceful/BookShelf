@@ -3,9 +3,14 @@
     <v-card-title class="pt-2 headline font-weight-medium">{{
       book.title
     }}</v-card-title>
-    <v-card-subtitle v-if="book.series" class="title">{{
-      book.series.fullName
-    }}</v-card-subtitle>
+    <v-card-subtitle v-if="book.series" class="title">
+      <router-link
+        class="series"
+        :to="{ name: 'series', params: { id: book.series.id } }"
+      >
+        {{ book.series.fullName }}
+      </router-link>
+    </v-card-subtitle>
     <v-card-text class="pb-0 subtitle-1">
       <span>by </span>
       <span
@@ -84,3 +89,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.series {
+  color: inherit !important;
+}
+</style>
