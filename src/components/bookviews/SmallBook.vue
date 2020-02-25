@@ -14,10 +14,19 @@
           </router-link>
         </v-card-text>
 
-        <v-card-text class="pa-1"> by {{ book.author }} </v-card-text>
+        <v-card-text class="pa-1">
+          <span>by </span>
+          <span
+            v-for="(author, i) in book.authors"
+            :key="i"
+            v-text="
+              i < book.authors.length - 1 ? `${author.name}, ` : author.name
+            "
+          ></span>
+        </v-card-text>
       </v-col>
       <v-col auto>
-        <v-rating medium v-model="book.rating" hover></v-rating>
+        <v-rating medium v-model="book.userData.rating" hover></v-rating>
       </v-col>
       <v-col cols="4">
         <v-row no-gutters>
@@ -25,7 +34,7 @@
             <div class="body-2">Pages read</div>
           </v-col>
           <v-col>
-            <div class="text-end body-2">{{ book.pagesRead }}</div>
+            <div class="text-end body-2">{{ book.userData.pagesRead }}</div>
           </v-col>
         </v-row>
         <v-progress-linear :value="pagesProgress"></v-progress-linear>
@@ -40,7 +49,7 @@ export default {
   props: ["book"],
   computed: {
     pagesProgress() {
-      return (this.book.pagesRead / this.book.pages) * 100;
+      return (this.book.userData.pagesRead / this.book.pages) * 100;
     }
   }
 };

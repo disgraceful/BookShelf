@@ -74,7 +74,7 @@ export default {
     },
     pagesReadTotal() {
       return this.userBooks.reduce(
-        (prevValue, curValue) => prevValue + curValue.pagesRead,
+        (prevValue, curValue) => prevValue + +curValue.userData.pagesRead,
         0
       );
     }
@@ -92,19 +92,21 @@ export default {
     this.tabItems = [
       {
         name: "Reading",
-        books: this.userBooks.filter(book => book.status === "reading")
+        books: this.userBooks.filter(book => book.userData.status === "reading")
       },
       {
         name: "2Read",
-        books: this.userBooks.filter(book => book.status === "toread")
+        books: this.userBooks.filter(book => book.userData.status === "toread")
       },
       {
         name: "Stopped",
-        books: this.userBooks.filter(book => book.status === "stopped")
+        books: this.userBooks.filter(book => book.userData.status === "stopped")
       },
       {
         name: "Finished",
-        books: this.userBooks.filter(book => book.status === "finished")
+        books: this.userBooks.filter(
+          book => book.userData.status === "finished"
+        )
       }
     ];
     this.loading = false;

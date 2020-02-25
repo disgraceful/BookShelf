@@ -1,6 +1,6 @@
 <template>
   <v-card flat>
-    <v-container v-if="book" class="pa-6">
+    <v-container v-if="book && !error" class="pa-6">
       <v-row>
         <v-col cols="4" md="3">
           <v-col>
@@ -104,6 +104,11 @@
           </v-row>
         </v-col>
       </v-row>
+      <v-row v-if="book.userData.status === 'finished'">
+        <v-col>
+          <bs-book-activity :userData="book.userData"></bs-book-activity>
+        </v-col>
+      </v-row>
     </v-container>
     <bs-loader
       v-if="loading && !error"
@@ -120,11 +125,12 @@
 </template>
 
 <script>
-import { ServiceFactory } from "../../services/serviceFactory";
 import Preloader from "../shared/Preloader";
 import ErrorPage from "../shared/ErrorPage";
 import FinishBookDialog from "./FinishBookDialog";
 import BookInfo from "./BookInfo";
+import UserBookActivity from "./UserBookActivity";
+import { ServiceFactory } from "../../services/serviceFactory";
 const bookService = ServiceFactory.get("book");
 const userService = ServiceFactory.get("user");
 export default {
@@ -171,7 +177,8 @@ export default {
     "bs-loader": Preloader,
     "bs-error": ErrorPage,
     "bs-finish-dialog": FinishBookDialog,
-    "bs-book-info": BookInfo
+    "bs-book-info": BookInfo,
+    "bs-book-activity": UserBookActivity
   },
   watch: {
     $route(to, from) {
@@ -199,6 +206,7 @@ export default {
         this.error = error.body;
       }
     },
+
     async finishBook(eventBook) {
       this.finishDialog = false;
       this.book = eventBook;
@@ -206,6 +214,7 @@ export default {
       this.book.userData.pagesRead = this.book.pages;
       await this.addToUserCollection("finished");
     },
+
     async addToUserCollection(collection) {
       if (!collection || this.book.status === collection) return;
       try {
@@ -214,9 +223,7 @@ export default {
           this.book,
           collection
         );
-        console.log(result);
         this.book.userData.status = result.userData.status;
-        console.log(this.book);
       } catch (error) {
         this.loading = false;
         this.error = error.body;
@@ -238,15 +245,15 @@ export default {
     },
 
     async favoriteBook() {
-      this.book.userData.isFavorited = !this.book.userData.isFavorited;
       try {
-        const bookRecord = this.createBookRecord();
         const result = await userService.setFavorite(
           this.user.token,
-          bookRecord
+          this.book
         );
-        if (result)
+        if (result) {
+          console.log(result);
           this.book.userData.isFavorited = result.userData.isFavorited;
+        }
       } catch (error) {
         console.log(error);
         this.loading = false;
@@ -255,11 +262,7 @@ export default {
     },
     async updateBook() {
       try {
-        const bookRecord = this.createBookRecord();
-        const result = await userService.updateBook(
-          this.user.token,
-          bookRecord
-        );
+        const result = await userService.updateBook(this.user.token, this.book);
         console.log(result);
       } catch (error) {
         console.log(error);

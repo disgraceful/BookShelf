@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card-title class="pt-0 headline font-weight-medium">{{
+    <v-card-title class="pt-2 headline font-weight-medium">{{
       book.title
     }}</v-card-title>
     <v-card-subtitle v-if="book.series" class="title">{{
