@@ -11,7 +11,14 @@
           ></v-img>
         </v-col>
         <v-col class="pa-4">
-          <v-card-title class="pa-0">{{ book.title }}</v-card-title>
+          <v-card-title class="pa-0">
+            <router-link
+              class="link-inherit"
+              :to="{ name: 'book', params: { id: book.id } }"
+            >
+              {{ book.title }}
+            </router-link>
+          </v-card-title>
           <v-card-text class="pa-0 subtitle-1">
             by
             <span

@@ -41,7 +41,6 @@
             "
           >
             <v-rating
-              class="pt-4"
               v-model="book.userData.rating"
               hover
               medium

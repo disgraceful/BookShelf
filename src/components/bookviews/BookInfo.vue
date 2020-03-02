@@ -5,7 +5,7 @@
     }}</v-card-title>
     <v-card-subtitle v-if="book.series" class="title">
       <router-link
-        class="series"
+        class="link-inherit"
         :to="{ name: 'series', params: { id: book.series.id } }"
       >
         {{ book.series.fullName }}
@@ -47,7 +47,7 @@
       style="white-space: pre-line"
     >
       {{ shrinkedDescription }}
-      <a @click="shrinked = !shrinked" v-if="splitDescription.length > 100">
+      <a @click="shrinked = !shrinked" v-if="splitDescription.length > 90">
         {{ expandLink }}</a
       ></v-card-text
     >
@@ -67,12 +67,12 @@ export default {
       return this.shrinked ? "...more" : "less";
     },
     isShrinked() {
-      return this.splitDescription.length > 100;
+      return this.splitDescription.length > 90;
     },
     shrinkedDescription() {
-      if (this.shrinked && this.splitDescription.length > 100) {
+      if (this.shrinked && this.splitDescription.length > 90) {
         let shortDesc = this.splitDescription;
-        return shortDesc.slice(0, 70).join(" ");
+        return shortDesc.slice(0, 60).join(" ");
       } else {
         return this.book.description;
       }
@@ -90,8 +90,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.series {
-  color: inherit !important;
-}
-</style>
+<style scoped></style>
