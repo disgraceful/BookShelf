@@ -1,8 +1,8 @@
 import Vue from "vue";
 
 export default {
-    getSeriesById(bookId, token) {
-        return Vue.http.get(`books/${bookId}`, { headers: { 'X-Access-Token': token } })
+    getSeriesById(seriesId, token) {
+        return Vue.http.get(`series/${seriesId}`, { headers: { 'X-Access-Token': token } })
             .then((response) => Promise.resolve(response.data))
             .catch((error) => Promise.reject(error));
     },
