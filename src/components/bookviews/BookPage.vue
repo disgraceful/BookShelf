@@ -37,7 +37,7 @@
             class="d-flex justify-center flex-column"
             v-if="
               book.userData.status !== 'not reading' &&
-                book.userData.status !== 'toread'
+                book.userData.status !== '2read'
             "
           >
             <v-rating
@@ -150,7 +150,7 @@ export default {
         },
         {
           title: "2Read",
-          collection: "toread",
+          collection: "2read",
           clickHandler: this.addToUserCollection
         },
         {

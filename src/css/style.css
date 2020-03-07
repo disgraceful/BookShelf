@@ -5,9 +5,11 @@
 a {
   text-decoration: none !important;
 }
-a:hover {
+
+a.highlight:hover {
   text-decoration: underline !important;
 }
+
 .link-inherit {
   color: inherit !important;
 }

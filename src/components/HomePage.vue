@@ -1,31 +1,22 @@
 <template>
   <v-card flat>
-    <v-card-title>This is Home page</v-card-title>
     <v-container>
-      <v-layout wrap justify-start>
-        <!-- <my-book-standart
-          v-for="item in 10"
-          :key="item"
-          :name="`BookName ${item}`"
-          :author="`Author Name ${item}`"
-          :imgUrl="mockUrl"
-        >
-        </my-book-standart> -->
-      </v-layout>
+      <bs-user-stats></bs-user-stats>
+      <bs-user-feed></bs-user-feed>
     </v-container>
   </v-card>
 </template>
 
 <script>
-// import BookStandart from "./bookviews/BookStandart";
+import UserPage from "./userviews/UserPage";
+import UserFeed from "./userviews/UserFeed";
 export default {
   data() {
-    return {
-      mockUrl: "https://source.unsplash.com/random/160x200"
-    };
+    return {};
   },
   components: {
-    // "my-book-standart": BookStandart
+    "bs-user-stats": UserPage,
+    "bs-user-feed": UserFeed
   }
 };
 </script>

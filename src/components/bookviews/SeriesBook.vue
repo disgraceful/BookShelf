@@ -13,7 +13,7 @@
         <v-col class="pa-4">
           <v-card-title class="pa-0">
             <router-link
-              class="link-inherit"
+              class="link-inherit highlight"
               :to="{ name: 'book', params: { id: book.id } }"
             >
               {{ book.title }}
@@ -41,7 +41,7 @@
             {{ shrinkedDescription }}
             <a
               @click="shrinked = !shrinked"
-              v-if="splitDescription.length > 12"
+              v-if="splitDescription.length > this.splitChar"
             >
               {{ expandLink }}</a
             ></v-card-text
@@ -51,14 +51,14 @@
               <v-menu offset-y>
                 <template v-slot:activator="{ on: on }">
                   <v-btn v-on="on"
-                    >Not Reading <v-icon right>mdi-chevron-down</v-icon></v-btn
+                    >{{ book.userData.status }}
+                    <v-icon right>mdi-chevron-down</v-icon></v-btn
                   ></template
                 >
                 <v-list>
-                  <v-list-item>2Read</v-list-item>
-                  <v-list-item>Reading</v-list-item>
-                  <v-list-item>Stopped</v-list-item>
-                  <v-list-item>Finished</v-list-item>
+                  <v-list-item v-for="item in getAvaliableStatus" :key="item">{{
+                    item
+                  }}</v-list-item>
                 </v-list>
               </v-menu>
             </v-col>
@@ -67,7 +67,11 @@
                 <span
                   v-text="book.userData.rating > 0 ? 'Your rating:' : 'Rate:'"
                 ></span>
-                <v-rating size="20" hover></v-rating>
+                <v-rating
+                  size="20"
+                  hover
+                  :value="book.userData.rating"
+                ></v-rating>
               </v-row>
             </v-col>
           </v-row>
@@ -83,7 +87,15 @@ export default {
   data() {
     return {
       splitDescription: "",
-      shrinked: true
+      shrinked: true,
+      splitChar: 12,
+      avaliableStatus: [
+        "Not Reading",
+        "Reading",
+        "2Read",
+        "Finished",
+        "Stopped"
+      ]
     };
   },
   computed: {
@@ -91,15 +103,20 @@ export default {
       return this.shrinked ? "...more" : "less";
     },
     isShrinked() {
-      return this.splitDescription.length > 12;
+      return this.splitDescription.length > this.splitChar;
     },
     shrinkedDescription() {
-      if (this.shrinked && this.splitDescription.length > 12) {
+      if (this.shrinked && this.splitDescription.length > this.splitChar) {
         let shortDesc = this.splitDescription;
-        return shortDesc.slice(0, 12).join(" ");
+        return shortDesc.slice(0, this.splitChar).join(" ");
       } else {
         return this.book.description;
       }
+    },
+    getAvaliableStatus() {
+      return this.avaliableStatus.filter(
+        item => item.toLowerCase() !== this.book.userData.status
+      );
     }
   },
   props: {

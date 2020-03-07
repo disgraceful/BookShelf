@@ -8,7 +8,7 @@
         <v-card-text class="pa-1 subtitle-1">
           <router-link
             :to="{ name: 'book', params: { id: book.id } }"
-            class="link-inherit"
+            class="link-inherit highlight"
           >
             {{ book.title }}
           </router-link>
