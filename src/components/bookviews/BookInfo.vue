@@ -5,23 +5,25 @@
     }}</v-card-title>
     <v-card-subtitle v-if="book.series" class="title">
       <router-link
-        class="link-inherit"
+        class="link-inherit highlight"
         :to="{ name: 'series', params: { id: book.series.id } }"
       >
         {{ book.series.fullName }}
       </router-link>
     </v-card-subtitle>
     <v-card-text class="pb-0 subtitle-1">
-      <span>by </span>
-      <span
+      by
+      <router-link
+        class="link-inherit highlight"
         v-for="(author, i) in book.authors"
         :key="i"
+        :to="{ name: 'authors', params: { id: author.id } }"
         v-text="i < book.authors.length - 1 ? `${author.name}, ` : author.name"
-      ></span>
+      ></router-link>
     </v-card-text>
     <v-card-text
       v-if="book.goodreadsRating"
-      class="pb-0 subtitle-1 "
+      class="pb-0 pt-0 subtitle-1 "
       v-text="`Goodreads rating: ${book.goodreadsRating}`"
     >
     </v-card-text>
