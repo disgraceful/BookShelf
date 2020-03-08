@@ -18,15 +18,41 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col>
-          <v-card-title>{{ author.name }}'s Books</v-card-title>
+        <v-col v-if="books">
+          <v-card-title class="title font-weight-regular pb-1"
+            >{{ author.name }}'s Books</v-card-title
+          >
           <v-divider></v-divider>
           <bs-author-book
-            :book="book"
             v-for="book in books"
+            :book="book"
             :key="book.id"
           ></bs-author-book>
         </v-col>
+      </v-row>
+      <v-row justify="end">
+        <a class="pa-2 link-inherit highlight"
+          >More books by {{ author.name }}</a
+        >
+      </v-row>
+      <v-row>
+        <v-col v-if="series">
+          <v-card-title class="title font-weight-regular pb-1"
+            >Series by {{ author.name }}</v-card-title
+          >
+          <v-divider></v-divider>
+          <bs-author-series
+            v-for="sery in series"
+            :series="sery"
+            :key="sery.id"
+          >
+          </bs-author-series>
+        </v-col>
+      </v-row>
+      <v-row justify="end">
+        <a class="pa-2 link-inherit highlight"
+          >More series by {{ author.name }}</a
+        >
       </v-row>
     </v-container>
   </v-card>
@@ -36,13 +62,17 @@
 import { ServiceFactory } from "../../services/serviceFactory";
 const authorService = ServiceFactory.get("author");
 const bookService = ServiceFactory.get("book");
+const seriesService = ServiceFactory.get("series");
 import AuthorBook from "../bookviews/AuthorBook";
+import AuthorSeries from "../series/AuthorSeries";
+
 export default {
   data() {
     return {
       author: null,
       books: null,
-      loading: true
+      loading: true,
+      series: null
     };
   },
   computed: {
@@ -56,7 +86,10 @@ export default {
       type: String
     }
   },
-  components: { "bs-author-book": AuthorBook },
+  components: {
+    "bs-author-book": AuthorBook,
+    "bs-author-series": AuthorSeries
+  },
   async created() {
     this.author = await authorService.getAuthorById(this.id, this.user.token);
     this.books = await Promise.all(
@@ -64,7 +97,15 @@ export default {
         return await bookService.getBookById(id, this.user.token);
       })
     );
-    console.log(this.books);
+    const authSeries = await authorService.getAuthorSeries(
+      this.id,
+      this.user.token
+    );
+    this.series = await Promise.all(
+      authSeries.slice(0, 5).map(async item => {
+        return await seriesService.getSeriesById(item.id, this.user.token);
+      })
+    );
   }
 };
 </script>
