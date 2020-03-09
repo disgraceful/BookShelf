@@ -2,15 +2,23 @@
   <v-card flat v-if="sery && books">
     <v-row>
       <v-col>
-        <v-card-text class="subtitle-1 pt-0 pb-0"
-          >{{ sery.title }} ({{ sery.workCount }} books)</v-card-text
-        >
-        <v-card-text>Average rating: {{ avgRating }} </v-card-text>
+        <v-card-text class="subtitle-1 font-weight-medium py-0"
+          ><router-link
+            class="link-inherit highlight"
+            :to="{ name: 'series', params: { id: sery.id } }"
+          >
+            {{ sery.title }} </router-link
+          >({{ sery.workCount }} books)
+        </v-card-text>
+        <v-card-text class="pb-0 body-2">by {{ sery.author }}</v-card-text>
+        <v-card-text class="py-1 body-2"
+          >Average rating: {{ avgRating }}
+        </v-card-text>
       </v-col>
       <v-col cols="auto">
         <v-row no-gutters justify="end">
-          <v-col cols="auto" v-for="book in books" :key="book.id">
-            <v-img :src="book.imageUrl" width="80" height="120" contain></v-img>
+          <v-col cols="auto" v-for="book in books" :key="book.id" class="pr-2">
+            <v-img :src="book.imageUrl" width="60" height="100"></v-img>
           </v-col>
         </v-row>
       </v-col>
@@ -36,9 +44,10 @@ export default {
     },
     avgRating() {
       return (
-        this.books.reduce((prevValue, curValue) => {
-          return prevValue + +curValue.goodreadsRating;
-        }, 0) / this.books.length
+        this.books.reduce(
+          (prevValue, curValue) => prevValue + +curValue.goodreadsRating,
+          0
+        ) / this.books.length
       ).toFixed(2);
     }
   },
@@ -53,13 +62,11 @@ export default {
       this.series.id,
       this.user.token
     );
-    console.log(this.sery);
     this.books = await Promise.all(
       this.sery.bookIds.map(async id => {
         return await bookService.getBookById(id, this.user.token);
       })
     );
-    console.log(this.books);
   }
 };
 </script>

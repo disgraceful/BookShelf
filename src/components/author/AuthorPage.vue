@@ -14,11 +14,19 @@
           <v-card-text class="pb-0 body-1"
             >Died: {{ author.deathDate }}</v-card-text
           >
-          <v-card-text class="pb-0 body-1">{{ author.about }}</v-card-text>
+          <v-card-text class="pb-0 body-1 text-justify"
+            >{{ shrinkedDescription }}
+            <a
+              @click="shrinked = !shrinked"
+              v-if="splitDescription.length > 90"
+            >
+              {{ expandLink }}</a
+            ></v-card-text
+          >
         </v-col>
       </v-row>
-      <v-row>
-        <v-col v-if="books">
+      <v-row v-if="books">
+        <v-col>
           <v-card-title class="title font-weight-regular pb-1"
             >{{ author.name }}'s Books</v-card-title
           >
@@ -30,13 +38,14 @@
           ></bs-author-book>
         </v-col>
       </v-row>
-      <v-row justify="end">
-        <a class="pa-2 link-inherit highlight"
+      <v-row v-if="books" justify="end">
+        <a class="pa-2 highlight teal--text text--darken-1"
           >More books by {{ author.name }}</a
         >
       </v-row>
-      <v-row>
-        <v-col v-if="series">
+
+      <v-row v-if="series">
+        <v-col>
           <v-card-title class="title font-weight-regular pb-1"
             >Series by {{ author.name }}</v-card-title
           >
@@ -49,8 +58,8 @@
           </bs-author-series>
         </v-col>
       </v-row>
-      <v-row justify="end">
-        <a class="pa-2 link-inherit highlight"
+      <v-row v-if="series" justify="end">
+        <a class="pa-2 highlight teal--text text--darken-1"
           >More series by {{ author.name }}</a
         >
       </v-row>
@@ -72,12 +81,28 @@ export default {
       author: null,
       books: null,
       loading: true,
-      series: null
+      series: null,
+      splitDescription: "",
+      shrinked: true
     };
   },
   computed: {
     user() {
       return this.$store.getters.getAuthUser;
+    },
+    expandLink() {
+      return this.shrinked ? "...more" : "less";
+    },
+    isShrinked() {
+      return this.splitDescription.length > 90;
+    },
+    shrinkedDescription() {
+      if (this.shrinked && this.splitDescription.length > 90) {
+        let shortDesc = this.splitDescription;
+        return shortDesc.slice(0, 60).join(" ");
+      } else {
+        return this.author.about;
+      }
     }
   },
   props: {
@@ -93,7 +118,7 @@ export default {
   async created() {
     this.author = await authorService.getAuthorById(this.id, this.user.token);
     this.books = await Promise.all(
-      this.author.books.map(async id => {
+      this.author.bookIds.slice(0, 6).map(async id => {
         return await bookService.getBookById(id, this.user.token);
       })
     );
@@ -106,6 +131,7 @@ export default {
         return await seriesService.getSeriesById(item.id, this.user.token);
       })
     );
+    this.splitDescription = this.author.about.split(" ");
   }
 };
 </script>

@@ -1,19 +1,19 @@
 <template>
   <v-card flat>
-    <v-row>
+    <v-row class="pl-3 py-0">
       <v-col cols="auto">
-        <v-img :src="book.imageUrl" width="60" contain></v-img>
+        <v-img :src="book.imageUrl" width="70" contain></v-img>
       </v-col>
-      <v-col cols="4" md="5">
-        <v-card-text class="pb-0 pt-0 subtitle-1">
+      <v-col>
+        <v-card-text class="pa-0 subtitle-1 font-weight-medium ">
           <router-link
             class="link-inherit highlight"
             :to="{ name: 'book', params: { id: book.id } }"
           >
-            {{ book.title }}
+            {{ book.title }} {{ book.series ? book.series.fullName : "" }}
           </router-link>
         </v-card-text>
-        <v-card-text class="pb-0 body-2">
+        <v-card-text class="pa-0 pt-1 body-2">
           by
           <router-link
             class="link-inherit highlight"
@@ -25,9 +25,13 @@
             "
           ></router-link>
         </v-card-text>
+        <v-card-text class="pa-0">
+          Goodreads rating: {{ book.goodreadsRating }} &bull; Published in
+          {{ book.publishedYear }}
+        </v-card-text>
       </v-col>
       <v-col cols="auto">
-        <v-row>
+        <v-row justify="center">
           <v-menu offset-y>
             <template v-slot:activator="{ on: on }">
               <v-btn v-on="on"
@@ -42,11 +46,14 @@
             </v-list>
           </v-menu>
         </v-row>
-        <v-row class="pt-2" align="center">
-          <span
-            v-text="book.userData.rating > 0 ? 'Your rating:' : 'Rate:'"
-          ></span>
-          <v-rating size="20" hover :value="book.userData.rating"></v-rating>
+        <v-row class="pt-2" align="center" justify="center" no-gutters>
+          <v-col>
+            <div
+              class="text-center"
+              v-text="book.userData.rating > 0 ? 'Your rating:' : 'Rate:'"
+            ></div>
+            <v-rating size="20" hover :value="book.userData.rating"></v-rating>
+          </v-col>
         </v-row>
       </v-col>
     </v-row>
