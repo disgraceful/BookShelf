@@ -4,7 +4,7 @@ import Home from "../components/HomePage"
 import Register from "../components/auth/RegisterPage"
 import Login from "../components/auth/LoginPage"
 import BookPage from "../components/bookviews/BookPage"
-import UserPage from "../components/userviews/UserPage"
+import UserStats from "../components/userviews/UserStats"
 import SeriesPage from "../components/series/SeriesPage"
 import AuthorPage from "../components/author/AuthorPage"
 
@@ -50,7 +50,7 @@ const routes = [
     path: "/user/:id",
     name: "user",
     props: true,
-    component: UserPage,
+    component: UserStats,
     beforeEnter: authGard
   },
   {
