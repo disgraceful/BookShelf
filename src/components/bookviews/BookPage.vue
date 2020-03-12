@@ -223,7 +223,7 @@ export default {
           this.book,
           collection
         );
-        this.book.userData = result.userData.status;
+        this.book.userData.status = result.userData.status;
       } catch (error) {
         this.loading = false;
         this.error = error.body;

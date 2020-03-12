@@ -35,5 +35,11 @@ export default {
         return Vue.http.put("user/collection", { book: book }, { headers: { 'X-Access-Token': token } })
             .then((response) => Promise.resolve(response.data))
             .catch((error) => Promise.reject(error));
+    },
+
+    getUserGenres(token) {
+        return Vue.http.get("user/genres", { headers: { 'X-Access-Token': token } })
+            .then(response => Promise.resolve(response.data))
+            .catch(error => Promise.reject(error));
     }
 }

@@ -1,14 +1,14 @@
 <template>
-  <v-row>
-    <v-col cols="4" md="6">
-      <bs-pie-chart :chart-data="data" :options="options"></bs-pie-chart>
-    </v-col>
-    <v-col cols="6"></v-col>
-  </v-row>
+  <bs-pie-chart
+    v-if="data"
+    :chart-data="data"
+    :options="options"
+  ></bs-pie-chart>
 </template>
 
 <script>
 import PieChart from "../shared/PieChart";
+import genresForChart from "../../mixins/genresForChart";
 export default {
   data() {
     return {
@@ -16,29 +16,19 @@ export default {
       options: null
     };
   },
+  computed: {
+    user() {
+      return this.$store.getters.getAuthUser;
+    }
+  },
   components: {
     "bs-pie-chart": PieChart
   },
-  created() {
-    this.data = {
-      labels: ["Green", "Red", "Blue"],
-      datasets: [
-        {
-          label: "Data One",
-          backgroundColor: ["#41B883", "#E46651", "#00D8FF"],
-          data: [1, 10, 5]
-        }
-      ]
-    };
-    this.options = {
-      responsive: true,
-      legend: {
-        display: false
-      },
-      tooltips: {
-        enabled: true
-      }
-    };
+  mixins: [genresForChart],
+  async created() {
+    const chart = await this.getChartData(this.user.token);
+    this.data = chart.chartData;
+    this.options = chart.options;
   }
 };
 </script>
