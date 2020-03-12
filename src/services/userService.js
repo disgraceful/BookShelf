@@ -13,6 +13,18 @@ export default {
             .catch((error) => Promise.reject(error));
     },
 
+    getUserCollection(token, collection) {
+        return Vue.http.get(`user/${collection}`, { headers: { 'X-Access-Token': token } })
+            .then((response) => Promise.resolve(response.data))
+            .catch((error) => Promise.reject(error));
+    },
+
+    getAllUserBooks(token) {
+        return Vue.http.get(`user/books`, { headers: { 'X-Access-Token': token } })
+            .then((response) => Promise.resolve(response.data))
+            .catch((error) => Promise.reject(error));
+    },
+
     removeFromUserCollection(token, bookId) {
         return Vue.http.delete("user/collection", { params: { bookId: bookId }, headers: { 'X-Access-Token': token } })
             .then((response) => Promise.resolve(response.data))

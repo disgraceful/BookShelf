@@ -88,7 +88,6 @@ export default {
     this.loading = true;
     this.user = await userService.getUser(this.userState.token);
     this.userBooks = this.user.books;
-
     this.tabItems = [
       {
         name: "Reading",
@@ -96,7 +95,7 @@ export default {
       },
       {
         name: "2Read",
-        books: this.userBooks.filter(book => book.userData.status === "toread")
+        books: this.userBooks.filter(book => book.userData.status === "2read")
       },
       {
         name: "Stopped",
