@@ -1,44 +1,73 @@
 <template>
-  <v-card style="z-index:50">
-    <v-toolbar elevation="2" color="teal" dark>
-      <v-btn text large class="subtitle-1" to="/">
-        <v-icon left large class="title-icon">mdi-book-open-outline</v-icon
-        >BookShelf
-      </v-btn>
-      <v-spacer></v-spacer>
-      <bs-search-bar v-if="userIsAuthenticated"></bs-search-bar>
-
-      <v-spacer></v-spacer>
-      <v-toolbar-items>
+  <v-card class="toolbar-wrapper">
+    <v-toolbar color="teal" dark max-width="1200" style="margin:0 auto" flat>
+      <v-col cols="auto" class="pl-0">
+        <v-btn text class="subtitle-1" to="/">
+          <v-icon left large class="title-icon">mdi-book-open-outline</v-icon>
+          BookShelf
+        </v-btn>
+      </v-col>
+      <v-spacer v-if="$mq === 'sm'"></v-spacer>
+      <bs-search-bar v-if="userIsAuthenticated && $mq !== 'sm'"></bs-search-bar>
+      <v-col cols="auto" v-if="$mq === 'sm'">
+        <v-btn icon>
+          <v-icon large>mdi-magnify</v-icon>
+        </v-btn>
+      </v-col>
+      <v-spacer v-if="$mq !== 'sm'"></v-spacer>
+      <v-toolbar-items v-if="$mq === 'lg'">
         <div
           class="link-wrapper"
           v-for="(link, index) in headerLinks"
           :key="link.name"
         >
-          <v-btn class="link" text v-text="link.name"> </v-btn>
+          <v-btn text v-text="link.name"> </v-btn>
           <v-divider vertical v-if="index < headerLinks.length - 1"></v-divider>
         </div>
       </v-toolbar-items>
-      <v-spacer v-if="userIsAuthenticated"></v-spacer>
-      <v-menu v-model="menuActive" offset-y v-if="user">
-        <template v-slot:activator="{ on }">
-          <v-btn text v-on="on">
-            <v-icon class="user-icon"> mdi-account</v-icon>
-            {{ user.email }}
-            <v-icon
-              v-text="menuActive ? 'mdi-menu-up' : 'mdi-menu-down'"
-            ></v-icon>
-          </v-btn>
-        </template>
-        <v-list>
-          <v-list-item
-            v-for="item in menuList"
-            :key="item.name"
-            @click="item.action"
-            >{{ item.name }}
-          </v-list-item>
-        </v-list>
-      </v-menu>
+      <v-spacer v-if="$mq !== 'sm'"></v-spacer>
+      <v-col cols="auto">
+        <v-menu offset-y v-if="user && $mq !== 'lg'">
+          <template v-slot:activator="{ on }">
+            <v-btn icon v-on="on">
+              <v-icon large> mdi-format-list-bulleted</v-icon>
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item v-for="item in headerLinks" :key="item.name"
+              ><router-link :to="item.to" class="link-inherit">
+                {{ item.name }}
+              </router-link>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </v-col>
+      <v-col cols="auto" class="text-center">
+        <v-menu v-model="menuActive" offset-y v-if="user">
+          <template v-slot:activator="{ on }">
+            <v-btn text v-on="on" v-if="$mq === 'lg'">
+              <v-icon left> mdi-account</v-icon>
+              {{ username }}
+              <v-icon
+                right
+                large
+                v-text="menuActive ? 'mdi-menu-up' : 'mdi-menu-down'"
+              ></v-icon>
+            </v-btn>
+            <v-btn v-else icon v-on="on">
+              <v-icon large> mdi-account</v-icon>
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item
+              v-for="item in menuList"
+              :key="item.name"
+              @click="item.action"
+              >{{ item.name }}
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </v-col>
     </v-toolbar>
   </v-card>
 </template>
@@ -70,9 +99,9 @@ export default {
       ];
       if (this.userIsAuthenticated) {
         headerLinks = [
-          { name: "2Read", to: "2read" },
-          { name: "Reading", to: "reading" },
-          { name: "Finished", to: "finished" }
+          { name: "Favorites", to: "favorites" },
+          { name: "Content", to: "content" },
+          { name: "New content", to: "content" }
         ];
       }
       return headerLinks;
@@ -82,6 +111,9 @@ export default {
     },
     userIsAuthenticated() {
       return this.user !== null && this.user !== undefined;
+    },
+    username() {
+      return this.user.email.replace(new RegExp(/@[\s\S]*/g), "");
     }
   },
   methods: {
@@ -96,10 +128,7 @@ export default {
 
 <style scoped>
 .title-icon {
-  margin-right: 2rem !important;
-}
-.user-icon {
-  margin-right: 0.8rem !important;
+  margin-right: 1rem !important;
 }
 .search-bar {
   min-width: 280px !important;
@@ -110,7 +139,12 @@ export default {
   display: flex;
   align-items: center;
 }
-.link-wrapper > .link {
+.link-wrapper > .v-btn {
   height: 100% !important;
+}
+.toolbar-wrapper {
+  background-color: #009688 !important;
+  border-bottom: 5px #004d40 solid !important;
+  z-index: 50;
 }
 </style>

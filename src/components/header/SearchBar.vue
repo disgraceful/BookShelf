@@ -1,5 +1,5 @@
 <template>
-  <v-col sm6 md3 class="search-wrapper">
+  <v-col class="search-wrapper">
     <div v-click-outside="clearSearch">
       <v-text-field
         ref="search"
@@ -18,7 +18,7 @@
             color="white"
             indeterminate
           ></v-progress-circular>
-          <v-icon v-else>mdi-magnify</v-icon>
+          <v-icon v-else @click="minimize">mdi-magnify</v-icon>
         </template>
       </v-text-field>
 
@@ -59,7 +59,7 @@
 
 <script>
 import ClickOutside from "vue-click-outside";
-import { ServiceFactory } from "../services/serviceFactory";
+import { ServiceFactory } from "../../services/serviceFactory";
 import { fromEvent, from, Subject, of } from "rxjs";
 import {
   debounceTime,
@@ -99,6 +99,9 @@ export default {
   methods: {
     clearSearch() {
       this.visibleResults = false;
+    },
+    minimize() {
+      this.$emit("minimized");
     }
   },
   directives: { ClickOutside },
@@ -145,7 +148,9 @@ export default {
   width: 100%;
 }
 .search-wrapper {
-  min-width: 280px !important;
+  min-width: 160px !important;
+  max-width: 330px;
+  margin-left: -0.8rem;
   padding-top: 1.5rem;
   position: relative;
 }

@@ -1,20 +1,19 @@
 <template>
   <v-app>
-    <my-header></my-header>
+    <bs-header></bs-header>
     <router-view></router-view>
   </v-app>
 </template>
 
 <script>
-import AppHeader from "./components/AppHeader";
+import ResponsiveHeader from "./components/header/ResponsiveHeader";
 export default {
   name: "BookShelfApp",
   data() {
     return {};
   },
   components: {
-    "my-header": AppHeader
+    "bs-header": ResponsiveHeader
   }
 };
 </script>
-
