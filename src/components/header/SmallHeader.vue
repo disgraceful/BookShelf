@@ -7,9 +7,9 @@
       </v-btn>
     </v-col>
     <v-spacer v-if="searchbarMinimized"></v-spacer>
-    <v-col class="px-0">
+    <v-col class="px-0" v-if="!searchbarMinimized">
       <bs-search-bar
-        v-if="userIsAuthenticated && !searchbarMinimized"
+        v-if="userIsAuthenticated"
         @minimized="searchbarMinimized = true"
       ></bs-search-bar>
     </v-col>

@@ -1,8 +1,8 @@
 <template>
   <v-card flat>
-    <v-container v-if="book && !error" class="pa-6">
+    <v-container v-if="book && !error" class="pa-6" style="max-width:1000px">
       <v-row>
-        <v-col cols="4" md="3">
+        <v-col cols="3">
           <v-col>
             <div style="position:relative">
               <v-img :src="book.imageUrl || defaultImg" content> </v-img>
@@ -33,8 +33,8 @@
               </v-tooltip>
             </div>
           </v-col>
-          <div
-            class="d-flex justify-center flex-column"
+          <v-col
+            class="py-0"
             v-if="
               book.userData.status !== 'not reading' &&
                 book.userData.status !== '2read'
@@ -46,12 +46,23 @@
               medium
               @input="updateBook"
             ></v-rating>
-          </div>
+          </v-col>
+          <!-- <v-col>
+            <v-select
+              background-color="teal"
+              dark
+              v-model="status"
+              :items="avaliableStatus"
+              :menu-props="{ offsetY: true}"
+              solo
+            ></v-select>
+          </v-col> -->
         </v-col>
         <v-col>
           <bs-book-info :book="book"></bs-book-info>
+
           <v-divider></v-divider>
-          <v-toolbar flat dense color="#fafafa">
+          <v-toolbar flat dense>
             <v-toolbar-items>
               <v-spacer></v-spacer>
               <template v-for="(item, index) in bookStatusButtons">
@@ -130,12 +141,14 @@ import FinishBookDialog from "./FinishBookDialog";
 import BookInfo from "./BookInfo";
 import UserBookActivity from "./UserBookActivity";
 import { ServiceFactory } from "../../services/serviceFactory";
+import bookStatus from "../../mixins/bookStatus";
 const bookService = ServiceFactory.get("book");
 const userService = ServiceFactory.get("user");
 export default {
   data() {
     return {
       book: null,
+      status: null,
       defaultImg: "../../assets/goodreads.png",
       bookStatusButtons: [
         {
@@ -172,6 +185,7 @@ export default {
     };
   },
   props: ["id"],
+  mixins: [bookStatus],
   components: {
     "bs-loader": Preloader,
     "bs-error": ErrorPage,
@@ -200,6 +214,9 @@ export default {
         this.book = null;
         this.loading = true;
         this.book = await bookService.getBookById(this.id, this.user.token);
+        this.status = this.book.userData.status.replace(/^\w/, char =>
+          char.toUpperCase()
+        );
         this.loading = false;
       } catch (error) {
         this.loading = false;

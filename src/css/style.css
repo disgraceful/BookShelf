@@ -1,6 +1,5 @@
-
-.v-card {
-  background-color: #fafafa !important;
+.v-application--wrap {
+  background-color: #fff !important;
 }
 
 a {
@@ -14,4 +13,3 @@ a.highlight:hover {
 .link-inherit {
   color: inherit !important;
 }
-

@@ -20,9 +20,9 @@
         <v-divider vertical v-if="index < headerLinks.length - 1"></v-divider>
       </div>
     </v-toolbar-items>
-    <v-spacer></v-spacer>
-    <v-col cols="auto" class="text-center">
-      <v-menu v-model="menuActive" offset-y v-if="user">
+    <v-spacer v-if="user"></v-spacer>
+    <v-col cols="auto" class="text-center" v-if="user">
+      <v-menu v-model="menuActive" offset-y>
         <template v-slot:activator="{ on }">
           <v-btn text v-on="on">
             <v-icon left> mdi-account</v-icon>
