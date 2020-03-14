@@ -74,35 +74,20 @@ const bookService = ServiceFactory.get("book");
 const seriesService = ServiceFactory.get("series");
 import AuthorBook from "../bookviews/AuthorBook";
 import AuthorSeries from "../series/AuthorSeries";
-
+import shrinkDescription from "../../mixins/shrinkDescription";
 export default {
   data() {
     return {
       author: null,
       books: null,
       loading: true,
-      series: null,
-      splitDescription: "",
-      shrinked: true
+      series: null
     };
   },
+  mixins: [shrinkDescription],
   computed: {
     user() {
       return this.$store.getters.getAuthUser;
-    },
-    expandLink() {
-      return this.shrinked ? "...more" : "less";
-    },
-    isShrinked() {
-      return this.splitDescription.length > 90;
-    },
-    shrinkedDescription() {
-      if (this.shrinked && this.splitDescription.length > 90) {
-        let shortDesc = this.splitDescription;
-        return shortDesc.slice(0, 60).join(" ");
-      } else {
-        return this.author.about;
-      }
     }
   },
   props: {
@@ -117,6 +102,7 @@ export default {
   },
   async created() {
     this.author = await authorService.getAuthorById(this.id, this.user.token);
+    this.generateDescription(this.author.about, 60, 90);
     this.books = await Promise.all(
       this.author.bookIds.slice(0, 6).map(async id => {
         return await bookService.getBookById(id, this.user.token);
@@ -131,7 +117,6 @@ export default {
         return await seriesService.getSeriesById(item.id, this.user.token);
       })
     );
-    this.splitDescription = this.author.about.split(" ");
   }
 };
 </script>

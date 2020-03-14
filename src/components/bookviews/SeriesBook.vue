@@ -41,7 +41,7 @@
             {{ shrinkedDescription }}
             <a
               @click="shrinked = !shrinked"
-              v-if="splitDescription.length > this.splitChar"
+              v-if="splitDescription.length > this.showLength"
             >
               {{ expandLink }}</a
             ></v-card-text
@@ -83,12 +83,11 @@
 </template>
 
 <script>
+import shrinkDescription from "../../mixins/shrinkDescription";
 export default {
   data() {
     return {
-      splitDescription: "",
-      shrinked: true,
-      splitChar: 12,
+      showLength: 12,
       avaliableStatus: [
         "Not Reading",
         "Reading",
@@ -98,21 +97,8 @@ export default {
       ]
     };
   },
+  mixins: [shrinkDescription],
   computed: {
-    expandLink() {
-      return this.shrinked ? "...more" : "less";
-    },
-    isShrinked() {
-      return this.splitDescription.length > this.splitChar;
-    },
-    shrinkedDescription() {
-      if (this.shrinked && this.splitDescription.length > this.splitChar) {
-        let shortDesc = this.splitDescription;
-        return shortDesc.slice(0, this.splitChar).join(" ");
-      } else {
-        return this.book.description;
-      }
-    },
     getAvaliableStatus() {
       return this.avaliableStatus.filter(
         item => item.toLowerCase() !== this.book.userData.status
@@ -126,7 +112,11 @@ export default {
     }
   },
   mounted() {
-    this.splitDescription = this.book.description.split(" ");
+    this.generateDescription(
+      this.book.description,
+      this.showLength,
+      this.showLength
+    );
   }
 };
 </script>

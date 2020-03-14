@@ -49,7 +49,10 @@
       style="white-space: pre-line"
     >
       {{ shrinkedDescription }}
-      <a @click="shrinked = !shrinked" v-if="splitDescription.length > 90">
+      <a
+        @click="shrinked = !shrinked"
+        v-if="splitDescription.length > maxShowLength"
+      >
         {{ expandLink }}</a
       ></v-card-text
     >
@@ -57,29 +60,15 @@
 </template>
 
 <script>
+import shrinkDescription from "../../mixins/shrinkDescription";
 export default {
   data() {
     return {
-      splitDescription: "",
-      shrinked: true
+      showLength: 60,
+      maxShowLength: 90
     };
   },
-  computed: {
-    expandLink() {
-      return this.shrinked ? "...more" : "less";
-    },
-    isShrinked() {
-      return this.splitDescription.length > 90;
-    },
-    shrinkedDescription() {
-      if (this.shrinked && this.splitDescription.length > 90) {
-        let shortDesc = this.splitDescription;
-        return shortDesc.slice(0, 60).join(" ");
-      } else {
-        return this.book.description;
-      }
-    }
-  },
+  mixins: [shrinkDescription],
   props: {
     book: {
       required: true,
@@ -87,9 +76,11 @@ export default {
     }
   },
   mounted() {
-    this.splitDescription = this.book.description.split(" ");
+    this.generateDescription(
+      this.book.description,
+      this.showLength,
+      this.maxShowLength
+    );
   }
 };
 </script>
-
-<style scoped></style>
