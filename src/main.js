@@ -6,7 +6,6 @@ import vuetify from './plugins/vuetify';
 import VueResource from "vue-resource";
 import VueMq from 'vue-mq'
 import "./css/style.css";
-import "@/css/style.css";
 
 Vue.use(VueResource);
 Vue.config.productionTip = false
@@ -14,7 +13,8 @@ Vue.http.options.root = 'http://localhost:4200/';
 
 Vue.use(VueMq, {
   breakpoints: {
-    sm: 500,
+    xs: 500,
+    sm: 800,
     md: 1200,
     lg: Infinity,
   },

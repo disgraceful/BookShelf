@@ -1,8 +1,8 @@
 <template>
   <v-card class="toolbar-wrapper">
     <bs-lg-header v-if="$mq === 'lg'"></bs-lg-header>
-    <bs-md-header v-if="$mq === 'md'"></bs-md-header>
-    <bs-sm-header v-if="$mq === 'sm'"></bs-sm-header>
+    <bs-md-header v-if="$mq === 'md' || $mq === 'sm'"></bs-md-header>
+    <bs-sm-header v-if="$mq === 'xs'"></bs-sm-header>
   </v-card>
 </template>
 

@@ -9,13 +9,8 @@
     <v-col>
       <bs-search-bar v-if="userIsAuthenticated"></bs-search-bar>
     </v-col>
-    <v-spacer></v-spacer>
-    <v-col cols="auto" v-if="$mq === 'sm'">
-      <v-btn icon>
-        <v-icon large>mdi-magnify</v-icon>
-      </v-btn>
-    </v-col>
-    <v-col cols="auto">
+    <v-spacer v-if="$mq === 'sm'"></v-spacer>
+    <v-col cols="auto" class="px-0" v-if="$mq === 'sm'">
       <v-menu offset-y v-if="user">
         <template v-slot:activator="{ on }">
           <v-btn icon v-on="on">
@@ -31,6 +26,17 @@
         </v-list>
       </v-menu>
     </v-col>
+    <v-toolbar-items v-else>
+      <div
+        class="link-wrapper"
+        v-for="(link, index) in headerLinks"
+        :key="link.name"
+      >
+        <v-btn text v-text="link.name"> </v-btn>
+        <v-divider vertical v-if="index < headerLinks.length - 1"></v-divider>
+      </div>
+    </v-toolbar-items>
+    <v-spacer v-if="$mq === 'md'"></v-spacer>
     <v-col cols="auto" class="text-center px-0">
       <v-menu v-model="menuActive" offset-y v-if="user">
         <template v-slot:activator="{ on }">

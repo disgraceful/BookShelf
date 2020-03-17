@@ -1,8 +1,11 @@
 <template>
   <v-card flat>
-    <v-container v-if="book && !error" class="pa-6" style="max-width:1000px">
-      <v-row>
-        <v-col cols="3">
+    <v-container v-if="book && !error" class="pa-6 page-container">
+      <v-row dense justify="center">
+        <v-col
+          :cols="$mq | mq({ xs: 'auto', sm: 3, md: 3, lg: 3 })"
+          style="min-width:240px"
+        >
           <v-col>
             <div style="position:relative">
               <v-img :src="book.imageUrl || defaultImg" content> </v-img>
@@ -47,24 +50,22 @@
               @input="updateBook"
             ></v-rating>
           </v-col>
-          <!-- <v-col>
+          <v-col class="pb-0" v-if="$mq === 'sm' || $mq === 'xs'">
             <v-select
               background-color="teal"
               dark
-              v-model="status"
+              v-model="book.userData.status"
               :items="avaliableStatus"
-              :menu-props="{ offsetY: true}"
+              :menu-props="{ offsetY: true }"
               solo
             ></v-select>
-          </v-col> -->
+          </v-col>
         </v-col>
-        <v-col>
+        <v-col :cols="$mq | mq({ xs: 12, sm: 5, md: 8, lg: 9 })">
           <bs-book-info :book="book"></bs-book-info>
-
-          <v-divider></v-divider>
-          <v-toolbar flat dense>
+          <v-divider v-if="$mq !== 'sm' && $mq !== 'xs'"></v-divider>
+          <v-toolbar flat dense v-if="$mq !== 'sm' && $mq !== 'xs'">
             <v-toolbar-items>
-              <v-spacer></v-spacer>
               <template v-for="(item, index) in bookStatusButtons">
                 <v-btn
                   text
@@ -81,7 +82,6 @@
                   v-if="index < bookStatusButtons.length - 1"
                 ></v-divider>
               </template>
-              <v-spacer></v-spacer>
             </v-toolbar-items>
           </v-toolbar>
           <v-dialog v-model="finishDialog" max-width="600">
@@ -148,7 +148,6 @@ export default {
   data() {
     return {
       book: null,
-      status: null,
       defaultImg: "../../assets/goodreads.png",
       bookStatusButtons: [
         {
@@ -214,9 +213,9 @@ export default {
         this.book = null;
         this.loading = true;
         this.book = await bookService.getBookById(this.id, this.user.token);
-        this.status = this.book.userData.status.replace(/^\w/, char =>
-          char.toUpperCase()
-        );
+        // this.status = this.book.userData.status.replace(/^\w/, char =>
+        //   char.toUpperCase()
+        // );
         this.loading = false;
       } catch (error) {
         this.loading = false;
