@@ -1,6 +1,6 @@
 <template>
   <v-card flat>
-    <v-container v-if="series">
+    <v-container v-if="series" class="page-container">
       <v-card-title class="display-1 pb-1">{{ series.title }}</v-card-title>
       <v-card-text class="subtitle-1"
         >{{ series.workCount }} primary works | {{ series.allWorks }} total

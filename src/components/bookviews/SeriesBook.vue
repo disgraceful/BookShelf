@@ -1,16 +1,11 @@
 <template>
   <v-card flat>
-    <v-container class="pr-5 pl-5 pb-0 pt-0">
+    <v-container class="px-5 py-0">
       <v-row>
         <v-col cols="auto" style="max-width:130px">
-          <v-img
-            :src="book.imageUrl"
-            contain
-            width="110px"
-            height="180px"
-          ></v-img>
+          <v-img :src="book.imageUrl" width="110px" height="180px"></v-img>
         </v-col>
-        <v-col class="pa-4">
+        <v-col class="pa-3 pt-1">
           <v-card-title class="pa-0">
             <router-link
               class="link-inherit highlight"
@@ -35,7 +30,7 @@
           </v-card-text>
           <v-card-text
             v-if="book.description"
-            class="subtitle-1 text-justify pa-0"
+            class="subtitle-1 text-justify pa-0 pt-2"
             style="white-space: pre-line"
           >
             {{ shrinkedDescription }}
@@ -47,25 +42,28 @@
             ></v-card-text
           >
           <v-row align="start">
-            <v-col cols="4" class="pb-0">
+            <v-col cols="auto" class="pb-0" style="width:180px">
               <v-select
                 dense
                 background-color="teal"
                 dark
-                v-model="status"
+                v-model="statusTemp"
                 :items="avaliableStatus"
                 item-text="text"
                 item-value="status"
                 :menu-props="{ offsetY: true }"
                 solo
-                @input="handleCollection()"
+                @input="handleCollection(statusTemp)"
               ></v-select>
             </v-col>
-            <v-col cols="auto">
+            <v-col cols="auto" :class="$mq === 'xs' ? 'py-0' : ''">
               <v-row align="baseline">
-                <span
-                  v-text="book.userData.rating > 0 ? 'Your rating:' : 'Rate:'"
-                ></span>
+                <v-col
+                  :cols="$mq | mq({ xs: 12, sm: 'auto' })"
+                  class="pa-0 pl-3"
+                >
+                  {{ book.userData.rating > 0 ? "Your rating:" : "Rate:" }}
+                </v-col>
                 <v-rating
                   size="20"
                   hover
@@ -76,6 +74,9 @@
           </v-row>
         </v-col>
       </v-row>
+      <v-dialog v-model="finishDialog" max-width="600">
+        <bs-finish-dialog :book="book" @posted="finishBook"></bs-finish-dialog>
+      </v-dialog>
       <slot></slot>
     </v-container>
   </v-card>
@@ -84,14 +85,17 @@
 <script>
 import shrinkDescription from "../../mixins/shrinkDescription";
 import bookStatus from "../../mixins/bookStatus";
+import FinishDialog from "./FinishBookDialog";
 export default {
   data() {
     return {
-      status: null,
-      showLength: 12
+      showLength: 12,
+      finishDialog: false,
+      statusTemp: null
     };
   },
   mixins: [shrinkDescription, bookStatus],
+  components: { "bs-finish-dialog": FinishDialog },
   props: {
     book: {
       required: true,
@@ -99,7 +103,7 @@ export default {
     }
   },
   mounted() {
-    this.status = this.book.userData.status;
+    this.statusTemp = this.book.userData.status;
     this.generateDescription(
       this.book.description,
       this.showLength,

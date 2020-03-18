@@ -51,13 +51,13 @@
             <v-select
               background-color="teal"
               dark
-              v-model="book.userData.status"
+              v-model="statusTemp"
               :items="avaliableStatus"
               item-text="text"
               item-value="status"
               :menu-props="{ offsetY: true }"
               solo
-              @input="handleCollection(book.userData.status)"
+              @input="handleCollection(book.userData.statusTemp)"
             ></v-select>
           </v-col>
         </v-col>
@@ -148,6 +148,7 @@ export default {
   data() {
     return {
       book: null,
+      statusTemp: null,
       defaultImg: "../../assets/goodreads.png",
       activeClass: "active",
       loaderWrapper: "loader-wrapper",
@@ -186,7 +187,7 @@ export default {
         this.book = null;
         this.loading = true;
         this.book = await bookService.getBookById(this.id, this.user.token);
-        this.status = this.book.userData.status;
+        this.statusTemp = this.book.userData.status;
         this.loading = false;
       } catch (error) {
         this.loading = false;

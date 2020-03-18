@@ -12,6 +12,11 @@ export default {
             ]
         }
     },
+    computed: {
+        user() {
+            return this.$store.getters.getAuthUser;
+        }
+    },
     methods: {
         getStatusHandler(status) {
             const res = this.avaliableStatus.find(item => item.status === status);
@@ -24,9 +29,9 @@ export default {
         },
 
         handleCollection(status) {
-            console.log(status);
+            console.log(status, this.book.userData.status);
+            if (this.book.userData.status === status) return;
             const statusHandler = this.getStatusHandler(status);
-            console.log(statusHandler);
             if (!statusHandler) return;
             statusHandler(status);
         },
@@ -34,6 +39,7 @@ export default {
         async removeBook(status) {
             if (this.book.userData.status === status) return;
             try {
+
                 const result = await userService.removeFromUserCollection(this.user.token, this.book.id);
                 console.log(result);
                 if (result) this.book.userData = result.userData;
