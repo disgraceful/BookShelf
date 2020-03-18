@@ -46,21 +46,20 @@
               {{ expandLink }}</a
             ></v-card-text
           >
-          <v-row align="center">
-            <v-col cols="auto">
-              <v-menu offset-y>
-                <template v-slot:activator="{ on: on }">
-                  <v-btn v-on="on"
-                    >{{ book.userData.status }}
-                    <v-icon right>mdi-chevron-down</v-icon></v-btn
-                  ></template
-                >
-                <v-list>
-                  <v-list-item v-for="item in getAvaliableStatus" :key="item">{{
-                    item
-                  }}</v-list-item>
-                </v-list>
-              </v-menu>
+          <v-row align="start">
+            <v-col cols="4" class="pb-0">
+              <v-select
+                dense
+                background-color="teal"
+                dark
+                v-model="status"
+                :items="avaliableStatus"
+                item-text="text"
+                item-value="status"
+                :menu-props="{ offsetY: true }"
+                solo
+                @input="handleCollection()"
+              ></v-select>
             </v-col>
             <v-col cols="auto">
               <v-row align="baseline">
@@ -84,27 +83,15 @@
 
 <script>
 import shrinkDescription from "../../mixins/shrinkDescription";
+import bookStatus from "../../mixins/bookStatus";
 export default {
   data() {
     return {
-      showLength: 12,
-      avaliableStatus: [
-        "Not Reading",
-        "Reading",
-        "2Read",
-        "Finished",
-        "Stopped"
-      ]
+      status: null,
+      showLength: 12
     };
   },
-  mixins: [shrinkDescription],
-  computed: {
-    getAvaliableStatus() {
-      return this.avaliableStatus.filter(
-        item => item.toLowerCase() !== this.book.userData.status
-      );
-    }
-  },
+  mixins: [shrinkDescription, bookStatus],
   props: {
     book: {
       required: true,
@@ -112,6 +99,7 @@ export default {
     }
   },
   mounted() {
+    this.status = this.book.userData.status;
     this.generateDescription(
       this.book.description,
       this.showLength,

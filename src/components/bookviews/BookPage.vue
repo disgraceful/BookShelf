@@ -1,11 +1,8 @@
 <template>
   <v-card flat>
     <v-container v-if="book && !error" class="pa-6 page-container">
-      <v-row dense justify="center">
-        <v-col
-          :cols="$mq | mq({ xs: 'auto', sm: 3, md: 3, lg: 3 })"
-          style="min-width:240px"
-        >
+      <v-row dense :justify="$mq === 'xs' ? 'center' : 'space-around'">
+        <v-col :cols="$mq | mq({ xs: '2', sm: 3 })" style="min-width:240px">
           <v-col>
             <div style="position:relative">
               <v-img :src="book.imageUrl || defaultImg" content> </v-img>
@@ -56,30 +53,33 @@
               dark
               v-model="book.userData.status"
               :items="avaliableStatus"
+              item-text="text"
+              item-value="status"
               :menu-props="{ offsetY: true }"
               solo
+              @input="handleCollection(book.userData.status)"
             ></v-select>
           </v-col>
         </v-col>
-        <v-col :cols="$mq | mq({ xs: 12, sm: 5, md: 8, lg: 9 })">
+        <v-col :cols="$mq | mq({ xs: 'auto', sm: '', md: 8, lg: 9 })">
           <bs-book-info :book="book"></bs-book-info>
           <v-divider v-if="$mq !== 'sm' && $mq !== 'xs'"></v-divider>
           <v-toolbar flat dense v-if="$mq !== 'sm' && $mq !== 'xs'">
             <v-toolbar-items>
-              <template v-for="(item, index) in bookStatusButtons">
+              <template v-for="(item, index) in avaliableStatus">
                 <v-btn
                   text
-                  :key="item.title"
+                  :key="item.status"
                   :class="[
-                    item.collection === book.userData.status ? activeClass : ''
+                    item.status === book.userData.status ? activeClass : ''
                   ]"
-                  @click="item.clickHandler(item.collection)"
-                  >{{ item.title }}
+                  @click="handleCollection(item.status)"
+                  >{{ item.text }}
                 </v-btn>
                 <v-divider
                   vertical
                   :key="index"
-                  v-if="index < bookStatusButtons.length - 1"
+                  v-if="index < avaliableStatus.length - 1"
                 ></v-divider>
               </template>
             </v-toolbar-items>
@@ -149,33 +149,6 @@ export default {
     return {
       book: null,
       defaultImg: "../../assets/goodreads.png",
-      bookStatusButtons: [
-        {
-          title: "Finished",
-          collection: "finished",
-          clickHandler: () => (this.finishDialog = true)
-        },
-        {
-          title: "Reading",
-          collection: "reading",
-          clickHandler: this.addToUserCollection
-        },
-        {
-          title: "2Read",
-          collection: "2read",
-          clickHandler: this.addToUserCollection
-        },
-        {
-          title: "Stopped",
-          collection: "stopped",
-          clickHandler: this.addToUserCollection
-        },
-        {
-          title: "Not Reading",
-          collection: "not reading",
-          clickHandler: this.removeFromCollection
-        }
-      ],
       activeClass: "active",
       loaderWrapper: "loader-wrapper",
       loading: true,
@@ -213,47 +186,8 @@ export default {
         this.book = null;
         this.loading = true;
         this.book = await bookService.getBookById(this.id, this.user.token);
-        // this.status = this.book.userData.status.replace(/^\w/, char =>
-        //   char.toUpperCase()
-        // );
+        this.status = this.book.userData.status;
         this.loading = false;
-      } catch (error) {
-        this.loading = false;
-        this.error = error.body;
-      }
-    },
-
-    async finishBook(eventBook) {
-      this.finishDialog = false;
-      this.book = eventBook;
-      console.log(this.book);
-      this.book.userData.pagesRead = this.book.pages;
-      await this.addToUserCollection("finished");
-    },
-
-    async addToUserCollection(collection) {
-      if (!collection || this.book.status === collection) return;
-      try {
-        const result = await userService.addToUserCollection(
-          this.user.token,
-          this.book,
-          collection
-        );
-        this.book.userData.status = result.userData.status;
-      } catch (error) {
-        this.loading = false;
-        this.error = error.body;
-      }
-    },
-
-    async removeFromCollection(collection) {
-      if (this.book.userData.status === collection) return;
-      try {
-        const result = await userService.removeFromUserCollection(
-          this.user.token,
-          this.book.id
-        );
-        if (result) this.book.userData = result.userData;
       } catch (error) {
         this.loading = false;
         this.error = error.body;
@@ -272,17 +206,16 @@ export default {
         }
       } catch (error) {
         console.log(error);
-        this.loading = false;
         this.error = error.body;
       }
     },
+
     async updateBook() {
       try {
         const result = await userService.updateBook(this.user.token, this.book);
         console.log(result);
       } catch (error) {
         console.log(error);
-        this.loading = false;
         this.error = error.body;
       }
     }
@@ -295,7 +228,7 @@ export default {
 
 <style scoped>
 .active {
-  background-color: teal;
+  background-color: #009688;
   color: #fff;
 }
 
