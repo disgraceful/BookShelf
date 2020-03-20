@@ -16,13 +16,15 @@
           </v-card-title>
           <v-card-text class="pa-0 subtitle-1">
             by
-            <span
+            <router-link
+              class="link-inherit highlight"
               v-for="(author, i) in book.authors"
               :key="i"
+              :to="{ name: 'authors', params: { id: author.id } }"
               v-text="
                 i < book.authors.length - 1 ? `${author.name}, ` : author.name
               "
-            ></span>
+            ></router-link>
           </v-card-text>
           <v-card-text class="pa-0 subtitle-1">
             Goodreads rating: {{ book.goodreadsRating }} &bull;

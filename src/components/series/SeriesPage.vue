@@ -15,11 +15,21 @@
         </v-col>
       </v-row>
     </v-container>
+    <bs-loader
+      v-if="loading && !error"
+      :options="{
+        isDetermined: true,
+        color: 'teal',
+        size: '100',
+        width: '10'
+      }"
+    ></bs-loader>
   </v-card>
 </template>
 
 <script>
 import SeriesBook from "../bookviews/SeriesBook";
+import Loader from "../shared/Preloader";
 import { ServiceFactory } from "../../services/serviceFactory";
 const seriesService = ServiceFactory.get("series");
 const bookService = ServiceFactory.get("book");
@@ -44,18 +54,24 @@ export default {
     }
   },
   components: {
-    "bs-series-book": SeriesBook
+    "bs-series-book": SeriesBook,
+    "bs-loader": Loader
   },
   async created() {
     try {
+      this.loading = true;
       this.series = await seriesService.getSeriesById(this.id, this.user.token);
       this.books = await Promise.all(
         this.series.bookIds.map(async id => {
-          return await bookService.getBookById(id, this.user.token);
+          const book = await bookService.getBookById(id, this.user.token);
+          console.log(book.id);
+          return book;
         })
       );
+      this.loading = false;
     } catch (error) {
       console.log(error);
+      this.error = error.body;
     }
   }
 };

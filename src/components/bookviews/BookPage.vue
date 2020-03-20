@@ -126,8 +126,7 @@
         isDetermined: true,
         color: 'teal',
         size: '100',
-        width: '10',
-        wrapperClass: loaderWrapper
+        width: '10'
       }"
     ></bs-loader>
     <component v-if="error" :is="errorComponent" :error="error"></component>
@@ -151,7 +150,6 @@ export default {
       statusTemp: null,
       defaultImg: "../../assets/goodreads.png",
       activeClass: "active",
-      loaderWrapper: "loader-wrapper",
       loading: true,
       error: false,
       finishDialog: false
@@ -237,13 +235,6 @@ export default {
   background-color: #f1f1f1;
   color: #000;
   font-weight: 500;
-}
-
-.loader-wrapper {
-  display: flex;
-  position: relative;
-  top: 240px;
-  justify-content: center;
 }
 
 .v-toolbar__content {

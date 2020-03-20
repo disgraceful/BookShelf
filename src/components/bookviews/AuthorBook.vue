@@ -31,61 +31,56 @@
         </v-card-text>
       </v-col>
       <v-col cols="auto">
-        <v-row justify="center">
-          <v-menu offset-y>
-            <template v-slot:activator="{ on: on }">
-              <v-btn v-on="on"
-                >{{ book.userData.status }}
-                <v-icon right>mdi-chevron-down</v-icon></v-btn
-              ></template
-            >
-            <v-list>
-              <v-list-item v-for="item in getAvaliableStatus" :key="item">{{
-                item
-              }}</v-list-item>
-            </v-list>
-          </v-menu>
+        <v-row style="max-width:180px">
+          <v-select
+            dense
+            background-color="teal"
+            dark
+            v-model="statusTemp"
+            :items="avaliableStatus"
+            item-text="text"
+            item-value="status"
+            :menu-props="{ offsetY: true }"
+            solo
+            @input="handleCollection(statusTemp)"
+          ></v-select>
         </v-row>
-        <v-row class="pt-2" align="center" justify="center" no-gutters>
-          <v-col>
-            <div
-              class="text-center"
-              v-text="book.userData.rating > 0 ? 'Your rating:' : 'Rate:'"
-            ></div>
+        <v-row align="center" style="margin-top:-5px">
+          <v-col class="text-center pa-0 ">
+            {{ book.userData.rating > 0 ? "Your rating:" : "Rate:" }}
             <v-rating size="20" hover :value="book.userData.rating"></v-rating>
           </v-col>
         </v-row>
       </v-col>
     </v-row>
     <v-divider></v-divider>
+    <v-dialog v-model="finishDialog" max-width="600">
+      <bs-finish-dialog :book="book" @posted="finishBook"></bs-finish-dialog>
+    </v-dialog>
   </v-card>
 </template>
 
 <script>
+import bookStatus from "../../mixins/bookStatus";
+import FinishDialog from "./FinishBookDialog";
 export default {
   data() {
     return {
-      avaliableStatus: [
-        "Not Reading",
-        "Reading",
-        "2Read",
-        "Finished",
-        "Stopped"
-      ]
+      statusTemp: null,
+      finishDialog: false
     };
   },
-  computed: {
-    getAvaliableStatus() {
-      return this.avaliableStatus.filter(
-        item => item.toLowerCase() !== this.book.userData.status
-      );
-    }
-  },
+  computed: {},
+  mixins: [bookStatus],
+  components: { "bs-finish-dialog": FinishDialog },
   props: {
     book: {
       required: true,
       type: Object
     }
+  },
+  mounted() {
+    this.statusTemp = this.book.userData.status;
   }
 };
 </script>

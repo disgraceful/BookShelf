@@ -1,6 +1,6 @@
 <template>
   <v-card flat>
-    <v-container v-if="author">
+    <v-container v-if="author" class="page-container">
       <v-row>
         <v-col cols="4" md="3" class="pa-4">
           <v-img :src="author.imageUrl"></v-img>
@@ -101,22 +101,33 @@ export default {
     "bs-author-series": AuthorSeries
   },
   async created() {
+    this.loading = true;
     this.author = await authorService.getAuthorById(this.id, this.user.token);
     this.generateDescription(this.author.about, 60, 90);
-    this.books = await Promise.all(
-      this.author.bookIds.slice(0, 6).map(async id => {
-        return await bookService.getBookById(id, this.user.token);
+
+    await Promise.all(
+      this.author.bookIds
+        .slice(0, 6)
+        .map(id => bookService.getBookById(id, this.user.token))
+    )
+      .then(books => {
+        this.books = books;
       })
-    );
-    const authSeries = await authorService.getAuthorSeries(
-      this.id,
-      this.user.token
-    );
-    this.series = await Promise.all(
-      authSeries.slice(0, 5).map(async item => {
-        return await seriesService.getSeriesById(item.id, this.user.token);
-      })
-    );
+      .catch(error => {
+        console.log(error);
+      });
+
+    authorService.getAuthorSeries(this.id, this.user.token).then(authSeries => {
+      Promise.all(
+        authSeries
+          .slice(0, 5)
+          .map(series =>
+            seriesService.getSeriesById(series.id, this.user.token)
+          )
+      ).then(series => {
+        this.series = series;
+      });
+    });
   }
 };
 </script>
