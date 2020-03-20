@@ -35,7 +35,8 @@ export default {
   data() {
     return {
       sery: null,
-      books: null
+      books: null,
+      loading: true
     };
   },
   computed: {
@@ -57,16 +58,26 @@ export default {
       type: Object
     }
   },
-  async mounted() {
-    this.sery = await seriesService.getSeriesById(
-      this.series.id,
-      this.user.token
-    );
-    this.books = await Promise.all(
-      this.sery.bookIds.map(async id => {
-        return await bookService.getBookById(id, this.user.token);
+  mounted() {
+    this.loading = true;
+    seriesService
+      .getSeriesById(this.series.id, this.user.token)
+      .then(sery => {
+        this.sery = sery;
+        return Promise.all(
+          this.sery.bookIds.map(id =>
+            bookService.getBookById(id, this.user.token)
+          )
+        );
       })
-    );
+      .then(books => {
+        this.books = books;
+        this.loading = false;
+      })
+      .catch(error => {
+        console.log(error);
+        this.loading = false;
+      });
   }
 };
 </script>

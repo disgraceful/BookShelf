@@ -32,5 +32,6 @@ export default {
   position: relative;
   top: 240px;
   justify-content: center;
+  padding-bottom: 2rem;
 }
 </style>

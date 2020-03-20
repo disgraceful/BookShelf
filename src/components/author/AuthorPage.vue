@@ -64,6 +64,15 @@
         >
       </v-row>
     </v-container>
+    <bs-loader
+      v-if="loading"
+      :options="{
+        isDetermined: true,
+        color: 'teal',
+        size: '100',
+        width: '10'
+      }"
+    ></bs-loader>
   </v-card>
 </template>
 
@@ -75,6 +84,7 @@ const seriesService = ServiceFactory.get("series");
 import AuthorBook from "../bookviews/AuthorBook";
 import AuthorSeries from "../series/AuthorSeries";
 import shrinkDescription from "../../mixins/shrinkDescription";
+import Loader from "../shared/Preloader";
 export default {
   data() {
     return {
@@ -98,14 +108,15 @@ export default {
   },
   components: {
     "bs-author-book": AuthorBook,
-    "bs-author-series": AuthorSeries
+    "bs-author-series": AuthorSeries,
+    "bs-loader": Loader
   },
   async created() {
     this.loading = true;
     this.author = await authorService.getAuthorById(this.id, this.user.token);
     this.generateDescription(this.author.about, 60, 90);
 
-    await Promise.all(
+    Promise.all(
       this.author.bookIds
         .slice(0, 6)
         .map(id => bookService.getBookById(id, this.user.token))
@@ -117,17 +128,24 @@ export default {
         console.log(error);
       });
 
-    authorService.getAuthorSeries(this.id, this.user.token).then(authSeries => {
-      Promise.all(
-        authSeries
-          .slice(0, 5)
-          .map(series =>
-            seriesService.getSeriesById(series.id, this.user.token)
-          )
-      ).then(series => {
+    authorService
+      .getAuthorSeries(this.id, this.user.token)
+      .then(authSeries => {
+        return Promise.all(
+          authSeries
+            .slice(0, 5)
+            .map(series =>
+              seriesService.getSeriesById(series.id, this.user.token)
+            )
+        );
+      })
+      .then(series => {
         this.series = series;
+        this.loading = false;
+      })
+      .catch(error => {
+        console.log(error);
       });
-    });
   }
 };
 </script>
