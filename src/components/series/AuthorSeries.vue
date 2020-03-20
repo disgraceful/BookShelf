@@ -1,29 +1,38 @@
 <template>
   <v-card flat v-if="sery && books">
-    <v-row>
-      <v-col>
-        <v-card-text class="subtitle-1 font-weight-medium py-0"
-          ><router-link
-            class="link-inherit highlight"
-            :to="{ name: 'series', params: { id: sery.id } }"
+    <v-container class="py-0">
+      <v-row>
+        <v-col class="text-center" style="min-width:150px">
+          <v-card-text class="subtitle-1 font-weight-medium pa-0"
+            ><router-link
+              class="link-inherit highlight"
+              :to="{ name: 'series', params: { id: sery.id } }"
+            >
+              {{ sery.title }} </router-link
+            >({{ sery.workCount }} books)
+          </v-card-text>
+          <v-card-text class="pa-0 pt-2 body-2"
+            >by {{ sery.author }}</v-card-text
           >
-            {{ sery.title }} </router-link
-          >({{ sery.workCount }} books)
-        </v-card-text>
-        <v-card-text class="pb-0 body-2">by {{ sery.author }}</v-card-text>
-        <v-card-text class="py-1 body-2"
-          >Average rating: {{ avgRating }}
-        </v-card-text>
-      </v-col>
-      <v-col cols="auto">
-        <v-row no-gutters justify="end">
-          <v-col cols="auto" v-for="book in books" :key="book.id" class="pr-2">
-            <v-img :src="book.imageUrl" width="60" height="100"></v-img>
-          </v-col>
-        </v-row>
-      </v-col>
-    </v-row>
-    <v-divider></v-divider>
+          <v-card-text class="py-1 px-0 body-2"
+            >Average rating: {{ avgRating }}
+          </v-card-text>
+        </v-col>
+        <v-col cols="auto">
+          <v-row dense :justify="$mq === 'xs' ? 'start' : 'end'">
+            <v-col
+              cols="auto"
+              v-for="book in books"
+              :key="book.id"
+              class="pr-2"
+            >
+              <v-img :src="book.imageUrl" width="60" height="100"></v-img>
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-row>
+      <v-divider></v-divider>
+    </v-container>
   </v-card>
 </template>
 
@@ -35,8 +44,7 @@ export default {
   data() {
     return {
       sery: null,
-      books: null,
-      loading: true
+      books: null
     };
   },
   computed: {
@@ -58,8 +66,7 @@ export default {
       type: Object
     }
   },
-  mounted() {
-    this.loading = true;
+  async mounted() {
     seriesService
       .getSeriesById(this.series.id, this.user.token)
       .then(sery => {
@@ -72,11 +79,9 @@ export default {
       })
       .then(books => {
         this.books = books;
-        this.loading = false;
       })
       .catch(error => {
         console.log(error);
-        this.loading = false;
       });
   }
 };

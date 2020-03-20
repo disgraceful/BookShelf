@@ -44,7 +44,11 @@
             ></v-card-text
           >
           <v-row align="start">
-            <v-col cols="auto" class="pb-0" style="width:180px">
+            <v-col
+              cols="auto"
+              class="pb-0"
+              style="width:180px; margin-bottom:-10px"
+            >
               <v-select
                 dense
                 background-color="teal"
@@ -58,7 +62,11 @@
                 @input="handleCollection(statusTemp)"
               ></v-select>
             </v-col>
-            <v-col cols="auto" :class="$mq === 'xs' ? 'py-0' : ''">
+            <v-col
+              v-if="book.userData.status !== 'not reading'"
+              cols="auto"
+              :class="$mq === 'xs' ? 'py-0' : ''"
+            >
               <v-row align="baseline">
                 <v-col
                   :cols="$mq | mq({ xs: 12, sm: 'auto' })"
@@ -69,7 +77,8 @@
                 <v-rating
                   size="20"
                   hover
-                  :value="book.userData.rating"
+                  v-model="book.userData.rating"
+                  @input="update"
                 ></v-rating>
               </v-row>
             </v-col>
@@ -87,6 +96,7 @@
 <script>
 import shrinkDescription from "../../mixins/shrinkDescription";
 import bookStatus from "../../mixins/bookStatus";
+import bookLogic from "../../mixins/bookLogic";
 import FinishDialog from "./FinishBookDialog";
 export default {
   data() {
@@ -96,12 +106,17 @@ export default {
       statusTemp: null
     };
   },
-  mixins: [shrinkDescription, bookStatus],
+  mixins: [shrinkDescription, bookStatus, bookLogic],
   components: { "bs-finish-dialog": FinishDialog },
   props: {
     book: {
       required: true,
       type: Object
+    }
+  },
+  methods: {
+    update() {
+      this.updateBook();
     }
   },
   mounted() {

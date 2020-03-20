@@ -4,11 +4,11 @@ export default {
     data() {
         return {
             avaliableStatus: [
-                { text: "Not reading", status: "not reading", handler: this.removeBook },
-                { text: "Reading", status: "reading", handler: this.addToUserCollection },
-                { text: "2Read", status: "2read", handler: this.addToUserCollection },
                 { text: "Finished", status: "finished", handler: this.activateFinish },
-                { text: "Stopped", status: "stopped", handler: this.addToUserCollection }
+                { text: "2Read", status: "2read", handler: this.addToUserCollection },
+                { text: "Reading", status: "reading", handler: this.addToUserCollection },
+                { text: "Stopped", status: "stopped", handler: this.addToUserCollection },
+                { text: "Not reading", status: "not reading", handler: this.removeBook },
             ]
         }
     },

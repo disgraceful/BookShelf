@@ -1,11 +1,15 @@
 <template>
   <v-card flat>
     <v-container v-if="author" class="page-container">
-      <v-row>
-        <v-col cols="4" md="3" class="pa-4">
+      <v-row :justify="$mq === 'xs' ? 'center' : 'space-around'">
+        <v-col
+          :cols="$mq | mq({ xs: 'auto' })"
+          style="max-width: 280px; min-width:240px;"
+          class="pa-4"
+        >
           <v-img :src="author.imageUrl"></v-img>
         </v-col>
-        <v-col>
+        <v-col :cols="$mq | mq({ xs: 'auto', sm: '' })">
           <v-card-title class="headline"> {{ author.name }}</v-card-title>
           <v-divider></v-divider>
           <v-card-text class="pb-0 body-1"

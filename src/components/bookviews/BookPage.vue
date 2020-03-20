@@ -16,7 +16,7 @@
                     right
                     v-on="on"
                     color="white"
-                    @click="favoriteBook"
+                    @click="favorite"
                   >
                     <v-icon :color="book.userData.isFavorited ? 'red' : 'grey'">
                       {{
@@ -44,7 +44,7 @@
               v-model="book.userData.rating"
               hover
               medium
-              @input="updateBook"
+              @input="update"
             ></v-rating>
           </v-col>
           <v-col class="pb-0" v-if="$mq === 'sm' || $mq === 'xs'">
@@ -103,11 +103,7 @@
               </v-slider>
             </v-col>
             <v-col cols="auto">
-              <v-btn
-                depressed
-                color="teal"
-                class="white--text"
-                @click="updateBook"
+              <v-btn depressed color="teal" class="white--text" @click="update"
                 >Update progress</v-btn
               >
             </v-col>
@@ -141,6 +137,7 @@ import BookInfo from "./BookInfo";
 import UserBookActivity from "./UserBookActivity";
 import { ServiceFactory } from "../../services/serviceFactory";
 import bookStatus from "../../mixins/bookStatus";
+import bookLogic from "../../mixins/bookLogic";
 const bookService = ServiceFactory.get("book");
 const userService = ServiceFactory.get("user");
 export default {
@@ -156,7 +153,7 @@ export default {
     };
   },
   props: ["id"],
-  mixins: [bookStatus],
+  mixins: [bookStatus, bookLogic],
   components: {
     "bs-loader": Preloader,
     "bs-error": ErrorPage,
@@ -180,47 +177,24 @@ export default {
     }
   },
   methods: {
-    async getBookInfo() {
-      try {
-        this.book = null;
-        this.loading = true;
-        this.book = await bookService.getBookById(this.id, this.user.token);
-        this.statusTemp = this.book.userData.status;
-        this.loading = false;
-      } catch (error) {
-        this.loading = false;
-        this.error = error.body;
-      }
+    async favorite() {
+      await this.favoriteBook();
     },
-
-    async favoriteBook() {
-      try {
-        const result = await userService.setFavorite(
-          this.user.token,
-          this.book
-        );
-        if (result) {
-          console.log(result);
-          this.book.userData.isFavorited = result.userData.isFavorited;
-        }
-      } catch (error) {
-        console.log(error);
-        this.error = error.body;
-      }
-    },
-
-    async updateBook() {
-      try {
-        const result = await userService.updateBook(this.user.token, this.book);
-        console.log(result);
-      } catch (error) {
-        console.log(error);
-        this.error = error.body;
-      }
+    async update() {
+      await this.updateBook();
     }
   },
-  mounted() {
-    this.getBookInfo();
+  async mounted() {
+    try {
+      this.book = null;
+      this.loading = true;
+      this.book = await bookService.getBookById(this.id, this.user.token);
+      this.statusTemp = this.book.userData.status;
+      this.loading = false;
+    } catch (error) {
+      this.loading = false;
+      this.error = error.body;
+    }
   }
 };
 </script>
