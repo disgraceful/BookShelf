@@ -2,7 +2,10 @@
   <v-card flat v-if="sery && books">
     <v-container class="py-0">
       <v-row>
-        <v-col class="text-center" style="min-width:150px">
+        <v-col
+          :class="$mq !== 'xs' ? '' : 'text-center'"
+          style="min-width:150px"
+        >
           <v-card-text class="subtitle-1 font-weight-medium pa-0"
             ><router-link
               class="link-inherit highlight"

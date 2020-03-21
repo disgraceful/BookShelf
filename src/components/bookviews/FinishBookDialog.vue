@@ -2,9 +2,7 @@
   <v-card>
     <v-form v-model="formValid">
       <v-container>
-        <v-card-title
-          >{{ book.title }} {{ book.series.fullName }}
-        </v-card-title>
+        <v-card-title>{{ book.title }} {{ getSeries }} </v-card-title>
         <v-card-text class="subtitle-1">
           <span>by </span>
           <span
@@ -150,7 +148,11 @@ export default {
       required: true
     }
   },
-  computed: {},
+  computed: {
+    getSeries() {
+      return this.book.series ? this.book.series.fullName : "";
+    }
+  },
   methods: {
     formatDate(date) {
       return date ? moment(date).format("MMMM Do YYYY") : "";
@@ -180,7 +182,7 @@ export default {
     }
   },
   mounted() {
-    this.hovered = this.book.rating;
+    this.hovered = this.book.userData.rating;
   }
 };
 </script>
