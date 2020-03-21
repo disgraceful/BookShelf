@@ -1,7 +1,8 @@
 <template>
   <v-card flat>
-    <v-divider> </v-divider>
-    <v-card-title>User Feed</v-card-title>
+    <v-container>
+      <v-card-title class="py-0">User Feed</v-card-title>
+    </v-container>
   </v-card>
 </template>
 

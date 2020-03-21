@@ -91,6 +91,7 @@ export default {
       type: Object
     }
   },
+ 
   methods: {
     update() {
       this.updateBook();

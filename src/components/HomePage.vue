@@ -1,6 +1,6 @@
 <template>
   <v-card flat>
-    <v-container>
+    <v-container class="page-container">
       <bs-user-stats></bs-user-stats>
       <bs-user-feed></bs-user-feed>
     </v-container>

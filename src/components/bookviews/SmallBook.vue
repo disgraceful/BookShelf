@@ -1,10 +1,13 @@
 <template>
-  <v-container>
-    <v-row align="center" justify="space-between">
-      <v-col class="smallImg">
-        <v-img :src="book.imageUrl" contain max-height="120"></v-img>
+  <v-container class="py-0">
+    <v-row
+      align="center"
+      :justify="$mq !== 'lg' && $mq !== 'md' ? 'center' : 'space-between'"
+    >
+      <v-col cols="auto">
+        <v-img :src="book.imageUrl" height="120" width="80"></v-img>
       </v-col>
-      <v-col>
+      <v-col cols="auto">
         <v-card-text class="pa-1 subtitle-1">
           <router-link
             :to="{ name: 'book', params: { id: book.id } }"
@@ -13,23 +16,29 @@
             {{ book.title }}
           </router-link>
         </v-card-text>
-
-        <v-card-text class="pa-1">
-          <span>by </span>
-          <span
+        <v-card-text class="pa-1 ">
+          by
+          <router-link
+            class="link-inherit highlight"
             v-for="(author, i) in book.authors"
             :key="i"
+            :to="{ name: 'authors', params: { id: author.id } }"
             v-text="
               i < book.authors.length - 1 ? `${author.name}, ` : author.name
             "
-          ></span>
+          ></router-link>
         </v-card-text>
       </v-col>
-      <v-col auto>
-        <v-rating medium v-model="book.userData.rating" hover></v-rating>
+      <v-col class="text-center">
+        <v-rating
+          medium
+          v-model="book.userData.rating"
+          hover
+          @input="update"
+        ></v-rating>
       </v-col>
-      <v-col cols="4">
-        <v-row no-gutters>
+      <v-col cols="auto">
+        <v-row no-gutters style="min-width:230px">
           <v-col>
             <div class="body-2">Pages read</div>
           </v-col>
@@ -45,18 +54,22 @@
 </template>
 
 <script>
+import bookLogic from "../../mixins/bookLogic";
 export default {
-  props: ["book"],
+  props: { book: { type: Object, required: true } },
+  mixins: [bookLogic],
   computed: {
     pagesProgress() {
       return (this.book.userData.pagesRead / this.book.pages) * 100;
+    },
+    user() {
+      return this.$store.getters.getAuthUser;
+    }
+  },
+  methods: {
+    update() {
+      this.updateBook();
     }
   }
 };
 </script>
-
-<style scoped>
-.smallImg {
-  flex-grow: 0 !important;
-}
-</style>

@@ -1,9 +1,9 @@
 <template>
   <v-card flat>
-    <v-container v-if="!loading"
-      ><v-card-title>{{ user.email }}</v-card-title>
-      <v-col>
-        <v-row>
+    <v-container v-if="user && tabItems"
+      ><v-card-title class="py-0">{{ user.email }}</v-card-title>
+      <v-row :justify="$mq !== 'xs' ? 'start' : 'center'">
+        <v-col cols="auto" class="pa-5">
           <bs-progress
             :progress="{
               value: tabItems[3].books.length,
@@ -13,6 +13,8 @@
               bgcolor: '#ff9999'
             }"
           ></bs-progress>
+        </v-col>
+        <v-col cols="auto" class="pa-5">
           <bs-progress
             :progress="{
               value: pagesReadTotal,
@@ -22,24 +24,20 @@
               bgcolor: '#99ffcc'
             }"
           ></bs-progress>
-        </v-row>
-      </v-col>
+        </v-col>
+      </v-row>
       <v-divider></v-divider>
-      <v-col>
-        <v-tabs v-model="tab" grow background-color="#fafafa">
-          <v-tab v-for="item in tabItems" :key="item.name">
-            <v-badge color="deep-purple accent-4" icon="mdi-vuetify">
-              {{ item.name }} <sup>{{ item.books.length }}</sup>
-            </v-badge>
-          </v-tab>
-          <v-tabs-items v-model="tab">
-            <bs-book-list :books="tabItems[tab].books"></bs-book-list>
-          </v-tabs-items>
-        </v-tabs>
+      <v-col class="py-0">
+        <bs-user-tabs
+          v-if="$mq === 'md' || $mq === 'lg'"
+          :tabItems="tabItems"
+        ></bs-user-tabs>
+        <bs-user-panels v-else :tabItems="tabItems"></bs-user-panels>
       </v-col>
+      <v-divider> </v-divider>
     </v-container>
     <bs-loader
-      v-else
+      v-if="loading"
       :options="{
         isDetermined: true,
         color: 'teal',
@@ -53,18 +51,21 @@
 
 <script>
 import Preloader from "../shared/Preloader";
-import UserProgress from "../shared/UserProgress";
-import UserBookList from "./UserBookList";
+import UserProgress from "./UserProgress";
+import UserTabs from "./UserBookTabs";
+import UserPanels from "./UserBookPanels";
 import { ServiceFactory } from "../../services/serviceFactory";
 const userService = ServiceFactory.get("user");
 export default {
   data() {
     return {
-      user: {},
+      user: null,
       tab: 0,
-      tabItems: [],
-      loading: false,
-      userBooks: null
+      tabItems: null,
+      loading: true,
+      userBooks: null,
+      countPages: (prevValue, curValue) =>
+        prevValue + +curValue.userData.pagesRead
     };
   },
   props: ["id"],
@@ -73,17 +74,16 @@ export default {
       return this.$store.getters.getAuthUser;
     },
     pagesReadTotal() {
-      return this.userBooks.reduce(
-        (prevValue, curValue) => prevValue + +curValue.userData.pagesRead,
-        0
-      );
+      return this.userBooks.reduce(this.countPages, 0);
     }
   },
   components: {
+    "bs-user-tabs": UserTabs,
+    "bs-user-panels": UserPanels,
     "bs-progress": UserProgress,
-    "bs-book-list": UserBookList,
     "bs-loader": Preloader
   },
+  methods: {},
   async created() {
     this.loading = true;
     this.user = await userService.getUser(this.userState.token);

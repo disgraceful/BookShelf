@@ -36,7 +36,6 @@ export default {
 
 <style scoped>
 .progress {
-  margin-right: 4.5rem;
   width: 200px;
   height: 200px;
   min-height: 100px;

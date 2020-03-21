@@ -3,7 +3,6 @@ const userService = ServiceFactory.get("user");
 
 export default {
     methods: {
-
         async favoriteBook() {
             try {
                 const result = await userService.setFavorite(
