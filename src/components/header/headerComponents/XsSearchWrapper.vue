@@ -1,5 +1,5 @@
 <template>
-  <v-row align="center">
+  <v-row align="center" style="flex-wrap:nowrap">
     <v-col
       cols="auto"
       :class="lgScreen ? 'pl-0' : 'px-0'"
