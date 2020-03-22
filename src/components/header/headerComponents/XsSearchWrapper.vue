@@ -17,7 +17,11 @@
     >
       <bs-search-bar @minimized="searchbarMinimized = true"></bs-search-bar>
     </v-col>
-    <v-col cols="auto" class="pl-0" v-if="searchbarMinimized">
+    <v-col
+      cols="auto"
+      class="pl-0"
+      v-if="userIsAuthenticated && searchbarMinimized"
+    >
       <v-btn icon @click="searchbarMinimized = false">
         <v-icon large>mdi-magnify</v-icon>
       </v-btn>

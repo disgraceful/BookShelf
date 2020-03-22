@@ -1,5 +1,5 @@
 <template>
-  <v-toolbar-items v-if="lgScreen || mdScreen">
+  <v-toolbar-items v-if="!userIsAuthenticated || (lgScreen || mdScreen)">
     <div
       class="link-wrapper"
       v-for="(link, index) in headerLinks"

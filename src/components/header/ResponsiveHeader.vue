@@ -14,7 +14,7 @@
       >
         <bs-search-bar @minimized="searchbarMinimized = true"></bs-search-bar>
       </v-col>
-      <v-spacer v-if="lgScreen"></v-spacer>
+      <v-spacer v-if="!userIsAuthenticated || lgScreen || mdScreen"></v-spacer>
       <bs-content-links></bs-content-links>
       <v-spacer v-if="user && (lgScreen || mdScreen)"></v-spacer>
       <v-col
