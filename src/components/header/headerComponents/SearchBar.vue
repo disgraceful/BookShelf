@@ -59,7 +59,7 @@
 
 <script>
 import ClickOutside from "vue-click-outside";
-import { ServiceFactory } from "../../services/serviceFactory";
+import { ServiceFactory } from "../../../services/serviceFactory";
 import { fromEvent, from, Subject, of } from "rxjs";
 import {
   debounceTime,
@@ -148,10 +148,11 @@ export default {
   width: 100%;
 }
 .search-wrapper {
-  min-width: 160px !important;
+  min-width: 190px !important;
   max-width: 330px;
   margin-left: -0.8rem;
   padding-top: 1.5rem;
+  margin-right: 0.5rem;
   position: relative;
 }
 .search-results {

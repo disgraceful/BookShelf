@@ -1,4 +1,3 @@
-import SearchBar from "../components/header/SearchBar"
 export default {
     data() {
         return {
@@ -12,9 +11,6 @@ export default {
                 { name: "Logout", action: this.logOut }
             ]
         };
-    },
-    components: {
-        "bs-search-bar": SearchBar
     },
     computed: {
         headerLinks() {
