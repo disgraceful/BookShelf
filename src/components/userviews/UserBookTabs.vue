@@ -1,7 +1,7 @@
 <template>
   <v-tabs v-model="tab" grow>
     <v-tab v-for="item in tabItems" :key="item.name">
-      <v-badge color="deep-purple accent-4" icon="mdi-vuetify">
+      <v-badge>
         {{ item.name }} <sup>{{ item.books.length }}</sup>
       </v-badge>
     </v-tab>

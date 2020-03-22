@@ -10,7 +10,12 @@
         class="mx-0"
         @click.stop="expanded = !expanded"
       >
-        <v-card-title class="font-weight-regular">{{ item.name }}</v-card-title>
+        <v-card-title class="font-weight-regular">
+          <v-badge>
+            {{ item.name }} <sup>{{ item.books.length }}</sup>
+          </v-badge>
+        </v-card-title>
+
         <v-btn icon>
           <v-icon>mdi-chevron-down</v-icon>
         </v-btn>
@@ -43,6 +48,14 @@ export default {
   },
   components: {
     "bs-smallbook": SmallBook
+  },
+  methods: {
+    pagesRead(tab) {
+      return this.item.books.reduce(
+        (prevValue, curValue) => prevValue + +curValue.userData.pagesRead,
+        0
+      );
+    }
   }
 };
 </script>
