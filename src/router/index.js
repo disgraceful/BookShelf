@@ -7,6 +7,7 @@ import BookPage from "../components/bookviews/BookPage"
 import UserStats from "../components/userviews/UserStats"
 import SeriesPage from "../components/series/SeriesPage"
 import AuthorPage from "../components/author/AuthorPage"
+import Favorites from "../components/userviews/Favorites.vue"
 
 Vue.use(VueRouter)
 const authGard = (to, from, next) => {
@@ -54,6 +55,13 @@ const routes = [
     beforeEnter: authGard
   },
   {
+    path: "/user/:id/favorites",
+    name: "favorites",
+    props: true,
+    component: Favorites,
+    beforeEnter: authGard
+  },
+  {
     path: "/series/:id",
     name: "series",
     props: true,
@@ -65,10 +73,11 @@ const routes = [
     props: true,
     component: AuthorPage,
     beforeEnter: authGard
-  }
+  },
 
 
-  //component: () => import(/* webpackChunkName: "about" */ "../views/About.vue")
+
+  // component: () => import(/* webpackChunkName: "about" */ "../views/About.vue")
 ]
 
 const router = new VueRouter({

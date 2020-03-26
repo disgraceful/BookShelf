@@ -6,6 +6,7 @@ import vuetify from './plugins/vuetify';
 import VueResource from "vue-resource";
 import VueMq from 'vue-mq'
 import "./css/style.css";
+import Preloader from "./components/shared/Preloader";
 
 Vue.use(VueResource);
 Vue.config.productionTip = false
@@ -20,6 +21,8 @@ Vue.use(VueMq, {
   },
   defaultBreakpoint: 'sm'
 })
+
+Vue.component("bs-loader", Preloader)
 
 new Vue({
   router,

@@ -2,6 +2,11 @@ import { ServiceFactory } from "../services/serviceFactory";
 const userService = ServiceFactory.get("user");
 
 export default {
+    computed: {
+        user() {
+            return this.$store.getters.getAuthUser;
+        }
+    },
     methods: {
         async favoriteBook() {
             try {

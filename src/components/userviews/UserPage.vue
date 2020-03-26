@@ -36,16 +36,7 @@
       </v-col>
       <v-divider> </v-divider>
     </v-container>
-    <bs-loader
-      v-if="loading"
-      :options="{
-        isDetermined: true,
-        color: 'teal',
-        size: '100',
-        width: '10'
-      }"
-    >
-    </bs-loader>
+    <bs-loader v-if="loading"> </bs-loader>
   </v-card>
 </template>
 

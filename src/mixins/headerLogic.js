@@ -20,7 +20,7 @@ export default {
             ];
             if (this.userIsAuthenticated) {
                 headerLinks = [
-                    { name: "Favorites", to: "favorites" },
+                    { name: "Favorites", to: { name: "favorites", params: { id: this.user.id } } },
                     { name: "Content", to: "content" },
                     { name: "New content", to: "content" }
                 ];
