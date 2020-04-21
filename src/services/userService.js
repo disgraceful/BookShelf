@@ -8,13 +8,13 @@ export default {
     },
 
     addToUserCollection(token, book, collection) {
-        return Vue.http.post(`user/${collection}`, { book: book }, { headers: { 'X-Access-Token': token } })
+        return Vue.http.post(`user/books/${collection}`, { book: book }, { headers: { 'X-Access-Token': token } })
             .then((response) => Promise.resolve(response.data))
             .catch((error) => Promise.reject(error));
     },
 
     getUserCollection(token, collection) {
-        return Vue.http.get(`user/${collection}`, { headers: { 'X-Access-Token': token } })
+        return Vue.http.get(`user/books/${collection}`, { headers: { 'X-Access-Token': token } })
             .then((response) => Promise.resolve(response.data))
             .catch((error) => Promise.reject(error));
     },
@@ -26,19 +26,19 @@ export default {
     },
 
     removeFromUserCollection(token, bookId) {
-        return Vue.http.delete("user/collection", { params: { bookId: bookId }, headers: { 'X-Access-Token': token } })
+        return Vue.http.delete("user/books", { params: { bookId: bookId }, headers: { 'X-Access-Token': token } })
             .then((response) => Promise.resolve(response.data))
             .catch((error) => Promise.reject(error));
     },
 
     getFavorites(token) {
-        return Vue.http.get("user/favorite", { headers: { 'X-Access-Token': token } })
+        return Vue.http.get("user/books/favorite", { headers: { 'X-Access-Token': token } })
             .then((response) => Promise.resolve(response.data))
             .catch((error) => Promise.reject(error));
     },
 
     setFavorite(token, book) {
-        return Vue.http.post("user/favorite", { book: book }, { headers: { 'X-Access-Token': token } })
+        return Vue.http.post("user/books/favorite", { book: book }, { headers: { 'X-Access-Token': token } })
             .then((response) => Promise.resolve(response.data))
             .catch((error) => Promise.reject(error));
     },
@@ -50,7 +50,7 @@ export default {
     },
 
     getUserGenres(token) {
-        return Vue.http.get("user/genres", { headers: { 'X-Access-Token': token } })
+        return Vue.http.get("user/books", { headers: { 'X-Access-Token': token } })
             .then(response => Promise.resolve(response.data))
             .catch(error => Promise.reject(error));
     }
