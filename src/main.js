@@ -22,7 +22,4 @@ new Vue({
   store,
   vuetify,
   render: (h) => h(App),
-  created() {
-    Vue.http.get("books/123").then((result) => console.log(result));
-  },
 }).$mount("#app");

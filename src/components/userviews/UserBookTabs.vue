@@ -1,8 +1,9 @@
 <template>
   <v-tabs v-model="tab" grow>
     <v-tab v-for="item in tabItems" :key="item.name">
-      <v-badge>
-        {{ item.name }} <sup>{{ item.books.length }}</sup>
+      <v-badge color="transparent">
+        {{ item.name }}
+        <sup>{{item.books.length}}</sup>
       </v-badge>
     </v-tab>
     <v-tabs-items v-model="tab">
@@ -11,9 +12,7 @@
           <v-card-title class="pa-2">{{ tabItems[tab].name }}</v-card-title>
         </v-col>
         <v-col cols="auto">
-          <v-card-title class="pa-2 font-weight-regular">
-            read {{ pagesRead(tab) }} pages
-          </v-card-title>
+          <v-card-title class="pa-2 font-weight-regular">read {{ pagesRead(tab) }} pages</v-card-title>
         </v-col>
       </v-row>
       <v-divider v-if="getBooks(tab).length > 0"></v-divider>
