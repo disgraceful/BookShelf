@@ -69,6 +69,9 @@ export default {
     userState() {
       return this.$store.getters.getAuthUser;
     },
+    globalLoading() {
+      return this.$store.getters.loading;
+    },
     pagesReadTotal() {
       return this.userBooks.reduce(this.countPages, 0);
     }
