@@ -1,10 +1,9 @@
-
-import Vue from "vue"
-import Vuex from "vuex"
+import Vue from "vue";
+import Vuex from "vuex";
 import { ServiceFactory } from "../services/serviceFactory";
 const authService = ServiceFactory.get("auth");
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
@@ -24,56 +23,70 @@ export default new Vuex.Store({
     },
     setLoading(state, payload) {
       state.loading = payload;
-    }
+    },
   },
   actions: {
     signUpUser({ commit }, payload) {
       commit("setLoading", true);
-      authService.signUp(payload.email, payload.password)
-        .then(response => {
+      authService
+        .signUp(payload.email, payload.password)
+        .then((response) => {
           const user = response.user;
           const token = response.token;
-          localStorage.setItem("user", JSON.stringify({ id: user.id, email: user.email, token: token }));
+          user.token = token;
+          localStorage.setItem("token", token);
           commit("setUser", user);
           commit("setLoading", false);
-        }).catch(error => {
+        })
+        .catch((error) => {
           commit("setError", error.body);
           commit("setLoading", false);
-        })
+        });
     },
 
     signInUser({ commit }, payload) {
       commit("setLoading", true);
-      authService.signIn(payload.email, payload.password)
-        .then(response => {
+      authService
+        .signIn(payload.email, payload.password)
+        .then((response) => {
           const user = response.user;
           const token = response.token;
-          localStorage.setItem("user", JSON.stringify({ id: user.id, email: user.email, token: token }));
-          commit("setUser", user);
-          commit("setLoading", false);
-        }).catch(error => {
-          commit("setError", error.body);
+          console.log(user);
+          localStorage.setItem("token", token);
+          commit("setUser", { id: user.id, email: user.email, token: token });
           commit("setLoading", false);
         })
+        .catch((error) => {
+          commit("setError", error.body);
+          commit("setLoading", false);
+        });
     },
 
     validateUser({ commit }) {
       commit("setLoading", true);
-      let user = JSON.parse(localStorage.getItem("user"));
-      if (user) {
+      let token = localStorage.getItem("token");
+      console.log(token);
+      if (token) {
         console.log("validating user");
-        commit("setUser", user);
+        authService.validateToken(token).then((response) => {
+          console.log(response);
+          const user = response;
+          user.token = token;
+          commit("setUser", user);
+          commit("setLoading", false);
+        });
+      } else {
+        commit("setLoading", false);
       }
-      commit("setLoading", false);
     },
 
     logOutUser({ commit }) {
-      localStorage.removeItem("user");
+      localStorage.removeItem("token");
       commit("setUser", null);
     },
     clearError({ commit }) {
       commit("clearError");
-    }
+    },
   },
   getters: {
     getAuthUser(state) {
@@ -84,6 +97,6 @@ export default new Vuex.Store({
     },
     getLoading(state) {
       return state.loading;
-    }
-  }
-})
+    },
+  },
+});
