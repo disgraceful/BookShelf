@@ -10,7 +10,7 @@ import AuthorPage from "../components/author/AuthorPage";
 
 Vue.use(VueRouter);
 const authGard = (to, from, next) => {
-  if (localStorage.getItem("token")) {
+  if (localStorage.getItem("user")) {
     next();
   } else {
     next({
