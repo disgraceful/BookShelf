@@ -1,20 +1,20 @@
-import Vue from "vue"
-import VueRouter from "vue-router"
-import Home from "../components/HomePage"
-import Register from "../components/auth/RegisterPage"
-import Login from "../components/auth/LoginPage"
-import BookPage from "../components/bookviews/BookPage"
-import UserStats from "../components/userviews/UserStats"
-import SeriesPage from "../components/series/SeriesPage"
-import AuthorPage from "../components/author/AuthorPage"
+import Vue from "vue";
+import VueRouter from "vue-router";
+import Home from "../components/HomePage";
+import Register from "../components/auth/RegisterPage";
+import Login from "../components/auth/LoginPage";
+import BookPage from "../components/bookviews/BookPage";
+import UserStats from "../components/userviews/UserStats";
+import SeriesPage from "../components/series/SeriesPage";
+import AuthorPage from "../components/author/AuthorPage";
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 const authGard = (to, from, next) => {
   if (localStorage.getItem("user")) {
     next();
   } else {
     next({
-      name: "login"
+      name: "login",
     });
   }
 };
@@ -27,52 +27,52 @@ const routes = [
   {
     path: "/home",
     component: Home,
-    beforeEnter: authGard
+    beforeEnter: authGard,
   },
   {
     path: "/register",
     name: "register",
-    component: Register
+    component: Register,
   },
   {
     path: "/login",
     name: "login",
-    component: Login
+    component: Login,
   },
   {
     path: "/book/:id",
     name: "book",
     props: true,
     component: BookPage,
-    beforeEnter: authGard
+    beforeEnter: authGard,
   },
   {
     path: "/user/:id",
     name: "user",
     props: true,
     component: UserStats,
-    beforeEnter: authGard
+    beforeEnter: authGard,
   },
   {
     path: "/series/:id",
     name: "series",
     props: true,
     component: SeriesPage,
-    beforeEnter: authGard
-  }, {
+    beforeEnter: authGard,
+  },
+  {
     path: "/author/:id",
     name: "authors",
     props: true,
     component: AuthorPage,
-    beforeEnter: authGard
-  }
-
+    beforeEnter: authGard,
+  },
 
   //component: () => import(/* webpackChunkName: "about" */ "../views/About.vue")
-]
+];
 
 const router = new VueRouter({
-  routes
-})
+  routes,
+});
 
-export default router
+export default router;

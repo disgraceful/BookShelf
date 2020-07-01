@@ -9,11 +9,11 @@
 import ResponsiveHeader from "./components/header/ResponsiveHeader";
 export default {
   name: "BookShelfApp",
-  data() {
-    return {};
-  },
   components: {
     "bs-header": ResponsiveHeader
+  },
+  data() {
+    return {};
   }
 };
 </script>
