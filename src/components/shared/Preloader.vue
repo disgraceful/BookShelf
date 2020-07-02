@@ -1,5 +1,5 @@
 <template>
-  <div :class="getWrapperClass">
+  <div :class="options.wrapperClass">
     <v-progress-circular
       :indeterminate="options.isDetermined"
       :color="options.color"
@@ -10,19 +10,20 @@
 </template>
 <script>
 export default {
-  data() {
-    return {
-      defaultClass: "loader-wrapper"
-    };
-  },
-  computed: {
-    getWrapperClass() {
-      return this.options.wrapperClass
-        ? this.options.wrapperClass
-        : this.defaultClass;
+  props: {
+    options: {
+      type: Object,
+      default: function() {
+        return {
+          isDetermined: true,
+          color: "teal",
+          size: "100",
+          width: "10",
+          wrapperClass: "loader-wrapper"
+        };
+      }
     }
-  },
-  props: { options: { type: Object, required: true } }
+  }
 };
 </script>
 

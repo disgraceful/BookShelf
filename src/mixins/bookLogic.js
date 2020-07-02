@@ -10,7 +10,6 @@ export default {
         console.log(response);
         if (response) {
           this.book.userData.isFavorited = response.body.userData.isFavorited;
-        }
       } catch (error) {
         console.log(error);
         this.error = error.body;
@@ -25,5 +24,5 @@ export default {
         this.error = error.body;
       }
     },
-  },
+    }
 };

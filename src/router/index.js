@@ -1,12 +1,13 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
-import Home from "../components/HomePage";
-import Register from "../components/auth/RegisterPage";
-import Login from "../components/auth/LoginPage";
-import BookPage from "../components/bookviews/BookPage";
-import UserStats from "../components/userviews/UserStats";
-import SeriesPage from "../components/series/SeriesPage";
-import AuthorPage from "../components/author/AuthorPage";
+import Vue from "vue"
+import VueRouter from "vue-router"
+import Home from "../components/HomePage"
+import Register from "../components/auth/RegisterPage"
+import Login from "../components/auth/LoginPage"
+import BookPage from "../components/bookviews/BookPage"
+import UserStats from "../components/userviews/UserStats"
+import SeriesPage from "../components/series/SeriesPage"
+import AuthorPage from "../components/author/AuthorPage"
+import Favorites from "../components/userviews/Favorites.vue"
 
 Vue.use(VueRouter);
 const authGard = (to, from, next) => {
@@ -54,6 +55,13 @@ const routes = [
     beforeEnter: authGard,
   },
   {
+    path: "/user/:id/favorites",
+    name: "favorites",
+    props: true,
+    component: Favorites,
+    beforeEnter: authGard
+  },
+  {
     path: "/series/:id",
     name: "series",
     props: true,
@@ -70,6 +78,9 @@ const routes = [
 
   //component: () => import(/* webpackChunkName: "about" */ "../views/About.vue")
 ];
+
+
+
 
 const router = new VueRouter({
   routes,

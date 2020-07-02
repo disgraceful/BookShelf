@@ -1,11 +1,11 @@
 <template>
-  <v-toolbar-items v-if="!userIsAuthenticated || (lgScreen || mdScreen)">
+  <v-toolbar-items v-if="!userIsAuthenticated || lgScreen || mdScreen">
     <div
       class="link-wrapper"
       v-for="(link, index) in headerLinks"
       :key="link.name"
     >
-      <v-btn text v-text="link.name"> </v-btn>
+      <v-btn text v-text="link.name" :to="link.to"> </v-btn>
       <v-divider vertical v-if="index < headerLinks.length - 1"></v-divider>
     </div>
   </v-toolbar-items>

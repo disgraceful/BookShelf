@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
+
 import { ServiceFactory } from "../services/serviceFactory";
 const authService = ServiceFactory.get("auth");
 
