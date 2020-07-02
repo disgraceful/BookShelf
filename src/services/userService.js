@@ -1,57 +1,41 @@
 import Vue from "vue";
 
 export default {
-    getUser(token) {
-        return Vue.http.get("user", { headers: { 'X-Access-Token': token } })
-            .then((response) => Promise.resolve(response.data))
-            .catch((error) => Promise.reject(error));
-    },
+  getUser() {
+    return Vue.http.get("user");
+  },
 
-    addToUserCollection(token, book, collection) {
-        return Vue.http.post(`user/books/${collection}`, { book: book }, { headers: { 'X-Access-Token': token } })
-            .then((response) => Promise.resolve(response.data))
-            .catch((error) => Promise.reject(error));
-    },
+  addToUserCollection(book, collection) {
+    return Vue.http.post(`user/books/${collection}`, { book });
+  },
 
-    getUserCollection(token, collection) {
-        return Vue.http.get(`user/books/${collection}`, { headers: { 'X-Access-Token': token } })
-            .then((response) => Promise.resolve(response.data))
-            .catch((error) => Promise.reject(error));
-    },
+  getUserCollection(collection) {
+    return Vue.http.get(`user/books/${collection}`);
+  },
 
-    getAllUserBooks(token) {
-        return Vue.http.get(`user/books`, { headers: { 'X-Access-Token': token } })
-            .then((response) => Promise.resolve(response.data))
-            .catch((error) => Promise.reject(error));
-    },
+  getAllUserBooks() {
+    return Vue.http.get(`user/books`);
+  },
 
-    removeFromUserCollection(token, bookId) {
-        return Vue.http.delete("user/books", { params: { bookId: bookId }, headers: { 'X-Access-Token': token } })
-            .then((response) => Promise.resolve(response.data))
-            .catch((error) => Promise.reject(error));
-    },
+  removeFromUserCollection(bookId) {
+    return Vue.http.delete("user/books", {
+      params: { bookId },
+    });
+  },
 
-    getFavorites(token) {
-        return Vue.http.get("user/books/favorite", { headers: { 'X-Access-Token': token } })
-            .then((response) => Promise.resolve(response.data))
-            .catch((error) => Promise.reject(error));
-    },
+  getFavorites() {
+    return Vue.http.get("user/books/favorite");
+  },
 
-    setFavorite(token, book) {
-        return Vue.http.post("user/books/favorite", { book: book }, { headers: { 'X-Access-Token': token } })
-            .then((response) => Promise.resolve(response.data))
-            .catch((error) => Promise.reject(error));
-    },
+  setFavorite(book) {
+    return Vue.http.post("user/books/favorite", { book });
+  },
 
-    updateBook(token, book) {
-        return Vue.http.put("user/collection", { book: book }, { headers: { 'X-Access-Token': token } })
-            .then((response) => Promise.resolve(response.data))
-            .catch((error) => Promise.reject(error));
-    },
+  updateBook(book) {
+    return Vue.http.put("user/books", { book });
+  },
 
-    getUserGenres(token) {
-        return Vue.http.get("user/books", { headers: { 'X-Access-Token': token } })
-            .then(response => Promise.resolve(response.data))
-            .catch(error => Promise.reject(error));
-    }
-}
+  getUserGenres() {
+    return Vue.http.get("user/genres");
+  },
+};

@@ -1,7 +1,7 @@
 <template>
   <v-card flat>
-    <v-container v-if="user && tabItems"
-      ><v-card-title class="py-0">{{ user.email }}</v-card-title>
+    <v-container v-if="user && tabItems">
+      <v-card-title class="py-0">{{ user.email }}</v-card-title>
       <v-row :justify="$mq !== 'xs' ? 'start' : 'center'">
         <v-col cols="auto" class="pa-5">
           <bs-progress
@@ -28,14 +28,21 @@
       </v-row>
       <v-divider></v-divider>
       <v-col class="py-0">
-        <bs-user-tabs
-          v-if="$mq === 'md' || $mq === 'lg'"
-          :tabItems="tabItems"
-        ></bs-user-tabs>
+        <bs-user-tabs v-if="$mq === 'md' || $mq === 'lg'" :tabItems="tabItems"></bs-user-tabs>
         <bs-user-panels v-else :tabItems="tabItems"></bs-user-panels>
       </v-col>
-      <v-divider> </v-divider>
+      <v-divider></v-divider>
     </v-container>
+
+    <bs-loader
+      v-if="loading"
+      :options="{
+        isDetermined: true,
+        color: 'teal',
+        size: '100',
+        width: '10'
+      }"
+    ></bs-loader>
     <bs-loader v-if="loading"> </bs-loader>
   </v-card>
 </template>
@@ -64,6 +71,9 @@ export default {
     userState() {
       return this.$store.getters.getAuthUser;
     },
+    globalLoading() {
+      return this.$store.getters.loading;
+    },
     pagesReadTotal() {
       return this.userBooks.reduce(this.countPages, 0);
     }
@@ -75,31 +85,42 @@ export default {
     "bs-loader": Preloader
   },
   methods: {},
-  async created() {
+  created() {
     this.loading = true;
-    this.user = await userService.getUser(this.userState.token);
-    this.userBooks = this.user.books;
-    this.tabItems = [
-      {
-        name: "Reading",
-        books: this.userBooks.filter(book => book.userData.status === "reading")
-      },
-      {
-        name: "2Read",
-        books: this.userBooks.filter(book => book.userData.status === "2read")
-      },
-      {
-        name: "Stopped",
-        books: this.userBooks.filter(book => book.userData.status === "stopped")
-      },
-      {
-        name: "Finished",
-        books: this.userBooks.filter(
-          book => book.userData.status === "finished"
-        )
-      }
-    ];
-    this.loading = false;
+    userService
+      .getUser()
+      .then(response => {
+        this.user = response.body;
+        this.userBooks = this.user.books;
+        this.tabItems = [
+          {
+            name: "Reading",
+            books: this.userBooks.filter(
+              book => book.userData.status === "reading"
+            )
+          },
+          {
+            name: "2Read",
+            books: this.userBooks.filter(
+              book => book.userData.status === "2read"
+            )
+          },
+          {
+            name: "Stopped",
+            books: this.userBooks.filter(
+              book => book.userData.status === "stopped"
+            )
+          },
+          {
+            name: "Finished",
+            books: this.userBooks.filter(
+              book => book.userData.status === "finished"
+            )
+          }
+        ];
+        this.loading = false;
+      })
+      .catch(error => console.error(error));
   }
 };
 </script>

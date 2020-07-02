@@ -1,15 +1,13 @@
 import Vue from "vue";
 
 export default {
-    getBookById(bookId, token) {
-        return Vue.http.get(`books/${bookId}`, { headers: { 'X-Access-Token': token } })
-            .then((response) => Promise.resolve(response.data))
-            .catch((error) => Promise.reject(error));
-    },
+  getBookById(bookId) {
+    return Vue.http.get(`books/${bookId}`);
+  },
 
-    searchBook(text, token) {
-        return Vue.http.get(`books/search`, { params: { 'query': text }, headers: { 'X-Access-Token': token } })
-            .then(response => Promise.resolve(response.data))
-            .catch(error => Promise.reject(error));
-    }
-}
+  searchBook(text) {
+    return Vue.http.get(`books/search`, {
+      params: { query: text },
+    });
+  },
+};

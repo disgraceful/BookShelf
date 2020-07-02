@@ -2,10 +2,10 @@
   <v-card flat>
     <v-container v-if="series" class="page-container">
       <v-card-title class="display-1 pb-1">{{ series.title }}</v-card-title>
-      <v-card-text class="subtitle-1"
-        >{{ series.workCount }} primary works | {{ series.allWorks }} total
-        works</v-card-text
-      >
+      <v-card-text class="subtitle-1">
+        {{ series.workCount }} primary works | {{ series.allWorks }} total
+        works
+      </v-card-text>
       <v-divider></v-divider>
       <v-row v-if="books" justify="start">
         <v-col class="pa-0" cols="12" v-for="book in books" :key="book.id">
@@ -42,11 +42,6 @@ export default {
       books: null
     };
   },
-  computed: {
-    user() {
-      return this.$store.getters.getAuthUser;
-    }
-  },
   props: {
     id: {
       required: true,
@@ -60,12 +55,13 @@ export default {
   async created() {
     try {
       this.loading = true;
-      this.series = await seriesService.getSeriesById(this.id, this.user.token);
+      const response = await seriesService.getSeriesById(this.id);
+      this.series = response.body;
+
       this.books = await Promise.all(
         this.series.bookIds.map(async id => {
-          const book = await bookService.getBookById(id, this.user.token);
-          console.log(book.id);
-          return book;
+          const response = await bookService.getBookById(id);
+          return response.body;
         })
       );
       this.loading = false;
