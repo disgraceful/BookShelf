@@ -6,11 +6,11 @@ export default {
   },
 
   addToUserCollection(book, collection) {
-    return Vue.http.post(`user/${collection}`, { book });
+    return Vue.http.post(`user/books/${collection}`, { book });
   },
 
   getUserCollection(collection) {
-    return Vue.http.get(`user/${collection}`);
+    return Vue.http.get(`user/books/${collection}`);
   },
 
   getAllUserBooks() {
@@ -18,21 +18,21 @@ export default {
   },
 
   removeFromUserCollection(bookId) {
-    return Vue.http.delete("user/collection", {
-      params: { bookId: bookId },
+    return Vue.http.delete("user/books", {
+      params: { bookId },
     });
   },
 
   getFavorites() {
-    return Vue.http.get("user/favorite");
+    return Vue.http.get("user/books/favorite");
   },
 
   setFavorite(book) {
-    return Vue.http.post("user/favorite", { book });
+    return Vue.http.post("user/books/favorite", { book });
   },
 
   updateBook(book) {
-    return Vue.http.put("user/collection", { book });
+    return Vue.http.put("user/books", { book });
   },
 
   getUserGenres() {
