@@ -67,6 +67,13 @@ export default new Vuex.Store({
         });
     },
 
+    getSavedUser({ commit }) {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if (user) {
+        commit("setUser", user);
+      }
+    },
+
     logOutUser({ commit }) {
       localStorage.removeItem("user");
       commit("setUser", null);
