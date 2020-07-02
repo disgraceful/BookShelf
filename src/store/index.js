@@ -31,14 +31,14 @@ export default new Vuex.Store({
       authService
         .signUp(payload.email, payload.password)
         .then((response) => {
-          const user = response.user;
-          const token = response.token;
+          const user = response.body.user;
+          const token = response.body.token;
           user.token = token;
           localStorage.setItem(
             "user",
             JSON.stringify({ id: user.id, email: user.email, token })
           );
-          commit("setUser", user);
+          commit("setUser", { id: user.id, email: user.email, token: token });
           commit("setLoading", false);
         })
         .catch((error) => {
@@ -52,9 +52,8 @@ export default new Vuex.Store({
       authService
         .signIn(payload.email, payload.password)
         .then((response) => {
-          const user = response.user;
-          const token = response.token;
-          console.log(user);
+          const user = response.body.user;
+          const token = response.body.token;
           localStorage.setItem(
             "user",
             JSON.stringify({ id: user.id, email: user.email, token })
@@ -69,7 +68,7 @@ export default new Vuex.Store({
     },
 
     logOutUser({ commit }) {
-      localStorage.removeItem("token");
+      localStorage.removeItem("user");
       commit("setUser", null);
     },
     clearError({ commit }) {
