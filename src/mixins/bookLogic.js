@@ -10,19 +10,20 @@ export default {
         console.log(response);
         if (response) {
           this.book.userData.isFavorited = response.body.userData.isFavorited;
+        }
       } catch (error) {
         console.log(error);
         this.error = error.body;
       }
     },
+  },
 
-    async updateBook() {
-      try {
-        const response = await userService.updateBook(this.book);
-      } catch (error) {
-        console.log(error);
-        this.error = error.body;
-      }
-    },
+  async updateBook() {
+    try {
+      const response = await userService.updateBook(this.book);
+    } catch (error) {
+      console.log(error);
+      this.error = error.body;
     }
+  },
 };
