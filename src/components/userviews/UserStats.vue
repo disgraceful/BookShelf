@@ -9,22 +9,16 @@
           </div>
         </v-col>
         <v-col cols="6">
-          <v-card-text class="red--text headline"
-            ><span class="display-3 font-weight-medium">
-              {{ readBooks }}
-            </span>
+          <v-card-text class="red--text headline">
+            <span class="display-3 font-weight-medium">{{ readBooks }}</span>
             books and
-            <span class="display-3 font-weight-medium">{{ pagesRead }} </span
-            >pages read</v-card-text
-          >
-          <v-card-text class="grey--text headline "
-            ><span class="display-3 font-weight-medium">
-              {{ booksLeft }}
-            </span>
+            <span class="display-3 font-weight-medium">{{ pagesRead }}</span>pages read
+          </v-card-text>
+          <v-card-text class="grey--text headline">
+            <span class="display-3 font-weight-medium">{{ booksLeft }}</span>
             books and
-            <span class="display-3 font-weight-medium">{{ pagesLeft }} </span
-            >pages left</v-card-text
-          >
+            <span class="display-3 font-weight-medium">{{ pagesLeft }}</span>pages left
+          </v-card-text>
         </v-col>
       </v-row>
     </v-container>
@@ -53,7 +47,8 @@ export default {
     "bs-user-chart": UserGenreChart
   },
   async created() {
-    const books = await userService.getAllUserBooks(this.user.token);
+    const response = await userService.getAllUserBooks();
+    const books = response.body;
     const read = books.filter(book => book.userData.status === "finished");
     const pageCounter = (prevValue, curValue) => prevValue + +curValue.pages;
     this.readBooks = read.length;

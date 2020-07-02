@@ -12,12 +12,7 @@
         @focus="visibleResults = true"
       >
         <template v-slot:append>
-          <v-progress-circular
-            v-if="loading"
-            size="24"
-            color="white"
-            indeterminate
-          ></v-progress-circular>
+          <v-progress-circular v-if="loading" size="24" color="white" indeterminate></v-progress-circular>
           <v-icon v-else @click="minimize">mdi-magnify</v-icon>
         </template>
       </v-text-field>
@@ -28,26 +23,17 @@
         :style="{ visibility: visibleResults ? 'visible' : 'hidden' }"
       >
         <template v-if="error">
-          <v-list-item>
-            {{ error }}
-          </v-list-item>
+          <v-list-item>{{ error }}</v-list-item>
           <v-divider></v-divider>
         </template>
         <template v-else v-for="(item, index) in searchResults">
-          <v-list-item
-            :key="item.title"
-            :to="{ name: 'book', params: { id: item.id } }"
-          >
+          <v-list-item :key="item.title" :to="{ name: 'book', params: { id: item.id } }">
             <v-list-item-avatar tile height="56px" width="46px">
               <v-img :src="item.imageUrl"></v-img>
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title
-                >{{ item.title }} {{ item.series }}</v-list-item-title
-              >
-              <v-list-item-subtitle
-                v-text="`by ${item.author}`"
-              ></v-list-item-subtitle>
+              <v-list-item-title>{{ item.title }} {{ item.series }}</v-list-item-title>
+              <v-list-item-subtitle v-text="`by ${item.author}`"></v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
           <v-divider :key="index"></v-divider>
@@ -85,9 +71,6 @@ export default {
   computed: {
     searchActive() {
       return this.searchResults.length > 0;
-    },
-    user() {
-      return this.$store.getters.getAuthUser;
     }
   },
   watch: {
@@ -117,7 +100,7 @@ export default {
           if (text) {
             this.loading = true;
             this.error = null;
-            return from(bookService.searchBook(text, this.user.token));
+            return from(bookService.searchBook(text));
           } else {
             return of([]);
           }

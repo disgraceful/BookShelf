@@ -83,31 +83,42 @@ export default {
     "bs-loader": Preloader
   },
   methods: {},
-  async created() {
+  created() {
     this.loading = true;
-    this.user = await userService.getUser(this.userState.token);
-    this.userBooks = this.user.books;
-    this.tabItems = [
-      {
-        name: "Reading",
-        books: this.userBooks.filter(book => book.userData.status === "reading")
-      },
-      {
-        name: "2Read",
-        books: this.userBooks.filter(book => book.userData.status === "2read")
-      },
-      {
-        name: "Stopped",
-        books: this.userBooks.filter(book => book.userData.status === "stopped")
-      },
-      {
-        name: "Finished",
-        books: this.userBooks.filter(
-          book => book.userData.status === "finished"
-        )
-      }
-    ];
-    this.loading = false;
+    userService
+      .getUser()
+      .then(response => {
+        this.user = response.body;
+        this.userBooks = this.user.books;
+        this.tabItems = [
+          {
+            name: "Reading",
+            books: this.userBooks.filter(
+              book => book.userData.status === "reading"
+            )
+          },
+          {
+            name: "2Read",
+            books: this.userBooks.filter(
+              book => book.userData.status === "2read"
+            )
+          },
+          {
+            name: "Stopped",
+            books: this.userBooks.filter(
+              book => book.userData.status === "stopped"
+            )
+          },
+          {
+            name: "Finished",
+            books: this.userBooks.filter(
+              book => book.userData.status === "finished"
+            )
+          }
+        ];
+        this.loading = false;
+      })
+      .catch(error => console.error(error));
   }
 };
 </script>

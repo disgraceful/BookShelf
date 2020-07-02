@@ -4,9 +4,7 @@
       <v-flex xs12 sm6 offset-sm3>
         <v-card>
           <v-container>
-            <v-card-title>
-              {{ loginInfo }}
-            </v-card-title>
+            <v-card-title>{{ loginInfo }}</v-card-title>
             <v-form ref="form" v-model="valid">
               <v-col>
                 <v-flex xs12>
@@ -49,10 +47,7 @@
                 </v-flex>
               </v-col>
               <v-col v-if="error">
-                <app-alert
-                  :message="error.message"
-                  @dismissed="dismissError"
-                ></app-alert>
+                <app-alert :message="error.message" @dismissed="dismissError"></app-alert>
               </v-col>
               <v-col>
                 <v-flex xs12>
@@ -61,8 +56,7 @@
                     :loading="loading"
                     :disabled="!valid && !loading"
                     @click="onSubmit()"
-                    >Submit</v-btn
-                  >
+                  >Submit</v-btn>
                   <v-btn
                     color="primary"
                     :disabled="true"
@@ -102,7 +96,6 @@ export default {
   },
   props: ["loginInfo"],
   methods: {
-    toLogin() {},
     onSubmit() {
       if (this.isRegister) {
         this.signUp();
@@ -110,36 +103,44 @@ export default {
         this.signIn();
       }
     },
+
     signIn() {
       this.$store.dispatch("signInUser", {
         email: this.email,
         password: this.password
       });
     },
+
     signUp() {
       this.$store.dispatch("signUpUser", {
         email: this.email,
         password: this.password
       });
     },
+
     dismissError() {
       this.$store.dispatch("clearError");
     }
   },
+
   computed: {
     isRegister() {
       return this.loginInfo == "SignUp";
     },
+
     user() {
       return this.$store.getters.getAuthUser;
     },
+
     error() {
       return this.$store.getters.getError;
     },
+
     loading() {
       return this.$store.getters.getLoading;
     }
   },
+
   watch: {
     user(value) {
       if (value !== null && value !== undefined) {

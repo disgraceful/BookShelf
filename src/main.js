@@ -23,6 +23,6 @@ new Vue({
   vuetify,
   render: (h) => h(App),
   created() {
-    Vue.http.get("books/123").then((result) => console.log(result));
+    this.$store.dispatch("getSavedUser");
   },
 }).$mount("#app");
