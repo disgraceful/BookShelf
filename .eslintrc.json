@@ -1,0 +1,36 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "extends": "plugin:vue/essential",
+  "globals": {
+    "Atomics": "readonly",
+    "SharedArrayBuffer": "readonly"
+  },
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "plugins": ["vue"],
+  "rules": {
+    "no-console": "off",
+    "no-unused-vars": "off"
+  }
+}
+
+// "root": true,
+// "env": {
+//   "node": true
+// },
+// "extends": [
+//   "plugin:vue/essential",
+//   "eslint:recommended"
+// ],
+// "rules": {
+//   "no-console": "off",
+//   "no-unused-vars": "off"
+// },
+// "parserOptions": {
+//   "parser": "babel-eslint"
+// }
