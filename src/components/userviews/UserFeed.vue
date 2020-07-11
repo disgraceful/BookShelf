@@ -2,7 +2,7 @@
   <v-card flat>
     <v-container>
       <v-card-title class="py-0">User Feed</v-card-title>
-      <bs-user-record v-for="index in records" :key="index" :record="index"></bs-user-record>
+      <bs-user-record v-for="record in records" :key="record.date" :record="record"></bs-user-record>
     </v-container>
   </v-card>
 </template>
@@ -16,13 +16,18 @@ export default {
       records: [
         {
           date: "01/02/2020",
-          text: "Finished Konan the Barbarian",
-          link: "/book/12345"
+          texts: ["Finished", "Stopped reading", "Will be reading"],
+          books: [
+            { name: "Konan the Barbarian", id: 12345 },
+            { name: "The Book Example", id: 12345 },
+            { name: "The PeePee", id: 12345 }
+          ]
         },
-        1,
-        2,
-        3,
-        4
+        {
+          date: "05/01/2020",
+          texts: ["Read 100 pages of"],
+          books: [{ name: "Sex in the City", id: 1234 }]
+        }
       ]
     };
   }
