@@ -16,14 +16,14 @@ export default {
         this.error = error.body;
       }
     },
-  },
 
-  async updateBook() {
-    try {
-      const response = await userService.updateBook(this.book);
-    } catch (error) {
-      console.log(error);
-      this.error = error.body;
-    }
+    async updateBook() {
+      try {
+        await userService.updateBook(this.book);
+      } catch (error) {
+        console.log(error);
+        this.error = error.body;
+      }
+    },
   },
 };

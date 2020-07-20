@@ -146,6 +146,7 @@ export default {
       await this.favoriteBook();
     },
     async update() {
+      console.log(this);
       await this.updateBook();
     }
   },
@@ -155,7 +156,6 @@ export default {
       this.book = null;
       this.loading = true;
       const response = await bookService.getBookById(this.id);
-      console.log(response);
       this.book = response.body;
       this.statusTemp = this.book.userData.status;
       this.loading = false;

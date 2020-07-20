@@ -5,12 +5,17 @@
         <v-card-text class="pl-10 py-1 text-h6 font-weight-regular">{{record.date}}</v-card-text>
       </v-col>
       <v-col>
-        <v-card-text class="py-1 text-subtitle-1" v-for="(text,i) in record.texts" :key="text">
-          {{text}}
-          <a class="highlight">{{record.books[i].name}}</a>
+        <v-card-text
+          class="py-1 text-subtitle-1"
+          v-for="(record,index) in record.value"
+          :key="index"
+        >
+          {{record.message}}
+          <router-link :to="{name:'book', params:{id:record.data.id} }">{{record.data.title}}</router-link>
         </v-card-text>
       </v-col>
     </v-row>
+    <v-divider></v-divider>
   </v-card>
 </template>
 
