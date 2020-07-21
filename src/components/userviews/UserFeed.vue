@@ -1,30 +1,37 @@
 <template>
   <v-card flat>
-    <v-container>
+    <v-container v-if="records">
       <v-card-title class="py-0">User Feed</v-card-title>
-      <bs-user-record v-for="index in records" :key="index" :record="index"></bs-user-record>
+      <bs-user-record
+        v-for="(record, name, index) in records"
+        :key="name"
+        :record="{date:name, value: record}"
+      >
+        <v-divider v-show="index<length-1"></v-divider>
+      </bs-user-record>
     </v-container>
   </v-card>
 </template>
 
 <script>
 import UserRecord from "./UserRecord.vue";
+import { ServiceFactory } from "../../services/serviceFactory";
+const feedService = ServiceFactory.get("feed");
 export default {
   components: { "bs-user-record": UserRecord },
   data() {
     return {
-      records: [
-        {
-          date: "01/02/2020",
-          text: "Finished Konan the Barbarian",
-          link: "/book/12345"
-        },
-        1,
-        2,
-        3,
-        4
-      ]
+      loading: false,
+      records: null,
+      length: 0
     };
+  },
+  async created() {
+    this.loading = true;
+    const response = await feedService.getUserFeed();
+    this.records = response.body;
+    this.length = Object.keys(this.records).length;
+    this.loading = false;
   }
 };
 </script>
