@@ -3,10 +3,12 @@
     <v-container v-if="records">
       <v-card-title class="py-0">User Feed</v-card-title>
       <bs-user-record
-        v-for="(record, name) in records"
+        v-for="(record, name, index) in records"
         :key="name"
         :record="{date:name, value: record}"
-      ></bs-user-record>
+      >
+        <v-divider v-show="index<length-1"></v-divider>
+      </bs-user-record>
     </v-container>
   </v-card>
 </template>
@@ -20,13 +22,15 @@ export default {
   data() {
     return {
       loading: false,
-      records: null
+      records: null,
+      length: 0
     };
   },
   async created() {
     this.loading = true;
     const response = await feedService.getUserFeed();
     this.records = response.body;
+    this.length = Object.keys(this.records).length;
     this.loading = false;
   }
 };
