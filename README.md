@@ -16,12 +16,14 @@ The end-goal of the projet is create a simple solution to organizing your "virtu
 
 ## Technologies
 
-- Vue.js - 2.6.11
-- Vuex - 3.1.2
-- VueRouter - 3.1.3
-- Vuetify - 2.1.15
-- Rxjs - 6.5.4
-- Chart.js - 2.9.3
+- Vue.js 2.6.11 - main framework
+- Vuex 3.1.2 - for sharing user state
+- VueRouter 3.1.3 - for route managment, guards, navigation
+- Vuetify 2.1.15 - ui component library
+- Rxjs 6.5.4 - tiny bit of code for request spam prevention
+- Chart.js 2.9.3 - used for stat pie chart
+- Vue Test Utils 1.0.3 & Jest 24.9 - running tests
+- Moment.js 2.24 - working with time
 
 ## Setup
 
@@ -49,10 +51,10 @@ npm run build
 - [x] Sort by categories (2read, read, reading)
 - [x] User genre statistics
 - [x] Rate & Review
+- [x] User reading feed
 
 ### To-do
 
-- [ ] User reading feed !important
 - [ ] Account settings (security) !important
 - [ ] Advanced user stats
 - [ ] Advanced search
@@ -84,6 +86,10 @@ npm run build
 
 ```
 /src/store - Vuex configuration
+```
+
+```
+/src/http - Vue Resource configuration, interceptors
 ```
 
 ```
