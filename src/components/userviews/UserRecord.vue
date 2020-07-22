@@ -13,9 +13,7 @@
           >
             <v-row align="center">
               <template v-if="!record.data.rating">{{record.message}}</template>
-              <v-col cols="auto" class="pa-0 mb-1" v-else>
-                <v-icon v-for="i in 5" :key="i" :color="i<record.data.rating?'primary' :''">mdi-star</v-icon>
-              </v-col>
+              <v-rating v-else readonly v-model="record.data.rating" dense></v-rating>
               <v-col class="py-0" cols="auto">
                 <router-link :to="{name:'book', params:{id:record.data.id} }">{{record.data.title}}</router-link>
               </v-col>
