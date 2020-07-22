@@ -3,12 +3,15 @@
     <v-container v-if="records">
       <v-card-title class="py-0">User Feed</v-card-title>
       <bs-user-record
-        v-for="(record, name, index) in records"
+        v-for="(record, name) in records"
         :key="name"
         :record="{date:name, value: record}"
-      >
-        <v-divider v-show="index<length-1"></v-divider>
-      </bs-user-record>
+      ></bs-user-record>
+      <v-row justify="end">
+        <v-col cols="auto" class="pr-6">
+          <a class="highlight">Show more</a>
+        </v-col>
+      </v-row>
     </v-container>
   </v-card>
 </template>
