@@ -70,7 +70,7 @@ export default {
   },
   computed: {
     searchActive() {
-      return this.searchResults.length > 0;
+      return this.searchResults.length > 0 && this.searchQuery.length > 0;
     }
   },
   watch: {
@@ -114,7 +114,11 @@ export default {
       )
       .subscribe(response => {
         this.loading = false;
-        this.searchResults = response.slice(0, 4);
+        if (response.body && response.body.length > 0) {
+          this.searchResults = response.body.slice(0, 4);
+        } else {
+          this.searchResults = [];
+        }
       });
   },
   beforeDestroy() {
