@@ -31,7 +31,6 @@
         <bs-user-tabs v-if="$mq === 'md' || $mq === 'lg'" :tabItems="tabItems"></bs-user-tabs>
         <bs-user-panels v-else :tabItems="tabItems"></bs-user-panels>
       </v-col>
-      <v-divider></v-divider>
     </v-container>
 
     <bs-loader
@@ -43,7 +42,7 @@
         width: '10'
       }"
     ></bs-loader>
-    <bs-loader v-if="loading"> </bs-loader>
+    <bs-loader v-if="loading"></bs-loader>
   </v-card>
 </template>
 

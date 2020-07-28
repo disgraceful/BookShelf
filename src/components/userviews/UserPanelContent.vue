@@ -11,8 +11,9 @@
         @click.stop="expanded = !expanded"
       >
         <v-card-title class="font-weight-regular">
-          <v-badge>
-            {{ item.name }} <sup>{{ item.books.length }}</sup>
+          <v-badge color="transparent">
+            {{ item.name }}
+            <sup>{{ item.books.length }}</sup>
           </v-badge>
         </v-card-title>
 

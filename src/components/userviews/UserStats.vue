@@ -30,6 +30,9 @@ import UserGenreChart from "./UserGenreChart";
 import { ServiceFactory } from "../../services/serviceFactory";
 const userService = ServiceFactory.get("user");
 export default {
+  components: {
+    "bs-user-chart": UserGenreChart
+  },
   data() {
     return {
       readBooks: 0,
@@ -43,23 +46,28 @@ export default {
       return this.$store.getters.getAuthUser;
     }
   },
-  components: {
-    "bs-user-chart": UserGenreChart
+  methods: {
+    pageCounter(prevValue, curValue) {
+      return prevValue + +curValue.pages;
+    },
+    pageLeftCounter(prevValue, curValue) {
+      return prevValue + (+curValue.pages - curValue.userData.pagesRead);
+    }
   },
+
   async created() {
     const response = await userService.getAllUserBooks();
     const books = response.body;
     const read = books.filter(book => book.userData.status === "finished");
-    const pageCounter = (prevValue, curValue) => prevValue + +curValue.pages;
     this.readBooks = read.length;
-    this.pagesRead = read.reduce(pageCounter, 0);
+    this.pagesRead = read.reduce(this.pageCounter, 0);
     const left = books.filter(
       book =>
         book.userData.status !== "finished" &&
         book.userData.status !== "stopped"
     );
     this.booksLeft = left.length;
-    this.pagesLeft = left.reduce(pageCounter, 0);
+    this.pagesLeft = left.reduce(this.pageLeftCounter, 0);
   }
 };
 </script>

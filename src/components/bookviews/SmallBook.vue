@@ -1,9 +1,6 @@
 <template>
   <v-container class="py-0">
-    <v-row
-      align="center"
-      :justify="$mq !== 'lg' && $mq !== 'md' ? 'center' : 'space-between'"
-    >
+    <v-row align="center" :justify="$mq !== 'lg' && $mq !== 'md' ? 'center' : 'space-between'">
       <v-col cols="auto">
         <v-img :src="book.imageUrl" height="120" width="80"></v-img>
       </v-col>
@@ -12,11 +9,9 @@
           <router-link
             :to="{ name: 'book', params: { id: book.id } }"
             class="link-inherit highlight"
-          >
-            {{ book.title }}
-          </router-link>
+          >{{ book.title }}</router-link>
         </v-card-text>
-        <v-card-text class="pa-1 ">
+        <v-card-text class="pa-1">
           by
           <router-link
             class="link-inherit highlight"
@@ -30,20 +25,15 @@
         </v-card-text>
       </v-col>
       <v-col class="text-center">
-        <v-rating
-          medium
-          v-model="book.userData.rating"
-          hover
-          @input="update"
-        ></v-rating>
+        <v-rating medium v-model="book.userData.rating" hover @input="update"></v-rating>
       </v-col>
-      <v-col cols="auto">
-        <v-row no-gutters style="min-width:230px">
+      <v-col cols="4">
+        <v-row no-gutters style="min-width:250px">
           <v-col>
-            <div class="body-2">Pages read</div>
+            <div class="body-2">Pages read {{book.userData.pagesRead}}</div>
           </v-col>
           <v-col>
-            <div class="text-end body-2">{{ book.userData.pagesRead }}</div>
+            <div class="text-end body-2">{{ book.pages }}</div>
           </v-col>
         </v-row>
         <v-progress-linear :value="pagesProgress"></v-progress-linear>
@@ -56,7 +46,12 @@
 <script>
 import bookLogic from "../../mixins/bookLogic";
 export default {
-  props: { book: { type: Object, required: true } },
+  props: {
+    book: {
+      type: Object,
+      required: true
+    }
+  },
   mixins: [bookLogic],
   computed: {
     pagesProgress() {

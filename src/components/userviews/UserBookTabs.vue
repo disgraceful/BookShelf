@@ -18,7 +18,7 @@
       <v-divider v-if="getBooks(tab).length > 0"></v-divider>
       <v-row v-for="(book, i) in getBooks(tab)" :key="book.id">
         <bs-smallbook :book="book">
-          <v-divider v-if="i - 1 < getBooks(tab).length"></v-divider>
+          <v-divider v-if="i < getBooks(tab).length"></v-divider>
         </bs-smallbook>
       </v-row>
     </v-tabs-items>
