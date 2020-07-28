@@ -29,12 +29,22 @@
       </v-col>
       <v-col cols="4">
         <v-row no-gutters style="min-width:250px">
-          <v-col>
-            <div class="body-2">Pages read {{book.userData.pagesRead}}</div>
+          <div class="page-read">
+            <div :style="pagesStyle">
+              <div style="flex-grow:1">Pages read</div>
+              <div class="pl-2">{{book.userData.pagesRead}}</div>
+            </div>
+            <div v-show="pagesProgress<88">{{book.pages}}</div>
+          </div>
+          <!-- <v-col>
+            <div class="body-2">
+              Pages read
+              <div class="d-inline-block text-end ml-2">{{book.userData.pagesRead}}</div>
+            </div>
           </v-col>
-          <v-col>
+          <v-col cols="auto">
             <div class="text-end body-2">{{ book.pages }}</div>
-          </v-col>
+          </v-col>-->
         </v-row>
         <v-progress-linear :value="pagesProgress"></v-progress-linear>
       </v-col>
@@ -57,8 +67,10 @@ export default {
     pagesProgress() {
       return (this.book.userData.pagesRead / this.book.pages) * 100;
     },
-    user() {
-      return this.$store.getters.getAuthUser;
+    pagesStyle() {
+      return {
+        flexBasis: this.pagesProgress > 35 ? `${this.pagesProgress}%` : ""
+      };
     }
   },
   methods: {
@@ -68,3 +80,20 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.page-read {
+  display: flex;
+  flex-direction: row;
+  flex: 1 0;
+}
+
+.page-read div {
+  display: flex;
+}
+
+.page-read > div:last-child {
+  justify-content: flex-end;
+  flex: 1 0;
+}
+</style>
