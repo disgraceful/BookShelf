@@ -23,37 +23,33 @@
           </v-card-text>
         </v-col>
       </v-row>
-      <v-row v-if="books">
-        <v-col>
-          <v-card-title class="title font-weight-regular pb-1">{{ author.name }}'s Books</v-card-title>
-          <v-divider></v-divider>
-          <bs-author-book v-for="book in books" :book="book" :key="book.id"></bs-author-book>
-        </v-col>
-      </v-row>
-      <v-row v-if="books" justify="end">
-        <a class="pa-2 highlight teal--text text--darken-1">More books by {{ author.name }}</a>
-      </v-row>
+      <template v-if="books">
+        <v-row>
+          <v-col>
+            <v-card-title class="title font-weight-regular pb-1">{{ author.name }}'s Books</v-card-title>
+            <v-divider></v-divider>
+            <bs-author-book v-for="book in books" :book="book" :key="book.id"></bs-author-book>
+          </v-col>
+        </v-row>
+        <v-row justify="end">
+          <a class="pa-2 highlight teal--text text--darken-1">More books by {{ author.name }}</a>
+        </v-row>
+      </template>
 
-      <v-row v-if="series">
-        <v-col>
-          <v-card-title class="title font-weight-regular pb-1">Series by {{ author.name }}</v-card-title>
-          <v-divider></v-divider>
-          <bs-author-series v-for="sery in series" :series="sery" :key="sery.id"></bs-author-series>
-        </v-col>
-      </v-row>
-      <v-row v-if="series" justify="end">
-        <a class="pa-2 highlight teal--text text--darken-1">More series by {{ author.name }}</a>
-      </v-row>
+      <template v-if="series">
+        <v-row v-if="series">
+          <v-col>
+            <v-card-title class="title font-weight-regular pb-1">Series by {{ author.name }}</v-card-title>
+            <v-divider></v-divider>
+            <bs-author-series v-for="sery in series" :series="sery" :key="sery.id"></bs-author-series>
+          </v-col>
+        </v-row>
+        <v-row justify="end">
+          <a class="pa-2 highlight teal--text text--darken-1">More series by {{ author.name }}</a>
+        </v-row>
+      </template>
     </v-container>
-    <bs-loader
-      v-if="loading"
-      :options="{
-        isDetermined: true,
-        color: 'teal',
-        size: '100',
-        width: '10'
-      }"
-    ></bs-loader>
+    <bs-loader v-if="loading"></bs-loader>
   </v-card>
 </template>
 
@@ -116,6 +112,7 @@ export default {
       })
       .catch(error => {
         console.log(error);
+        this.loading = false;
       });
   }
 };

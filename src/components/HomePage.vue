@@ -1,7 +1,7 @@
 <template>
   <v-card flat>
     <v-container class="page-container">
-      <bs-user-stats></bs-user-stats>
+      <bs-user-page></bs-user-page>
       <bs-user-feed></bs-user-feed>
     </v-container>
   </v-card>
@@ -15,7 +15,7 @@ export default {
     return {};
   },
   components: {
-    "bs-user-stats": UserPage,
+    "bs-user-page": UserPage,
     "bs-user-feed": UserFeed
   }
 };

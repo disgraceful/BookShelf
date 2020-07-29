@@ -56,7 +56,7 @@ export default {
       type: Object
     }
   },
-  async mounted() {
+  async created() {
     seriesService
       .getSeriesById(this.series.id)
       .then(response => {

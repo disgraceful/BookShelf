@@ -1,6 +1,6 @@
 <template>
   <v-card flat>
-    <v-container>
+    <v-container v-if="!loading">
       <v-card-title class="headline">User Statistics</v-card-title>
       <v-row>
         <v-col cols="6">
@@ -22,30 +22,30 @@
         </v-col>
       </v-row>
     </v-container>
+    <bs-loader v-else></bs-loader>
   </v-card>
 </template>
 
 <script>
 import UserGenreChart from "./UserGenreChart";
+import Loader from "../shared/Preloader";
 import { ServiceFactory } from "../../services/serviceFactory";
 const userService = ServiceFactory.get("user");
 export default {
   components: {
-    "bs-user-chart": UserGenreChart
+    "bs-user-chart": UserGenreChart,
+    "bs-loader": Loader
   },
   data() {
     return {
       readBooks: 0,
       pagesRead: 0,
       booksLeft: 0,
-      pagesLeft: 0
+      pagesLeft: 0,
+      loading: false
     };
   },
-  computed: {
-    user() {
-      return this.$store.getters.getAuthUser;
-    }
-  },
+
   methods: {
     pageCounter(prevValue, curValue) {
       return prevValue + +curValue.pages;
@@ -56,6 +56,7 @@ export default {
   },
 
   async created() {
+    this.loading = true;
     const response = await userService.getAllUserBooks();
     const books = response.body;
     const read = books.filter(book => book.userData.status === "finished");
@@ -68,6 +69,7 @@ export default {
     );
     this.booksLeft = left.length;
     this.pagesLeft = left.reduce(this.pageLeftCounter, 0);
+    this.loading = false;
   }
 };
 </script>

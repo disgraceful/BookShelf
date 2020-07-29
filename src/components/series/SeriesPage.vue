@@ -15,15 +15,7 @@
         </v-col>
       </v-row>
     </v-container>
-    <bs-loader
-      v-if="loading && !error"
-      :options="{
-        isDetermined: true,
-        color: 'teal',
-        size: '100',
-        width: '10'
-      }"
-    ></bs-loader>
+    <bs-loader v-if="loading && !error"></bs-loader>
   </v-card>
 </template>
 

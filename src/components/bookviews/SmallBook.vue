@@ -36,15 +36,6 @@
             </div>
             <div v-show="pagesProgress<88">{{book.pages}}</div>
           </div>
-          <!-- <v-col>
-            <div class="body-2">
-              Pages read
-              <div class="d-inline-block text-end ml-2">{{book.userData.pagesRead}}</div>
-            </div>
-          </v-col>
-          <v-col cols="auto">
-            <div class="text-end body-2">{{ book.pages }}</div>
-          </v-col>-->
         </v-row>
         <v-progress-linear :value="pagesProgress"></v-progress-linear>
       </v-col>
