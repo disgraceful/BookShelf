@@ -1,5 +1,5 @@
 <template>
-  <v-card class="full-page">
+  <v-card>
     <v-dialog v-model="dialog" persistent max-width="700">
       <v-card>
         <v-container class="px-7">
@@ -7,11 +7,18 @@
           <v-form lazy-validation v-model="valid">
             <v-row justify="start">
               <v-col cols="auto">
-                <v-img src="../../assets/goodreads.png" width="150px" contain></v-img>
+                <v-img :src="imgPath" max-height="200px" width="150px" contain></v-img>
               </v-col>
             </v-row>
-            <v-file-input label="Upload book cover" clearable chips :rules="imgRules"></v-file-input>
-            <v-text-field label="Book title" clearable required :rules="titleRules"></v-text-field>
+            <v-file-input
+              label="Upload book cover"
+              v-model="cover"
+              clearable
+              chips
+              :rules="imgRules"
+              accept="image/*"
+            ></v-file-input>
+            <v-text-field label="Title" clearable required :rules="titleRules"></v-text-field>
             <v-text-field label="Author" clearable required :rules="authorRules"></v-text-field>
             <v-text-field label="Pages" clearable required :rules="pagesRules" type="number"></v-text-field>
             <v-textarea
@@ -27,7 +34,7 @@
                 <v-btn>Cancel</v-btn>
               </v-col>
               <v-col cols="auto">
-                <v-btn>Upload</v-btn>
+                <v-btn :disabled="!valid">Upload</v-btn>
               </v-col>
             </v-row>
           </v-form>
@@ -43,6 +50,8 @@ export default {
     return {
       dialog: true,
       valid: true,
+      cover: null,
+      defaultImg: require("../../assets/goodreads.png"),
       imgRules: [
         value =>
           !value ||
@@ -62,15 +71,17 @@ export default {
       ],
       pagesRules: [
         value => !!value || "Page count is required",
-        value => (value && value <= 0) || "Enter correct page count"
+        value => (value && value > 0) || "Enter correct page count"
       ]
     };
+  },
+  computed: {
+    imgPath() {
+      return this.cover && this.cover.size > 0
+        ? URL.createObjectURL(this.cover)
+        : this.defaultImg;
+    }
   }
 };
 </script>
 
-<style>
-.full-page {
-  height: 100vh;
-}
-</style>
