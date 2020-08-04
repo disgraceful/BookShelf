@@ -46,7 +46,7 @@ export default {
       userData: { isFavorited: false },
       id: "1223-fake",
       title: "Fake Book",
-      authors: [{ id: 123, name: "Fake Guy" }]
+      authors: "Fake Guy"
     });
   }
 };

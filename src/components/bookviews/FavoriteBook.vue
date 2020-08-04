@@ -16,24 +16,14 @@
           :to="{ name: 'book', params: { id: book.id } }"
         >{{ book.title }}</router-link>
       </v-card-text>
-      <v-card-text class="px-0 py-1 subtitle-2" style="max-width:140px">
-        by
-        <router-link
-          class="link-inherit highlight"
-          v-for="(author, i) in book.authors"
-          :key="i"
-          :to="{ name: 'authors', params: { id: author.id } }"
-          v-text="
-            i < book.authors.length - 1 ? `${author.name}, ` : author.name
-          "
-        ></router-link>
-      </v-card-text>
+      <bs-author-links :authors="book.authors" classes="px-0 py-1 subtitle-2"></bs-author-links>
     </v-col>
   </v-card>
 </template>
 
 <script>
 import bookLogic from "../../mixins/bookLogic";
+import AuthorLinksHelper from "../author/AuthorLinksHelper";
 export default {
   props: {
     book: {
@@ -41,6 +31,7 @@ export default {
       required: true
     }
   },
+  components: { "bs-author-links": AuthorLinksHelper },
   mixins: [bookLogic],
   methods: {
     favorite() {
