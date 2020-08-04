@@ -4,7 +4,25 @@
       <v-card-title class="headline py-2">Uploaded Books</v-card-title>
       <v-row>
         <v-col cols="auto" v-for="book in books" :key="book.id">
-          <bs-fav-book :book="book"></bs-fav-book>
+          <v-hover v-slot:default="{hover}">
+            <bs-display-book :book="book">
+              <template v-slot:actions>
+                <v-btn
+                  fab
+                  small
+                  absolute
+                  top
+                  right
+                  color="white"
+                  @click="remove"
+                  :style="{opacity: hover ? 1 :0}"
+                  class="hoverable"
+                >
+                  <v-icon>mdi-close</v-icon>
+                </v-btn>
+              </template>
+            </bs-display-book>
+          </v-hover>
         </v-col>
       </v-row>
       <v-divider></v-divider>
@@ -23,13 +41,13 @@
 
 <script>
 import BookUploadDialog from "../bookviews/BookUploadDialog.vue";
-import FavoriteBook from "../bookviews/FavoriteBook.vue";
+import GenericDisplayBook from "../bookviews/GenericDisplayBook";
 import Preloader from "../shared/Preloader";
 
 export default {
   components: {
     "bs-upload-dialog": BookUploadDialog,
-    "bs-fav-book": FavoriteBook,
+    "bs-display-book": GenericDisplayBook,
     "bs-loader": Preloader
   },
   data() {
@@ -38,6 +56,9 @@ export default {
       loading: false,
       books: null
     };
+  },
+  methods: {
+    remove() {}
   },
   created() {
     this.books = [];
@@ -51,3 +72,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.hoverable {
+  transition: opacity 0.5s ease-in;
+}
+</style>
