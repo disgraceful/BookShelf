@@ -5,7 +5,15 @@
       <v-card-title class="font-weight-regular py-2">Favorite books</v-card-title>
       <v-row>
         <v-col cols="auto" v-for="book in books" :key="book.id">
-          <bs-fav-book :book="book"></bs-fav-book>
+          <bs-display-book :book="book">
+            <template v-slot:actions>
+              <v-btn fab small absolute top right color="white" @click="favorite">
+                <v-icon
+                  :color="book.userData.isFavorited ? 'red' : 'grey'"
+                >{{ book.userData.isFavorited ? "mdi-heart" : "mdi-heart-outline" }}</v-icon>
+              </v-btn>
+            </template>
+          </bs-display-book>
         </v-col>
       </v-row>
       <v-divider></v-divider>
@@ -16,16 +24,17 @@
 </template>
 
 <script>
-import FavoriteBook from "../bookviews/FavoriteBook";
+import GenericDisplayBook from "../bookviews/GenericDisplayBook";
 import Loader from "../shared/Preloader";
+import bookLogic from "../../mixins/bookLogic";
 import { ServiceFactory } from "../../services/serviceFactory";
-
 const userService = ServiceFactory.get("user");
 export default {
   components: {
-    "bs-fav-book": FavoriteBook,
+    "bs-display-book": GenericDisplayBook,
     "bs-loader": Loader
   },
+  mixins: [bookLogic],
   data() {
     return {
       books: null,
@@ -38,12 +47,12 @@ export default {
       return this.$store.getters.getAuthUser;
     }
   },
-  props: {
-    id: {
-      type: String,
-      required: true
+  methods: {
+    favorite() {
+      this.favoriteBook();
     }
   },
+
   async created() {
     this.books = null;
     this.loading = true;

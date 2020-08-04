@@ -4,6 +4,7 @@ import userService from "./userService";
 import seriesService from "./seriesService";
 import authorService from "./authorService";
 import feedService from "./feedService";
+import uploadService from "./uploadService";
 
 const services = {
   book: bookService,
@@ -12,6 +13,7 @@ const services = {
   series: seriesService,
   author: authorService,
   feed: feedService,
+  upload: uploadService,
 };
 
 export const ServiceFactory = {

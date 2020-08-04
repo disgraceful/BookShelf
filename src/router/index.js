@@ -1,16 +1,17 @@
-import Vue from "vue"
-import VueRouter from "vue-router"
-import Home from "../components/HomePage"
-import Register from "../components/auth/RegisterPage"
-import Login from "../components/auth/LoginPage"
-import BookPage from "../components/bookviews/BookPage"
-import UserStats from "../components/userviews/UserStats"
-import SeriesPage from "../components/series/SeriesPage"
-import AuthorPage from "../components/author/AuthorPage"
-import Favorites from "../components/userviews/Favorites.vue"
+import Vue from "vue";
+import VueRouter from "vue-router";
+import Home from "../components/HomePage";
+import Register from "../components/auth/RegisterPage";
+import Login from "../components/auth/LoginPage";
+import BookPage from "../components/bookviews/BookPage";
+import UserStats from "../components/userviews/UserStats";
+import SeriesPage from "../components/series/SeriesPage";
+import AuthorPage from "../components/author/AuthorPage";
+import Favorites from "../components/userviews/Favorites.vue";
+import MyBooks from "../components/userviews/MyBooks";
 
 Vue.use(VueRouter);
-const authGard = (to, from, next) => {
+const authGuard = (to, from, next) => {
   if (localStorage.getItem("user")) {
     next();
   } else {
@@ -28,7 +29,7 @@ const routes = [
   {
     path: "/home",
     component: Home,
-    beforeEnter: authGard,
+    beforeEnter: authGuard,
   },
   {
     path: "/register",
@@ -45,42 +46,45 @@ const routes = [
     name: "book",
     props: true,
     component: BookPage,
-    beforeEnter: authGard,
+    beforeEnter: authGuard,
   },
   {
     path: "/user/:id",
     name: "user",
     props: true,
     component: UserStats,
-    beforeEnter: authGard,
+    beforeEnter: authGuard,
   },
   {
     path: "/user/:id/favorites",
     name: "favorites",
     props: true,
     component: Favorites,
-    beforeEnter: authGard
+    beforeEnter: authGuard,
   },
   {
     path: "/series/:id",
     name: "series",
     props: true,
     component: SeriesPage,
-    beforeEnter: authGard,
+    beforeEnter: authGuard,
   },
   {
     path: "/author/:id",
     name: "authors",
     props: true,
     component: AuthorPage,
-    beforeEnter: authGard,
+    beforeEnter: authGuard,
+  },
+  {
+    path: "/user/:id/mybooks",
+    name: "mybooks",
+    component: MyBooks,
+    beforeEnter: authGuard,
   },
 
   //component: () => import(/* webpackChunkName: "about" */ "../views/About.vue")
 ];
-
-
-
 
 const router = new VueRouter({
   routes,
