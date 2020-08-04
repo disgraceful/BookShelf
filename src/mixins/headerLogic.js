@@ -24,7 +24,10 @@ export default {
             name: "Favorites",
             to: { name: "favorites", params: { id: this.user.id } },
           },
-          { name: "Upload", to: "upload" },
+          {
+            name: "My Books",
+            to: { name: "mybooks", params: { id: this.user.id } },
+          },
           { name: "New content", to: "content" },
         ];
       }

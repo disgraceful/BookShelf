@@ -8,7 +8,7 @@ import UserStats from "../components/userviews/UserStats";
 import SeriesPage from "../components/series/SeriesPage";
 import AuthorPage from "../components/author/AuthorPage";
 import Favorites from "../components/userviews/Favorites.vue";
-import BookUpload from "../components/bookviews/BookUpload";
+import MyBooks from "../components/userviews/MyBooks";
 
 Vue.use(VueRouter);
 const authGuard = (to, from, next) => {
@@ -77,9 +77,9 @@ const routes = [
     beforeEnter: authGuard,
   },
   {
-    path: "/upload",
-    name: "upload",
-    component: BookUpload,
+    path: "/user/:id/mybooks",
+    name: "mybooks",
+    component: MyBooks,
     beforeEnter: authGuard,
   },
 

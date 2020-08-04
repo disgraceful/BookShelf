@@ -1,47 +1,40 @@
 <template>
   <v-card>
-    <v-dialog v-model="dialog" persistent max-width="700">
-      <v-card>
-        <v-container class="px-7">
-          <v-card-title class="px-0 text-uppercase">Upload private book</v-card-title>
-          <v-form ref="form" v-model="valid" lazy-validation>
-            <v-row justify="start">
-              <v-col cols="auto">
-                <v-img :src="imgPath" max-height="200px" width="150px" contain></v-img>
-              </v-col>
-            </v-row>
-            <v-file-input
-              label="Upload book cover"
-              v-model="cover"
-              clearable
-              chips
-              :rules="imgRules"
-              accept="image/*"
-            ></v-file-input>
-            <v-text-field label="Title" v-model="title" :rules="titleRules"></v-text-field>
-            <v-text-field label="Author" v-model="author" :rules="authorRules"></v-text-field>
-            <v-text-field label="Pages" v-model="pages" :rules="pagesRules" type="number"></v-text-field>
-            <v-textarea
-              label="Book description"
-              v-model.number="description"
-              clearable
-              rows="1"
-              counter="200"
-              auto-grow
-              :rules="descriptionRules"
-            ></v-textarea>
-            <v-row justify="end">
-              <v-col cols="auto">
-                <v-btn>Cancel</v-btn>
-              </v-col>
-              <v-col cols="auto">
-                <v-btn :disabled="!formValid" @click="upload">Upload</v-btn>
-              </v-col>
-            </v-row>
-          </v-form>
-        </v-container>
-      </v-card>
-    </v-dialog>
+    <v-container class="px-7">
+      <v-card-title class="px-0 text-uppercase">Upload private book</v-card-title>
+      <v-form ref="form" v-model="valid" lazy-validation>
+        <v-row justify="start">
+          <v-col cols="auto">
+            <v-img :src="imgPath" max-height="200px" width="150px" contain></v-img>
+          </v-col>
+        </v-row>
+        <v-file-input
+          label="Upload book cover"
+          v-model="cover"
+          clearable
+          chips
+          :rules="imgRules"
+          accept="image/*"
+        ></v-file-input>
+        <v-text-field label="Title" v-model="title" :rules="titleRules"></v-text-field>
+        <v-text-field label="Author" v-model="author" :rules="authorRules"></v-text-field>
+        <v-text-field label="Pages" v-model="pages" :rules="pagesRules" type="number"></v-text-field>
+        <v-textarea
+          label="Book description"
+          v-model.number="description"
+          clearable
+          rows="1"
+          counter="200"
+          auto-grow
+          :rules="descriptionRules"
+        ></v-textarea>
+        <v-row justify="end">
+          <v-col cols="auto">
+            <v-btn :disabled="!formValid" @click="upload">Upload</v-btn>
+          </v-col>
+        </v-row>
+      </v-form>
+    </v-container>
   </v-card>
 </template>
 
@@ -50,7 +43,6 @@ import uploadService from "../../services/uploadService";
 export default {
   data() {
     return {
-      dialog: true,
       valid: false,
       title: "",
       author: "",
