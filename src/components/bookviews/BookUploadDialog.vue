@@ -93,7 +93,10 @@ export default {
       data.append("pages", this.pages);
       data.append("description", this.description);
       data.append("cover", this.cover || this.defaultImg);
-      uploadService.uploadBook(data).then(response => console.log(response));
+      uploadService.uploadBook(data).then(response => {
+        console.log(response);
+        this.$emit("uploaded");
+      });
     }
   }
 };
