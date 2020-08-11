@@ -2,8 +2,8 @@
   <v-card flat>
     <v-container v-if="books" class="page-container">
       <v-card-title class="headline py-2">Uploaded Books</v-card-title>
-      <v-row justify="space-around">
-        <v-col cols="auto" v-for="book in books" :key="book.id">
+      <v-row>
+        <v-col cols="auto" class="px-1" v-for="book in books" :key="book.id">
           <v-hover v-slot:default="{hover}">
             <bs-display-book :book="book" :params="{id: book.fid}">
               <template v-slot:actions>
