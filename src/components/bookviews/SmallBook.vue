@@ -1,34 +1,25 @@
 <template>
   <v-container class="py-0">
-    <v-row align="center" :justify="$mq !== 'lg' && $mq !== 'md' ? 'center' : 'space-between'">
+    <v-row align="center">
       <v-col cols="auto">
         <v-img :src="book.imageUrl" height="120" width="80"></v-img>
       </v-col>
-      <v-col cols="auto">
+      <v-col cols="auto" style="max-width:200px">
         <v-card-text class="pa-1 subtitle-1">
           <router-link
             :to="{ name: 'book', params: { id: book.id } }"
             class="link-inherit highlight"
           >{{ book.title }}</router-link>
         </v-card-text>
-        <v-card-text class="pa-1">
-          by
-          <router-link
-            class="link-inherit highlight"
-            v-for="(author, i) in book.authors"
-            :key="i"
-            :to="{ name: 'authors', params: { id: author.id } }"
-            v-text="
-              i < book.authors.length - 1 ? `${author.name}, ` : author.name
-            "
-          ></router-link>
-        </v-card-text>
+        <bs-author-links :authors="book.authors" :classes="'pa-1 subtitle-1'"></bs-author-links>
       </v-col>
-      <v-col class="text-center">
+      <v-spacer></v-spacer>
+      <v-col class="text-center" cols="auto">
         <v-rating medium v-model="book.userData.rating" hover @input="update"></v-rating>
       </v-col>
-      <v-col cols="4">
-        <v-row no-gutters style="min-width:250px">
+      <v-spacer></v-spacer>
+      <v-col>
+        <v-row no-gutters style="min-width:300px">
           <div class="page-read">
             <div :style="pagesStyle">
               <div style="flex-grow:1">Pages read</div>
@@ -45,30 +36,32 @@
 </template>
 
 <script>
+import AuthorLinksHelper from "../author/AuthorLinksHelper";
 import bookLogic from "../../mixins/bookLogic";
 export default {
   props: {
     book: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   mixins: [bookLogic],
+  components: { "bs-author-links": AuthorLinksHelper },
   computed: {
     pagesProgress() {
       return (this.book.userData.pagesRead / this.book.pages) * 100;
     },
     pagesStyle() {
       return {
-        flexBasis: this.pagesProgress > 35 ? `${this.pagesProgress}%` : ""
+        flexBasis: this.pagesProgress > 35 ? `${this.pagesProgress}%` : "",
       };
-    }
+    },
   },
   methods: {
     update() {
       this.updateBook();
-    }
-  }
+    },
+  },
 };
 </script>
 

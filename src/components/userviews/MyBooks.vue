@@ -3,9 +3,9 @@
     <v-container v-if="books" class="page-container">
       <v-card-title class="headline py-2">Uploaded Books</v-card-title>
       <v-row>
-        <v-col cols="auto" v-for="book in books" :key="book.id">
+        <v-col cols="auto" class="px-1" v-for="book in books" :key="book.id">
           <v-hover v-slot:default="{hover}">
-            <bs-display-book :book="book">
+            <bs-display-book :book="book" :params="{id: book.fid}">
               <template v-slot:actions>
                 <v-btn
                   fab
@@ -34,7 +34,7 @@
     </v-container>
     <bs-loader v-if="loading"></bs-loader>
     <v-dialog v-model="dialogActive" max-width="700">
-      <bs-upload-dialog></bs-upload-dialog>
+      <bs-upload-dialog @uploaded="closeDialog()"></bs-upload-dialog>
     </v-dialog>
   </v-card>
 </template>
@@ -43,6 +43,7 @@
 import BookUploadDialog from "../bookviews/BookUploadDialog.vue";
 import GenericDisplayBook from "../bookviews/GenericDisplayBook";
 import Preloader from "../shared/Preloader";
+import uploadService from "../../services/uploadService";
 
 export default {
   components: {
@@ -50,6 +51,7 @@ export default {
     "bs-display-book": GenericDisplayBook,
     "bs-loader": Preloader
   },
+
   data() {
     return {
       dialogActive: false,
@@ -57,18 +59,27 @@ export default {
       books: null
     };
   },
+
   methods: {
-    remove() {}
+    remove() {},
+
+    async closeDialog() {
+      this.dialogActive = false;
+      await this.getPrivateBooks();
+    },
+
+    async getPrivateBooks() {
+      this.books = null;
+      this.loading = true;
+      const response = await uploadService.getPrivateBooks();
+      this.books = response.body;
+      console.log(this.books);
+      this.loading = false;
+    }
   },
-  created() {
-    this.books = [];
-    this.books.push({
-      imageUrl: require("../../assets/goodreads.png"),
-      userData: { isFavorited: false },
-      id: "1223-fake",
-      title: "Fake Book",
-      authors: "Fake Guy"
-    });
+
+  async created() {
+    await this.getPrivateBooks();
   }
 };
 </script>
