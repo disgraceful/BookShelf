@@ -1,6 +1,6 @@
 <template>
   <v-card flat>
-    <v-container v-if="user && tabItems">
+    <v-container v-if="userBooks && tabItems">
       <v-card-title class="py-0">{{ user.email }}</v-card-title>
       <v-row :justify="$mq !== 'xs' ? 'start' : 'center'">
         <v-col cols="auto" class="pa-5">
@@ -46,70 +46,64 @@ const userService = ServiceFactory.get("user");
 export default {
   data() {
     return {
-      user: null,
       tab: 0,
       tabItems: null,
       loading: true,
       userBooks: null,
       countPages: (prevValue, curValue) =>
-        prevValue + +curValue.userData.pagesRead
+        prevValue + +curValue.userData.pagesRead,
     };
   },
   props: ["id"],
   computed: {
-    userState() {
+    user() {
       return this.$store.getters.getAuthUser;
-    },
-    globalLoading() {
-      return this.$store.getters.loading;
     },
     pagesReadTotal() {
       return this.userBooks.reduce(this.countPages, 0);
-    }
+    },
   },
   components: {
     "bs-user-tabs": UserTabs,
     "bs-user-panels": UserPanels,
     "bs-progress": UserProgress,
-    "bs-loader": Preloader
+    "bs-loader": Preloader,
   },
-  methods: {},
   created() {
     this.loading = true;
     userService
-      .getUser()
-      .then(response => {
-        this.user = response.body;
-        this.userBooks = this.user.books;
+      .getAllUserBooks()
+      .then((response) => {
+        this.userBooks = response.body;
         this.tabItems = [
           {
             name: "Reading",
             books: this.userBooks.filter(
-              book => book.userData.status === "reading"
-            )
+              (book) => book.userData.status === "reading"
+            ),
           },
           {
             name: "2Read",
             books: this.userBooks.filter(
-              book => book.userData.status === "2read"
-            )
+              (book) => book.userData.status === "2read"
+            ),
           },
           {
             name: "Stopped",
             books: this.userBooks.filter(
-              book => book.userData.status === "stopped"
-            )
+              (book) => book.userData.status === "stopped"
+            ),
           },
           {
             name: "Finished",
             books: this.userBooks.filter(
-              book => book.userData.status === "finished"
-            )
-          }
+              (book) => book.userData.status === "finished"
+            ),
+          },
         ];
         this.loading = false;
       })
-      .catch(error => console.error(error));
-  }
+      .catch((error) => console.error(error));
+  },
 };
 </script>

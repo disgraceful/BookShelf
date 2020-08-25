@@ -1,18 +1,16 @@
 import Vue from "vue";
 import Vuex from "vuex";
-
 import { ServiceFactory } from "../services/serviceFactory";
 const authService = ServiceFactory.get("auth");
 
 Vue.use(Vuex);
 
 const saveUser = function(response) {
-  const user = response.body.user;
-  const token = response.body.token;
-  user.token = token;
+  const body = response.body;
+  const user = { id: body.id, email: body.email, token: body.token };
   localStorage.setItem(
     "user",
-    JSON.stringify({ id: user.id, email: user.email, token })
+    JSON.stringify({ id: user.id, email: user.email, token: user.token })
   );
   return user;
 };
