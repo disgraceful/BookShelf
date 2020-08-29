@@ -1,10 +1,10 @@
 <template>
   <v-container class="py-0">
-    <v-row align="center">
+    <v-row align="center" style="flex-wrap:nowrap">
       <v-col cols="auto">
         <v-img :src="book.imageUrl" height="120" width="80"></v-img>
       </v-col>
-      <v-col cols="auto" style="max-width:240px">
+      <v-col cols="auto" class="pa-1" style="max-width:240px">
         <v-card-text class="pa-1 subtitle-1">
           <router-link
             :to="{ name: 'book', params: { id: book.id } }"
@@ -18,8 +18,8 @@
         <v-rating medium v-model="book.userData.rating" hover @input="update"></v-rating>
       </v-col>
       <v-spacer></v-spacer>
-      <v-col>
-        <v-row no-gutters style="min-width:300px">
+      <v-col style="min-width:280px">
+        <v-row no-gutters>
           <div class="page-read">
             <div :style="pagesStyle">
               <div style="flex-grow:1">Pages read</div>
@@ -54,7 +54,7 @@ export default {
     },
     pagesStyle() {
       return {
-        flexBasis: this.pagesProgress > 35 ? `${this.pagesProgress}%` : "",
+        flexBasis: this.pagesProgress > 37 ? `${this.pagesProgress}%` : "",
       };
     },
   },
