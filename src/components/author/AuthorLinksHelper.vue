@@ -20,17 +20,17 @@
 export default {
   props: {
     authors: {
-      required: true
+      required: true,
     },
     classes: {
       type: String,
-      required: false
-    }
+      required: false,
+    },
   },
   computed: {
     isAuthorsArray() {
       return Array.isArray(this.authors);
-    }
-  }
+    },
+  },
 };
 </script>

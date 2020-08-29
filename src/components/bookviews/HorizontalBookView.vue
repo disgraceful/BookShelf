@@ -4,12 +4,12 @@
       <v-col cols="auto">
         <v-img :src="book.imageUrl" height="120" width="80"></v-img>
       </v-col>
-      <v-col cols="auto" style="max-width:200px">
+      <v-col cols="auto" style="max-width:240px">
         <v-card-text class="pa-1 subtitle-1">
           <router-link
             :to="{ name: 'book', params: { id: book.id } }"
             class="link-inherit highlight"
-          >{{ book.title }}</router-link>
+          >{{ shrinkedDescription }}</router-link>
         </v-card-text>
         <bs-author-links :authors="book.authors" :classes="'pa-1 subtitle-1'"></bs-author-links>
       </v-col>
@@ -38,6 +38,7 @@
 <script>
 import AuthorLinksHelper from "../author/AuthorLinksHelper";
 import bookLogic from "../../mixins/bookLogic";
+import shrinkDesc from "../../mixins/shrinkDescription";
 export default {
   props: {
     book: {
@@ -45,7 +46,7 @@ export default {
       required: true,
     },
   },
-  mixins: [bookLogic],
+  mixins: [bookLogic, shrinkDesc],
   components: { "bs-author-links": AuthorLinksHelper },
   computed: {
     pagesProgress() {
@@ -61,6 +62,9 @@ export default {
     update() {
       this.updateBook();
     },
+  },
+  created() {
+    this.generateDescription(this.book.title, 10, 10);
   },
 };
 </script>

@@ -24,9 +24,9 @@
     </v-hover>
     <template v-if="expanded === true">
       <v-col v-for="(book, i) in item.books" :key="book.id" class="pt-0">
-        <bs-smallbook :book="book">
+        <bs-horizontal-book :book="book">
           <v-divider v-if="i < item.books.length - 1"></v-divider>
-        </bs-smallbook>
+        </bs-horizontal-book>
       </v-col>
     </template>
     <slot></slot>
@@ -34,21 +34,21 @@
 </template>
 
 <script>
-import SmallBook from "../bookviews/SmallBook";
+import HorizontalBook from "../bookviews/HorizontalBookView";
 export default {
   data() {
     return {
-      expanded: false
+      expanded: false,
     };
   },
   props: {
     item: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   components: {
-    "bs-smallbook": SmallBook
+    "bs-horizontal-book": HorizontalBook,
   },
   methods: {
     pagesRead(tab) {
@@ -56,7 +56,7 @@ export default {
         (prevValue, curValue) => prevValue + +curValue.userData.pagesRead,
         0
       );
-    }
-  }
+    },
+  },
 };
 </script>

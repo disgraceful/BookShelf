@@ -17,30 +17,30 @@
       </v-row>
       <v-divider v-if="getBooks(tab).length > 0"></v-divider>
       <v-row v-for="(book, i) in getBooks(tab)" :key="book.id">
-        <bs-smallbook :book="book">
+        <bs-horizontal-book :book="book">
           <v-divider v-if="i < getBooks(tab).length"></v-divider>
-        </bs-smallbook>
+        </bs-horizontal-book>
       </v-row>
     </v-tabs-items>
   </v-tabs>
 </template>
 
 <script>
-import SmallBook from "../bookviews/SmallBook";
+import HorizontalBook from "../bookviews/HorizontalBookView";
 export default {
   data() {
     return {
-      tab: 0
+      tab: 0,
     };
   },
   props: {
     tabItems: {
       type: Array,
-      required: true
-    }
+      required: true,
+    },
   },
   components: {
-    "bs-smallbook": SmallBook
+    "bs-horizontal-book": HorizontalBook,
   },
   methods: {
     getBooks(tab) {
@@ -53,11 +53,11 @@ export default {
       );
     },
     getTabPos() {
-      return this.tabItems.findIndex(item => item.books.length > 0);
-    }
+      return this.tabItems.findIndex((item) => item.books.length > 0);
+    },
   },
   mounted() {
     this.tab = this.getTabPos();
-  }
+  },
 };
 </script>
