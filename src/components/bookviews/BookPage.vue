@@ -104,16 +104,19 @@ import { ServiceFactory } from "../../services/serviceFactory";
 import bookStatus from "../../mixins/bookStatus";
 import bookLogic from "../../mixins/bookLogic";
 const bookService = ServiceFactory.get("book");
-const userService = ServiceFactory.get("user");
+const uploadService = ServiceFactory.get("upload");
+
 export default {
-  props: ["id"],
+  props: {
+    id: String,
+  },
   mixins: [bookStatus, bookLogic],
   components: {
     "bs-loader": Preloader,
     "bs-error": ErrorPage,
     "bs-finish-dialog": FinishBookDialog,
     "bs-book-info": BookInfo,
-    "bs-book-activity": UserBookActivity
+    "bs-book-activity": UserBookActivity,
   },
   data() {
     return {
@@ -123,22 +126,22 @@ export default {
       activeClass: "active",
       loading: true,
       error: false,
-      finishDialog: false
+      finishDialog: false,
     };
   },
 
   watch: {
     $route(to, from) {
       if (to.path.includes("/book") || to.path === from.path) {
-        this.getBookInfo();
+        this.getBook();
       }
-    }
+    },
   },
 
   computed: {
     errorComponent() {
       return this.error ? "bs-error" : "";
-    }
+    },
   },
 
   methods: {
@@ -148,22 +151,32 @@ export default {
     async update() {
       console.log(this);
       await this.updateBook();
-    }
+    },
+
+    async getBook() {
+      try {
+        this.book = null;
+        this.loading = true;
+        let response;
+        console.log(this.$props);
+        if (isNaN(this.id)) {
+          response = await uploadService.getPrivateBookById(this.id);
+        } else {
+          response = await bookService.getBookById(this.id);
+        }
+        this.book = response.body;
+        this.statusTemp = this.book.userData.status;
+        this.loading = false;
+      } catch (error) {
+        this.loading = false;
+        this.error = error.body;
+      }
+    },
   },
 
   async created() {
-    try {
-      this.book = null;
-      this.loading = true;
-      const response = await bookService.getBookById(this.id);
-      this.book = response.body;
-      this.statusTemp = this.book.userData.status;
-      this.loading = false;
-    } catch (error) {
-      this.loading = false;
-      this.error = error.body;
-    }
-  }
+    await this.getBook();
+  },
 };
 </script>
 

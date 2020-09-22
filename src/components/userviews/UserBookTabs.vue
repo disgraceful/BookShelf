@@ -58,6 +58,7 @@ export default {
   },
   mounted() {
     this.tab = this.getTabPos();
+    console.log(this.tabItems);
   },
 };
 </script>

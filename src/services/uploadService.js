@@ -10,6 +10,6 @@ export default {
   },
 
   getPrivateBookById(bookId) {
-    return Vue.http.get(`user/upload${bookId}`);
+    return Vue.http.get(`user/upload/${bookId}`);
   },
 };
