@@ -12,4 +12,8 @@ export default {
   getPrivateBookById(bookId) {
     return Vue.http.get(`user/upload/${bookId}`);
   },
+
+  removePrivateBook(bookId) {
+    return Vue.http.delete("user/upload", { params: { id: bookId } });
+  },
 };

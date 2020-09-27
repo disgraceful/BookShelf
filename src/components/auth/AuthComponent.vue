@@ -47,7 +47,10 @@
                 </v-flex>
               </v-col>
               <v-col v-if="error">
-                <app-alert :message="error.message" @dismissed="dismissError"></app-alert>
+                <app-alert
+                  :message="error.message"
+                  @dismissed="dismissError"
+                ></app-alert>
               </v-col>
               <v-col>
                 <v-flex xs12>
@@ -56,7 +59,8 @@
                     :loading="loading"
                     :disabled="!valid && !loading"
                     @click="onSubmit()"
-                  >Submit</v-btn>
+                    >Submit</v-btn
+                  >
                   <v-btn
                     color="primary"
                     :disabled="true"
@@ -85,13 +89,13 @@ export default {
       confirmPassword: "",
       showPwd: false,
       rules: {
-        required: value => !!value || "Field is required",
-        length: value =>
+        required: (value) => !!value || "Field is required",
+        length: (value) =>
           value.length >= 6 || "Passwords must be 6 characters or longer",
-        confirmPassword: value =>
-          value === this.password || "Passwords do not match"
+        confirmPassword: (value) =>
+          value === this.password || "Passwords do not match",
       },
-      response: ""
+      response: "",
     };
   },
   props: ["loginInfo"],
@@ -107,20 +111,20 @@ export default {
     signIn() {
       this.$store.dispatch("signInUser", {
         email: this.email,
-        password: this.password
+        password: this.password,
       });
     },
 
     signUp() {
       this.$store.dispatch("signUpUser", {
         email: this.email,
-        password: this.password
+        password: this.password,
       });
     },
 
     dismissError() {
       this.$store.dispatch("clearError");
-    }
+    },
   },
 
   computed: {
@@ -138,7 +142,7 @@ export default {
 
     loading() {
       return this.$store.getters.getLoading;
-    }
+    },
   },
 
   watch: {
@@ -146,10 +150,15 @@ export default {
       if (value) {
         this.$router.push("/");
       }
-    }
+    },
   },
+
   components: {
-    "app-alert": Alert
-  }
+    "app-alert": Alert,
+  },
+
+  created() {
+    this.$store.dispatch("logOutUser");
+  },
 };
 </script>

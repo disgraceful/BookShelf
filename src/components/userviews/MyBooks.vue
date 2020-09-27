@@ -5,7 +5,7 @@
       <v-row>
         <v-col cols="auto" class="px-1" v-for="book in books" :key="book.id">
           <v-hover v-slot:default="{hover}">
-            <bs-display-book :book="book" :params="{id: book.fid}">
+            <bs-display-book :book="book">
               <template v-slot:actions>
                 <v-btn
                   fab
@@ -14,7 +14,7 @@
                   top
                   right
                   color="white"
-                  @click="remove"
+                  @click="remove(book.id)"
                   :style="{opacity: hover ? 1 :0}"
                   class="hoverable"
                 >
@@ -43,25 +43,31 @@
 import BookUploadDialog from "../bookviews/BookUploadDialog.vue";
 import GenericDisplayBook from "../bookviews/GenericDisplayBook";
 import Preloader from "../shared/Preloader";
-import uploadService from "../../services/uploadService";
+import { ServiceFactory } from "../../services/serviceFactory";
+const uploadService = ServiceFactory.get("upload");
 
 export default {
   components: {
     "bs-upload-dialog": BookUploadDialog,
     "bs-display-book": GenericDisplayBook,
-    "bs-loader": Preloader
+    "bs-loader": Preloader,
   },
 
   data() {
     return {
       dialogActive: false,
       loading: false,
-      books: null
+      books: null,
     };
   },
 
   methods: {
-    remove() {},
+    async remove(id) {
+      const res = await uploadService.removePrivateBook(id);
+      if (res) {
+        this.books = this.books.filter((book) => book.id !== id);
+      }
+    },
 
     async closeDialog() {
       this.dialogActive = false;
@@ -75,12 +81,12 @@ export default {
       this.books = response.body;
       console.log(this.books);
       this.loading = false;
-    }
+    },
   },
 
   async created() {
     await this.getPrivateBooks();
-  }
+  },
 };
 </script>
 

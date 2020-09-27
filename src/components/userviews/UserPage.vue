@@ -10,7 +10,7 @@
               max: 20,
               text: 'Books',
               color: '#cc0000',
-              bgcolor: '#ff9999'
+              bgcolor: '#ff9999',
             }"
           ></bs-progress>
         </v-col>
@@ -21,14 +21,17 @@
               max: 5000,
               text: 'Pages',
               color: '#009878',
-              bgcolor: '#99ffcc'
+              bgcolor: '#99ffcc',
             }"
           ></bs-progress>
         </v-col>
       </v-row>
       <v-divider></v-divider>
       <v-col class="py-0">
-        <bs-user-tabs v-if="$mq === 'md' || $mq === 'lg'" :tabItems="tabItems"></bs-user-tabs>
+        <bs-user-tabs
+          v-if="$mq === 'md' || $mq === 'lg'"
+          :tabItems="tabItems"
+        ></bs-user-tabs>
         <bs-user-panels v-else :tabItems="tabItems"></bs-user-panels>
       </v-col>
     </v-container>
