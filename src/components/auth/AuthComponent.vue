@@ -1,10 +1,17 @@
 <template>
   <v-container>
     <v-row>
-      <v-flex xs12 sm6 offset-sm3>
+      <v-col offset-md="3" md="6" sm="8" offset-sm="2">
         <v-card>
           <v-container>
-            <v-card-title>{{ loginInfo }}</v-card-title>
+            <v-card-title>{{ loginInfo }} </v-card-title>
+            <v-col class="py-0">
+              <v-divider></v-divider>
+            </v-col>
+            <v-card-text>Sign in with:</v-card-text>
+            <v-row>
+              <v-col> </v-col>
+            </v-row>
             <v-form ref="form" v-model="valid">
               <v-col>
                 <v-flex xs12>
@@ -19,32 +26,16 @@
                 </v-flex>
               </v-col>
               <v-col>
-                <v-flex xs12>
-                  <v-text-field
-                    name="password"
-                    label="Password"
-                    id="password"
-                    v-model="password"
-                    :append-icon="showPwd ? 'mdi-eye' : 'mdi-eye-off'"
-                    :type="showPwd ? 'text' : 'password'"
-                    :rules="[rules.required, rules.length]"
-                    @click:append="showPwd = !showPwd"
-                  ></v-text-field>
-                </v-flex>
-              </v-col>
-              <v-col v-if="isRegister">
-                <v-flex xs12>
-                  <v-text-field
-                    name="confirmPassword"
-                    label="Confirm Password"
-                    id="confirmPassword"
-                    v-model="confirmPassword"
-                    :append-icon="showPwd ? 'mdi-eye' : 'mdi-eye-off'"
-                    :type="showPwd ? 'text' : 'password'"
-                    :rules="[rules.required, rules.confirmPassword]"
-                    @click:append="showPwd = !showPwd"
-                  ></v-text-field>
-                </v-flex>
+                <v-text-field
+                  name="password"
+                  label="Password"
+                  id="password"
+                  v-model="password"
+                  :append-icon="showPwd ? 'mdi-eye' : 'mdi-eye-off'"
+                  :type="showPwd ? 'text' : 'password'"
+                  :rules="[rules.required, rules.length]"
+                  @click:append="showPwd = !showPwd"
+                ></v-text-field>
               </v-col>
               <v-col v-if="error">
                 <app-alert
@@ -73,7 +64,7 @@
             </v-form>
           </v-container>
         </v-card>
-      </v-flex>
+      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -92,8 +83,6 @@ export default {
         required: (value) => !!value || "Field is required",
         length: (value) =>
           value.length >= 6 || "Passwords must be 6 characters or longer",
-        confirmPassword: (value) =>
-          value === this.password || "Passwords do not match",
       },
       response: "",
     };
