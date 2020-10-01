@@ -9,8 +9,8 @@
               <v-divider></v-divider>
             </v-col>
             <v-card-text>Sign in with:</v-card-text>
-            <v-row>
-              <v-col>
+            <v-row justify="center">
+              <v-col cols="auto">
                 <div id="my-signin2"></div>
               </v-col>
             </v-row>
