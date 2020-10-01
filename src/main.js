@@ -7,9 +7,6 @@ import VueMq from "vue-mq";
 import "./css/style.css";
 import "./http/config";
 
-// 463636811603-dujav8toqr9ijfek13vfclg723dnqrfe.apps.googleusercontent.com
-// xmPuJHJ0AXV7BgSgtxObPJ_d;
-
 Vue.use(VueMq, {
   breakpoints: {
     xs: 500,

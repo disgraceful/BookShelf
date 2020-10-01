@@ -1,5 +1,5 @@
 <template>
-  <my-auth-component loginInfo="Sign In"></my-auth-component>
+  <bs-auth-component loginInfo="Sign In"></bs-auth-component>
 </template>
 
 <script>
@@ -7,7 +7,7 @@ import AuthComponent from "./AuthComponent";
 export default {
   methods: {},
   components: {
-    "my-auth-component": AuthComponent,
+    "bs-auth-component": AuthComponent,
   },
 };
 </script>

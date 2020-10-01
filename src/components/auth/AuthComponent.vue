@@ -10,8 +10,9 @@
             </v-col>
             <v-card-text>Sign in with:</v-card-text>
             <v-row justify="center">
-              <v-col cols="auto">
-                <div id="my-signin2"></div>
+              <v-col cols="auto" class="py-0">
+                <!-- <div id="my-signin2"></div> -->
+                <bs-signin></bs-signin>
               </v-col>
             </v-row>
             <v-form ref="form" v-model="valid">
@@ -66,6 +67,7 @@
 
 <script>
 import Alert from "../shared/Alert";
+import GoogleSignInVue from "../shared/GSignIn";
 export default {
   data() {
     return {
@@ -157,6 +159,7 @@ export default {
 
   components: {
     "app-alert": Alert,
+    "bs-signin": GoogleSignInVue,
   },
 
   created() {
@@ -164,15 +167,15 @@ export default {
   },
 
   mounted() {
-    gapi.signin2.render("my-signin2", {
-      scope: "profile email",
-      width: 200,
-      height: 40,
-      longtitle: true,
-      theme: "dark",
-      onfailure: this.onFailure,
-      onsuccess: this.signInWithGoogle,
-    });
+    // gapi.signin2.render("my-signin2", {
+    //   scope: "profile email",
+    //   width: 200,
+    //   height: 40,
+    //   longtitle: true,
+    //   theme: "dark",
+    //   onfailure: this.onFailure,
+    //   onsuccess: this.signInWithGoogle,
+    // });
   },
 };
 </script>
