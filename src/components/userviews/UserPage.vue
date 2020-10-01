@@ -32,7 +32,7 @@
           v-if="$mq === 'md' || $mq === 'lg'"
           :tabItems="tabItems"
         ></bs-user-tabs>
-        <bs-user-panels v-else :tabItems="tabItems"></bs-user-panels>
+        <bs-user-panels v-if="tabItems" :tabItems="tabItems"></bs-user-panels>
       </v-col>
     </v-container>
     <bs-loader v-if="loading"></bs-loader>
@@ -74,6 +74,8 @@ export default {
   },
   created() {
     this.loading = true;
+    this.tabItems = null;
+    this.userBooks = null;
     userService
       .getAllUserBooks()
       .then((response) => {

@@ -3,14 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve --host 127.0.0.1",
+    "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint"
   },
-  "dependencies": {
+    "dependencies": {
     "chart.js": "^2.9.3",
     "core-js": "^3.4.3",
+    "firebaseui": "^4.6.1",
     "moment": "^2.24.0",
     "rxjs": "^6.5.4",
     "vue": "^2.6.10",

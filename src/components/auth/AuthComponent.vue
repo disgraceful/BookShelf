@@ -10,7 +10,9 @@
             </v-col>
             <v-card-text>Sign in with:</v-card-text>
             <v-row>
-              <v-col> </v-col>
+              <v-col>
+                <div id="my-signin2"></div>
+              </v-col>
             </v-row>
             <v-form ref="form" v-model="valid">
               <v-col>
@@ -52,13 +54,6 @@
                     @click="onSubmit()"
                     >Submit</v-btn
                   >
-                  <v-btn
-                    color="primary"
-                    :disabled="true"
-                    v-text="
-                      isRegister ? 'SignUp with Google' : 'SignIn with Google'
-                    "
-                  ></v-btn>
                 </v-flex>
               </v-col>
             </v-form>
@@ -95,6 +90,24 @@ export default {
       } else {
         this.signIn();
       }
+    },
+
+    signInWithGoogle(googleUser) {
+      const profile = googleUser.getBasicProfile();
+      console.log("ID: " + profile.getId()); // Do not send to your backend! Use an ID token instead.
+      console.log("Name: " + profile.getName());
+      console.log("Image URL: " + profile.getImageUrl());
+      console.log("Email: " + profile.getEmail()); // This is null if the 'email' scope is not present.
+
+      const id_token = googleUser.getAuthResponse().id_token;
+      console.log("ID Token: " + id_token);
+
+      //send Id_token to the backend
+      this.$store.dispatch("signInUserGoogle", { token: id_token });
+      googleUser.disconnect();
+    },
+    onFailure(error) {
+      console.log(error);
     },
 
     signIn() {
@@ -148,6 +161,18 @@ export default {
 
   created() {
     this.$store.dispatch("logOutUser");
+  },
+
+  mounted() {
+    gapi.signin2.render("my-signin2", {
+      scope: "profile email",
+      width: 200,
+      height: 40,
+      longtitle: true,
+      theme: "dark",
+      onfailure: this.onFailure,
+      onsuccess: this.signInWithGoogle,
+    });
   },
 };
 </script>

@@ -78,6 +78,26 @@ export default new Vuex.Store({
         });
     },
 
+    signInUserGoogle({ commit }, payload) {
+      commit("setLoading", true);
+      authService
+        .signInGoogle(payload.token)
+        .then((response) => {
+          console.log(response);
+          const user = saveUser(response);
+          commit("setUser", {
+            id: user.id,
+            email: user.email,
+            token: user.token,
+          });
+          commit("setLoading", false);
+        })
+        .catch((error) => {
+          commit("setError", error.body);
+          commit("setLoading", false);
+        });
+    },
+
     getSavedUser({ commit }) {
       const user = JSON.parse(localStorage.getItem("user"));
       if (user) {

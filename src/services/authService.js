@@ -8,4 +8,8 @@ export default {
   signUp(email, password) {
     return Vue.http.post("auth/register", { email, password });
   },
+
+  signInGoogle(token) {
+    return Vue.http.post("auth/google/login", { token });
+  },
 };
