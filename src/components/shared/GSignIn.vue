@@ -11,7 +11,9 @@ c<template>
 
 <script>
 export default {
-  name: "googlesign",
+  props: {
+    signInFnc: { type: Function, required: true },
+  },
   data() {
     return {
       auth2: {},
@@ -21,7 +23,6 @@ export default {
     startApp() {
       gapi.load("auth2", () => {
         // Retrieve the singleton for the GoogleAuth library and set up the client.
-
         this.auth2 = gapi.auth2.init({
           client_id:
             "463636811603-dujav8toqr9ijfek13vfclg723dnqrfe.apps.googleusercontent.com",
@@ -37,11 +38,10 @@ export default {
       this.auth2.attachClickHandler(
         element,
         {},
-        function (googleUser) {
-          // use googleUser's ID_token
-          // here
+        (googleUser) => {
+          this.signInFnc(googleUser);
         },
-        function (error) {}
+        (error) => {}
       );
     },
   },

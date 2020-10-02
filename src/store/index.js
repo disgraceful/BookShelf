@@ -79,7 +79,6 @@ export default new Vuex.Store({
     },
 
     signInUserGoogle({ commit }, payload) {
-      commit("setLoading", true);
       authService
         .signInGoogle(payload.token)
         .then((response) => {
@@ -90,11 +89,9 @@ export default new Vuex.Store({
             email: user.email,
             token: user.token,
           });
-          commit("setLoading", false);
         })
         .catch((error) => {
           commit("setError", error.body);
-          commit("setLoading", false);
         });
     },
 

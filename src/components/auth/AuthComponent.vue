@@ -11,8 +11,7 @@
             <v-card-text>Sign in with:</v-card-text>
             <v-row justify="center">
               <v-col cols="auto" class="py-0">
-                <!-- <div id="my-signin2"></div> -->
-                <bs-signin></bs-signin>
+                <bs-signin :signInFnc="signInWithGoogle"></bs-signin>
               </v-col>
             </v-row>
             <v-form ref="form" v-model="valid">
