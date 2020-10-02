@@ -8,7 +8,7 @@
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint"
   },
-    "dependencies": {
+  "dependencies": {
     "chart.js": "^2.9.3",
     "core-js": "^3.4.3",
     "firebaseui": "^4.6.1",

@@ -10,23 +10,19 @@
             </v-col>
             <v-card-text>Sign in with:</v-card-text>
             <v-container>
-              <v-row justify="">
+              <v-row>
                 <v-col cols="auto" class="py-0">
-                  <bs-signin :signInFnc="signInWithGoogle"></bs-signin>
+                  <bs-google-signin
+                    :signInFnc="signInWithGoogle"
+                  ></bs-google-signin>
                 </v-col>
                 <v-col cols="auto" class="py-0">
                   <v-btn dark color="#42A5F5">
                     <img width="28" :src="twitterIcon" />
-                    <span class="text-capitalize"> Twitter </span>
-                  </v-btn>
-                </v-col>
-                <v-col cols="auto" class="py-0">
-                  <v-btn dark color="#3F51B5">
-                    <img
-                      width="28"
-                      :src="require('../../assets/facebook-32.png')"
-                    />
-                    <span class="text-capitalize"> Facebook </span>
+                    <span class="text-capitalize">Twitter</span>
+                    <!-- <span class="text-capitalize"
+                      >Login <span class="text-lowercase">via</span> Twitter
+                    </span> -->
                   </v-btn>
                 </v-col>
               </v-row>
@@ -87,7 +83,7 @@ import GoogleSignInVue from "../shared/GSignIn";
 export default {
   components: {
     "app-alert": Alert,
-    "bs-signin": GoogleSignInVue,
+    "bs-google-signin": GoogleSignInVue,
   },
   props: ["loginInfo"],
 
