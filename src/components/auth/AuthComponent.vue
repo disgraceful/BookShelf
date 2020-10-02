@@ -68,6 +68,12 @@
 import Alert from "../shared/Alert";
 import GoogleSignInVue from "../shared/GSignIn";
 export default {
+  components: {
+    "app-alert": Alert,
+    "bs-signin": GoogleSignInVue,
+  },
+  props: ["loginInfo"],
+
   data() {
     return {
       valid: false,
@@ -83,7 +89,7 @@ export default {
       response: "",
     };
   },
-  props: ["loginInfo"],
+
   methods: {
     onSubmit() {
       if (this.isRegister) {
@@ -94,12 +100,6 @@ export default {
     },
 
     signInWithGoogle(googleUser) {
-      const profile = googleUser.getBasicProfile();
-      console.log("ID: " + profile.getId()); // Do not send to your backend! Use an ID token instead.
-      console.log("Name: " + profile.getName());
-      console.log("Image URL: " + profile.getImageUrl());
-      console.log("Email: " + profile.getEmail()); // This is null if the 'email' scope is not present.
-
       const id_token = googleUser.getAuthResponse().id_token;
       console.log("ID Token: " + id_token);
 
@@ -156,25 +156,9 @@ export default {
     },
   },
 
-  components: {
-    "app-alert": Alert,
-    "bs-signin": GoogleSignInVue,
-  },
-
   created() {
     this.$store.dispatch("logOutUser");
-  },
-
-  mounted() {
-    // gapi.signin2.render("my-signin2", {
-    //   scope: "profile email",
-    //   width: 200,
-    //   height: 40,
-    //   longtitle: true,
-    //   theme: "dark",
-    //   onfailure: this.onFailure,
-    //   onsuccess: this.signInWithGoogle,
-    // });
+    this.$store.dispatch("clearError");
   },
 };
 </script>

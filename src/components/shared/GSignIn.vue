@@ -1,12 +1,10 @@
 c<template>
-  <div id="gSignInWrapper">
-    <v-btn id="customBtn">
-      <img src="https://img.icons8.com/color/28/000000/google-logo.png" />
-      <span class="text-capitalize">
-        Login<span class="text-lowercase"> via </span> Google
-      </span>
-    </v-btn>
-  </div>
+  <v-btn id="customBtn">
+    <img src="https://img.icons8.com/color/28/000000/google-logo.png" />
+    <span class="text-capitalize">
+      Login<span class="text-lowercase"> via </span> Google
+    </span>
+  </v-btn>
 </template>
 
 <script>
