@@ -9,11 +9,28 @@
               <v-divider></v-divider>
             </v-col>
             <v-card-text>Sign in with:</v-card-text>
-            <v-row justify="center">
-              <v-col cols="auto" class="py-0">
-                <bs-signin :signInFnc="signInWithGoogle"></bs-signin>
-              </v-col>
-            </v-row>
+            <v-container>
+              <v-row justify="">
+                <v-col cols="auto" class="py-0">
+                  <bs-signin :signInFnc="signInWithGoogle"></bs-signin>
+                </v-col>
+                <v-col cols="auto" class="py-0">
+                  <v-btn dark color="#42A5F5">
+                    <img width="28" :src="twitterIcon" />
+                    <span class="text-capitalize"> Twitter </span>
+                  </v-btn>
+                </v-col>
+                <v-col cols="auto" class="py-0">
+                  <v-btn dark color="#3F51B5">
+                    <img
+                      width="28"
+                      :src="require('../../assets/facebook-32.png')"
+                    />
+                    <span class="text-capitalize"> Facebook </span>
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-container>
             <v-form ref="form" v-model="valid">
               <v-col>
                 <v-flex xs12>
@@ -87,6 +104,7 @@ export default {
           value.length >= 6 || "Passwords must be 6 characters or longer",
       },
       response: "",
+      twitterIcon: require("../../assets/twitter-32.png"),
     };
   },
 

@@ -1,9 +1,7 @@
-c<template>
-  <v-btn id="customBtn">
+<template>
+  <v-btn id="customBtn" color="#fff">
     <img src="https://img.icons8.com/color/28/000000/google-logo.png" />
-    <span class="text-capitalize">
-      Login<span class="text-lowercase"> via </span> Google
-    </span>
+    <span class="text-capitalize"> Google </span>
   </v-btn>
 </template>
 
@@ -54,21 +52,5 @@ export default {
   padding: 5px;
   padding-right: 12px;
   padding-left: 0px;
-}
-
-span.label {
-  font-family: serif;
-  font-weight: normal;
-}
-
-span.buttonText {
-  display: inline-block;
-  vertical-align: middle;
-  padding-left: 20px;
-  padding-right: 42px;
-  font-size: 14px;
-  font-weight: bold;
-  /* Use the Roboto font that is loaded in the <head> */
-  font-family: "Roboto", sans-serif;
 }
 </style>
