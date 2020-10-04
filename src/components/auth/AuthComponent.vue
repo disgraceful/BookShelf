@@ -4,21 +4,23 @@
       <v-col offset-md="3" md="6" sm="8" offset-sm="2">
         <v-card>
           <v-container>
-            <v-card-title>{{ loginInfo }} </v-card-title>
+            <slot name="title"></slot>
             <v-col class="py-0">
               <v-divider></v-divider>
             </v-col>
-            <v-card-text>Sign in with:</v-card-text>
+            <slot name="text"></slot>
             <v-container>
               <v-row>
                 <v-col cols="auto" class="py-0">
-                  <bs-google-signin
-                    :signInFnc="signInWithGoogle"
-                  ></bs-google-signin>
+                  <bs-google-signin></bs-google-signin>
                 </v-col>
                 <v-col cols="auto" class="py-0">
                   <v-btn dark color="#42A5F5">
-                    <img width="28" :src="twitterIcon" />
+                    <img
+                      width="38"
+                      style="padding-right: 10px"
+                      :src="twitterIcon"
+                    />
                     <span class="text-capitalize">Twitter</span>
                     <!-- <span class="text-capitalize"
                       >Login <span class="text-lowercase">via</span> Twitter
@@ -26,21 +28,20 @@
                   </v-btn>
                 </v-col>
               </v-row>
+              <v-divider class="mt-6"></v-divider>
             </v-container>
             <v-form ref="form" v-model="valid">
-              <v-col>
-                <v-flex xs12>
-                  <v-text-field
-                    name="email"
-                    label="Mail"
-                    id="email"
-                    v-model="email"
-                    type="email"
-                    :rules="[rules.required]"
-                  ></v-text-field>
-                </v-flex>
+              <v-col class="pt-0">
+                <v-text-field
+                  name="email"
+                  label="Mail"
+                  id="email"
+                  v-model="email"
+                  type="email"
+                  :rules="[rules.required]"
+                ></v-text-field>
               </v-col>
-              <v-col>
+              <v-col class="pt-0">
                 <v-text-field
                   name="password"
                   label="Password"
@@ -58,16 +59,10 @@
                   @dismissed="dismissError"
                 ></app-alert>
               </v-col>
-              <v-col>
-                <v-flex xs12>
-                  <v-btn
-                    class="mr-3"
-                    :loading="loading"
-                    :disabled="!valid && !loading"
-                    @click="onSubmit()"
-                    >Submit</v-btn
-                  >
-                </v-flex>
+              <v-col class="pt-0">
+                <v-btn class="mr-3" :loading="loading" @click="submit()"
+                  >Submit</v-btn
+                >
               </v-col>
             </v-form>
           </v-container>
@@ -85,58 +80,43 @@ export default {
     "app-alert": Alert,
     "bs-google-signin": GoogleSignInVue,
   },
-  props: ["loginInfo"],
+
+  props: {
+    loginInfo: String,
+    onSubmit: {
+      type: Function,
+      required: true,
+    },
+  },
 
   data() {
     return {
       valid: false,
       email: "",
       password: "",
-      confirmPassword: "",
       showPwd: false,
       rules: {
         required: (value) => !!value || "Field is required",
         length: (value) =>
           value.length >= 6 || "Passwords must be 6 characters or longer",
       },
-      response: "",
       twitterIcon: require("../../assets/twitter-32.png"),
     };
   },
 
   methods: {
-    onSubmit() {
-      if (this.isRegister) {
-        this.signUp();
-      } else {
-        this.signIn();
+    validate() {
+      return this.$refs.form.validate();
+    },
+
+    submit() {
+      if (this.validate()) {
+        this.onSubmit(this.email, this.password);
       }
     },
 
-    signInWithGoogle(googleUser) {
-      const id_token = googleUser.getAuthResponse().id_token;
-      console.log("ID Token: " + id_token);
-
-      //send Id_token to the backend
-      this.$store.dispatch("signInUserGoogle", { token: id_token });
-      googleUser.disconnect();
-    },
     onFailure(error) {
       console.log(error);
-    },
-
-    signIn() {
-      this.$store.dispatch("signInUser", {
-        email: this.email,
-        password: this.password,
-      });
-    },
-
-    signUp() {
-      this.$store.dispatch("signUpUser", {
-        email: this.email,
-        password: this.password,
-      });
     },
 
     dismissError() {
@@ -145,10 +125,6 @@ export default {
   },
 
   computed: {
-    isRegister() {
-      return this.loginInfo == "SignUp";
-    },
-
     user() {
       return this.$store.getters.getAuthUser;
     },

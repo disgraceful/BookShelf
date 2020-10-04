@@ -41,6 +41,8 @@ export default new Vuex.Store({
   actions: {
     signUpUser({ commit }, payload) {
       commit("setLoading", true);
+      console.log("signing up user");
+      console.log(payload);
       authService
         .signUp(payload.email, payload.password)
         .then((response) => {

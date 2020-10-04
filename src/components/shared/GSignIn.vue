@@ -7,15 +7,21 @@
 
 <script>
 export default {
-  props: {
-    signInFnc: { type: Function, required: true },
-  },
   data() {
     return {
       auth2: {},
     };
   },
   methods: {
+    signInWithGoogle(googleUser) {
+      const id_token = googleUser.getAuthResponse().id_token;
+      console.log("ID Token: " + id_token);
+
+      //send Id_token to the backend
+      this.$store.dispatch("signInUserGoogle", { token: id_token });
+      googleUser.disconnect();
+    },
+
     startApp() {
       gapi.load("auth2", () => {
         // Retrieve the singleton for the GoogleAuth library and set up the client.
@@ -35,7 +41,7 @@ export default {
         element,
         {},
         (googleUser) => {
-          this.signInFnc(googleUser);
+          this.signInWithGoogle(googleUser);
         },
         (error) => {}
       );
