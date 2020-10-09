@@ -5,9 +5,7 @@ import store from "./store";
 import vuetify from "./plugins/vuetify";
 import VueMq from "vue-mq";
 import "./css/style.css";
-
 import "./http/config";
-
 
 Vue.use(VueMq, {
   breakpoints: {
@@ -18,7 +16,6 @@ Vue.use(VueMq, {
   },
   defaultBreakpoint: "sm",
 });
-
 
 new Vue({
   router,

@@ -16,7 +16,7 @@ export default {
   },
   components: {
     "bs-user-page": UserPage,
-    "bs-user-feed": UserFeed
-  }
+    "bs-user-feed": UserFeed,
+  },
 };
 </script>

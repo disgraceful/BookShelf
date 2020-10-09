@@ -41,6 +41,8 @@ export default new Vuex.Store({
   actions: {
     signUpUser({ commit }, payload) {
       commit("setLoading", true);
+      console.log("signing up user");
+      console.log(payload);
       authService
         .signUp(payload.email, payload.password)
         .then((response) => {
@@ -75,6 +77,39 @@ export default new Vuex.Store({
         .catch((error) => {
           commit("setError", error.body);
           commit("setLoading", false);
+        });
+    },
+
+    signInUserGoogle({ commit }, payload) {
+      authService
+        .signInGoogle(payload.token)
+        .then((response) => {
+          console.log(response);
+          const user = saveUser(response);
+          commit("setUser", {
+            id: user.id,
+            email: user.email,
+            token: user.token,
+          });
+        })
+        .catch((error) => {
+          commit("setError", error.body);
+        });
+    },
+
+    signInUserTwitter({ commit }, payload) {
+      authService
+        .signInTwitter(payload.token, payload.verifier)
+        .then((response) => {
+          const user = saveUser(response);
+          commit("setUser", {
+            id: user.id,
+            email: user.email,
+            token: user.token,
+          });
+        })
+        .catch((error) => {
+          commit("setError", error.body);
         });
     },
 

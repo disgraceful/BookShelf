@@ -8,7 +8,7 @@
       <v-card-text class="px-0 pb-1 subtitle-2" style="max-width:140px">
         <router-link
           class="link-inherit highlight"
-          :to="{ name: 'book', params: params || { id: book.id } }"
+          :to="{ name: 'book', params: { id: book.id } }"
         >{{ book.title }}</router-link>
       </v-card-text>
       <bs-author-links
@@ -26,13 +26,9 @@ export default {
   props: {
     book: {
       type: Object,
-      required: true
+      required: true,
     },
-    params: {
-      type: Object,
-      required: false
-    }
   },
-  components: { "bs-author-links": AuthorLinksHelper }
+  components: { "bs-author-links": AuthorLinksHelper },
 };
 </script>

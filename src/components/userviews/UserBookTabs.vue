@@ -3,7 +3,7 @@
     <v-tab v-for="item in tabItems" :key="item.name">
       <v-badge color="transparent">
         {{ item.name }}
-        <sup>{{item.books.length}}</sup>
+        <sup>{{ item.books.length }}</sup>
       </v-badge>
     </v-tab>
     <v-tabs-items v-model="tab">
@@ -12,35 +12,37 @@
           <v-card-title class="pa-2">{{ tabItems[tab].name }}</v-card-title>
         </v-col>
         <v-col cols="auto">
-          <v-card-title class="pa-2 font-weight-regular">read {{ pagesRead(tab) }} pages</v-card-title>
+          <v-card-title class="pa-2 font-weight-regular"
+            >read {{ pagesRead(tab) }} pages</v-card-title
+          >
         </v-col>
       </v-row>
       <v-divider v-if="getBooks(tab).length > 0"></v-divider>
       <v-row v-for="(book, i) in getBooks(tab)" :key="book.id">
-        <bs-smallbook :book="book">
+        <bs-horizontal-book :book="book">
           <v-divider v-if="i < getBooks(tab).length"></v-divider>
-        </bs-smallbook>
+        </bs-horizontal-book>
       </v-row>
     </v-tabs-items>
   </v-tabs>
 </template>
 
 <script>
-import SmallBook from "../bookviews/SmallBook";
+import HorizontalBook from "../bookviews/HorizontalBookView";
 export default {
   data() {
     return {
-      tab: 0
+      tab: 0,
     };
   },
   props: {
     tabItems: {
       type: Array,
-      required: true
-    }
+      required: true,
+    },
   },
   components: {
-    "bs-smallbook": SmallBook
+    "bs-horizontal-book": HorizontalBook,
   },
   methods: {
     getBooks(tab) {
@@ -53,11 +55,13 @@ export default {
       );
     },
     getTabPos() {
-      return this.tabItems.findIndex(item => item.books.length > 0);
-    }
+      const pos = this.tabItems.findIndex((item) => item.books.length > 0);
+      return pos > 0 ? pos : 0;
+    },
   },
   mounted() {
     this.tab = this.getTabPos();
-  }
+    console.log(this.tabItems);
+  },
 };
 </script>

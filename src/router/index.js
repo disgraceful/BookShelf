@@ -15,9 +15,9 @@ const authGuard = (to, from, next) => {
   if (localStorage.getItem("user")) {
     next();
   } else {
-    next({
-      name: "login",
-    });
+    // next({
+    //   name: "login",
+    // });
   }
 };
 
@@ -87,6 +87,7 @@ const routes = [
 ];
 
 const router = new VueRouter({
+  mode: "history",
   routes,
 });
 
