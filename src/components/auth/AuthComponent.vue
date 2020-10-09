@@ -15,17 +15,7 @@
                   <bs-google-signin></bs-google-signin>
                 </v-col>
                 <v-col cols="auto" class="py-0">
-                  <v-btn dark color="#42A5F5">
-                    <img
-                      width="38"
-                      style="padding-right: 10px"
-                      :src="twitterIcon"
-                    />
-                    <span class="text-capitalize">Twitter</span>
-                    <!-- <span class="text-capitalize"
-                      >Login <span class="text-lowercase">via</span> Twitter
-                    </span> -->
-                  </v-btn>
+                  <bs-twitter-signin></bs-twitter-signin>
                 </v-col>
               </v-row>
               <v-divider class="mt-6"></v-divider>
@@ -75,10 +65,12 @@
 <script>
 import Alert from "../shared/Alert";
 import GoogleSignInVue from "../shared/GSignIn";
+import TwitterSignInVue from "../shared/TwitterSignIn.vue";
 export default {
   components: {
     "app-alert": Alert,
     "bs-google-signin": GoogleSignInVue,
+    "bs-twitter-signin": TwitterSignInVue,
   },
 
   props: {
@@ -100,7 +92,6 @@ export default {
         length: (value) =>
           value.length >= 6 || "Passwords must be 6 characters or longer",
       },
-      twitterIcon: require("../../assets/twitter-32.png"),
     };
   },
 

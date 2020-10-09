@@ -12,4 +12,12 @@ export default {
   signInGoogle(token) {
     return Vue.http.post("auth/google/login", { token });
   },
+
+  getTwitterAuthUrl() {
+    return Vue.http.get("auth/twitter/url");
+  },
+
+  signInTwitter(token, verifier) {
+    return Vue.http.post(`auth/twitter/login?token=${token}&verifier=${verifier}`);
+  },
 };

@@ -97,6 +97,22 @@ export default new Vuex.Store({
         });
     },
 
+    signInUserTwitter({ commit }, payload) {
+      authService
+        .signInTwitter(payload.token, payload.verifier)
+        .then((response) => {
+          const user = saveUser(response);
+          commit("setUser", {
+            id: user.id,
+            email: user.email,
+            token: user.token,
+          });
+        })
+        .catch((error) => {
+          commit("setError", error.body);
+        });
+    },
+
     getSavedUser({ commit }) {
       const user = JSON.parse(localStorage.getItem("user"));
       if (user) {
