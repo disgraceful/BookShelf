@@ -47,18 +47,18 @@ npm run build
 
 - [x] Search books
 - [x] Favorite books
-- [x] View favorites
 - [x] Sort by categories (2read, read, reading)
 - [x] User genre statistics
 - [x] Rate & Review
 - [x] User reading feed
+- [x] Add private books
+- [x] OAuth Authorization (Google + Twitter)
 
 ### To-do
 
 - [ ] Account settings (security) !important
 - [ ] Advanced user stats
 - [ ] Advanced search
-- [ ] Add 'private' books to service
 - [ ] Language & Theme selection
 - [ ] Deploy
 
