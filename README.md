@@ -59,7 +59,6 @@ npm run build
 - [ ] Account settings (security) !important
 - [ ] Advanced user stats
 - [ ] Advanced search
-- [ ] Add 'private' books to service
 - [ ] Language & Theme selection
 - [ ] Deploy
 
