@@ -20,7 +20,9 @@ export default new Vuex.Store({
     authUser: null,
     error: null,
     loading: false,
+    loginProvider: null,
   },
+
   mutations: {
     setUser(state, payload) {
       state.authUser = payload;
@@ -37,12 +39,16 @@ export default new Vuex.Store({
     setLoading(state, payload) {
       state.loading = payload;
     },
+
+    setProvider(state, payload) {
+      state.loginProvider = payload;
+    },
   },
+
   actions: {
     signUpUser({ commit }, payload) {
       commit("setLoading", true);
-      console.log("signing up user");
-      console.log(payload);
+      commit("setProvider", "email");
       authService
         .signUp(payload.email, payload.password)
         .then((response) => {
@@ -63,6 +69,7 @@ export default new Vuex.Store({
 
     signInUser({ commit }, payload) {
       commit("setLoading", true);
+      commit("setProvider", "email");
       authService
         .signIn(payload.email, payload.password)
         .then((response) => {
@@ -81,6 +88,8 @@ export default new Vuex.Store({
     },
 
     signInUserGoogle({ commit }, payload) {
+      commit("setLoading", true);
+      commit("setProvider", "google");
       authService
         .signInGoogle(payload.token)
         .then((response) => {
@@ -91,13 +100,17 @@ export default new Vuex.Store({
             email: user.email,
             token: user.token,
           });
+          commit("setLoading", false);
         })
         .catch((error) => {
           commit("setError", error.body);
+          commit("setLoading", false);
         });
     },
 
     signInUserTwitter({ commit }, payload) {
+      commit("setLoading", true);
+      commit("setProvider", "twitter");
       authService
         .signInTwitter(payload.token, payload.verifier)
         .then((response) => {
@@ -107,9 +120,11 @@ export default new Vuex.Store({
             email: user.email,
             token: user.token,
           });
+          commit("setLoading", false);
         })
         .catch((error) => {
           commit("setError", error.body);
+          commit("setLoading", false);
         });
     },
 
@@ -140,6 +155,10 @@ export default new Vuex.Store({
 
     getLoading(state) {
       return state.loading;
+    },
+
+    getProvider(state) {
+      return state.loginProvider;
     },
   },
 });

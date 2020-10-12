@@ -1,5 +1,10 @@
 <template>
-  <v-btn dark color="#42A5F5" @click="signInWithTwitter">
+  <v-btn
+    dark
+    color="#42A5F5"
+    @click="signInWithTwitter"
+    :loading="loading && sameProvider"
+  >
     <img width="38" style="padding-right: 10px" :src="twitterIcon" />
     <!-- <span class="text-capitalize">Twitter</span> -->
     <span class="text-capitalize"
@@ -17,6 +22,7 @@ export default {
       twitterIcon: require("../../assets/twitter-32.png"),
     };
   },
+
   methods: {
     async signInWithTwitter() {
       const response = await authService.getTwitterAuthUrl();
@@ -24,6 +30,17 @@ export default {
       window.open(url, "_self");
     },
   },
+
+  computed: {
+    loading() {
+      return this.$store.getters.getLoading;
+    },
+
+    sameProvider() {
+      return this.$store.getters.getProvider === "twitter";
+    },
+  },
+
   async mounted() {
     const query = this.$route.query;
     console.log(this.$route);

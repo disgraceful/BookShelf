@@ -49,7 +49,7 @@
                 <v-col class="pt-0" cols="auto">
                   <v-btn
                     class="mr-3 text-capitalize"
-                    :loading="loading"
+                    :loading="loading && sameProvider"
                     @click="submit()"
                     >{{ loginInfo }}</v-btn
                   >
@@ -64,6 +64,7 @@
 </template>
 
 <script>
+import { retryWhen } from "rxjs/operators";
 import Alert from "../shared/Alert";
 import GoogleSignInVue from "../shared/GSignIn";
 import TwitterSignInVue from "../shared/TwitterSignIn.vue";
@@ -127,6 +128,10 @@ export default {
 
     loading() {
       return this.$store.getters.getLoading;
+    },
+
+    sameProvider() {
+      return this.$store.getters.getProvider === "email";
     },
   },
 
