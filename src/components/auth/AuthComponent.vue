@@ -6,17 +6,17 @@
           <v-container>
             <slot name="title"></slot>
             <v-container>
-              <v-row class="pb-5">
-                <v-col cols="auto" class="py-0">
+              <v-row justify="center" class="py-2">
+                <v-col cols="auto" class="pb-2">
                   <bs-google-signin :text="loginInfo"></bs-google-signin>
                 </v-col>
-                <v-col cols="auto" class="py-0">
+                <v-col cols="auto" class="pb-2">
                   <bs-twitter-signin :text="loginInfo"></bs-twitter-signin>
                 </v-col>
               </v-row>
               <v-card-text
                 class="body-1 pt-0 px-1"
-                v-if="loading && provider === 'twitter'"
+                v-if="loading && provider !== 'email'"
                 >You will be redirected to the application now</v-card-text
               >
               <v-divider></v-divider>
