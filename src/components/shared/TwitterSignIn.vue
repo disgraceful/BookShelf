@@ -7,9 +7,7 @@
   >
     <img width="38" style="padding-right: 10px" :src="twitterIcon" />
     <!-- <span class="text-capitalize">Twitter</span> -->
-    <span class="text-capitalize"
-      >Login <span class="text-lowercase">via</span> Twitter
-    </span>
+    <span class="text-none">{{ text }} via Twitter </span>
   </v-btn>
 </template>
 
@@ -17,18 +15,17 @@
 import { ServiceFactory } from "../../services/serviceFactory";
 const authService = ServiceFactory.get("auth");
 export default {
+  props: {
+    text: {
+      type: String,
+      default: "Login",
+    },
+  },
+
   data() {
     return {
       twitterIcon: require("../../assets/twitter-32.png"),
     };
-  },
-
-  methods: {
-    async signInWithTwitter() {
-      const response = await authService.getTwitterAuthUrl();
-      const url = response.body.url;
-      window.open(url, "_self");
-    },
   },
 
   computed: {
@@ -41,6 +38,14 @@ export default {
     },
   },
 
+  methods: {
+    async signInWithTwitter() {
+      const response = await authService.getTwitterAuthUrl();
+      const url = response.body.url;
+      window.open(url, "_self");
+    },
+  },
+
   async mounted() {
     const query = this.$route.query;
     console.log(this.$route);
@@ -49,8 +54,6 @@ export default {
       const verifier = query.oauth_verifier;
       if (token && verifier) {
         this.$store.dispatch("signInUserTwitter", { token, verifier });
-      } else {
-        // go again to login with error
       }
     }
   },

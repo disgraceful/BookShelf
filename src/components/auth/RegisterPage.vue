@@ -1,5 +1,5 @@
 <template>
-  <bs-auth loginInfo="Sign Up" :onSubmit="signUp">
+  <bs-auth loginInfo="Sign up" :onSubmit="signUp">
     <template v-slot:title>
       <v-card-title>Create new account </v-card-title>
     </template>

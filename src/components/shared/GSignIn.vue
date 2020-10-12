@@ -1,15 +1,19 @@
 <template>
   <v-btn id="customBtn" color="#fff" :loading="loading && sameProvider">
     <img src="https://img.icons8.com/color/28/000000/google-logo.png" />
-    <!-- <span class="text-capitalize"> Google </span> -->
-    <span class="text-capitalize"
-      >Login <span class="text-lowercase">via</span> Google
-    </span>
+    <span class="text-none">{{ text }} via Google </span>
   </v-btn>
 </template>
 
 <script>
 export default {
+  props: {
+    text: {
+      type: String,
+      default: "Login",
+    },
+  },
+
   data() {
     return {
       auth2: {},

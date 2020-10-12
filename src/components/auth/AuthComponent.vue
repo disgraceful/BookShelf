@@ -6,16 +6,22 @@
           <v-container>
             <slot name="title"></slot>
             <v-container>
-              <v-row>
+              <v-row class="pb-5">
                 <v-col cols="auto" class="py-0">
-                  <bs-google-signin></bs-google-signin>
+                  <bs-google-signin :text="loginInfo"></bs-google-signin>
                 </v-col>
                 <v-col cols="auto" class="py-0">
-                  <bs-twitter-signin></bs-twitter-signin>
+                  <bs-twitter-signin :text="loginInfo"></bs-twitter-signin>
                 </v-col>
               </v-row>
-              <v-divider class="mt-6"></v-divider>
+              <v-card-text
+                class="body-1 pt-0 px-1"
+                v-if="loading && provider === 'twitter'"
+                >You will be redirected to the application now</v-card-text
+              >
+              <v-divider></v-divider>
             </v-container>
+
             <v-form ref="form" v-model="valid">
               <v-col class="pt-0">
                 <v-text-field
@@ -49,7 +55,7 @@
                 <v-col class="pt-0" cols="auto">
                   <v-btn
                     class="mr-3 text-capitalize"
-                    :loading="loading && sameProvider"
+                    :loading="loading && provider === 'email'"
                     @click="submit()"
                     >{{ loginInfo }}</v-btn
                   >
@@ -97,6 +103,32 @@ export default {
     };
   },
 
+  computed: {
+    user() {
+      return this.$store.getters.getAuthUser;
+    },
+
+    error() {
+      return this.$store.getters.getError;
+    },
+
+    loading() {
+      return this.$store.getters.getLoading;
+    },
+
+    provider() {
+      return this.$store.getters.getProvider;
+    },
+  },
+
+  watch: {
+    user(value) {
+      if (value) {
+        this.$router.push("/");
+      }
+    },
+  },
+
   methods: {
     validate() {
       return this.$refs.form.validate();
@@ -114,32 +146,6 @@ export default {
 
     dismissError() {
       this.$store.dispatch("clearError");
-    },
-  },
-
-  computed: {
-    user() {
-      return this.$store.getters.getAuthUser;
-    },
-
-    error() {
-      return this.$store.getters.getError;
-    },
-
-    loading() {
-      return this.$store.getters.getLoading;
-    },
-
-    sameProvider() {
-      return this.$store.getters.getProvider === "email";
-    },
-  },
-
-  watch: {
-    user(value) {
-      if (value) {
-        this.$router.push("/");
-      }
     },
   },
 
