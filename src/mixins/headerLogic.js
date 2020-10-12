@@ -5,8 +5,7 @@ export default {
       menuList: [
         {
           name: "Statistics",
-          action: () =>
-            this.$router.push({ name: "user", params: { id: this.user.id } }),
+          action: () => this.$router.push({ name: "user", params: { id: this.user.id } }),
         },
         { name: "Logout", action: this.logOut },
       ],
@@ -18,7 +17,7 @@ export default {
         { name: "SignUp", to: "register" },
         { name: "SignIn", to: "login" },
       ];
-      if (this.userIsAuthenticated) {
+      if (this.user) {
         headerLinks = [
           {
             name: "Favorites",
@@ -36,9 +35,7 @@ export default {
     user() {
       return this.$store.getters.getAuthUser;
     },
-    userIsAuthenticated() {
-      return this.user !== null && this.user !== undefined;
-    },
+
     username() {
       return this.user.email.replace(new RegExp(/@[\s\S]*/g), "");
     },

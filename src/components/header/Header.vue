@@ -1,26 +1,22 @@
 <template>
   <v-card class="toolbar-wrapper">
-    <v-toolbar color="teal" dark max-width="1200" style="margin:0 auto" flat>
-      <v-col cols="auto" :class="lgScreen ? 'pl-0' : 'px-0'" v-if="!xsScreen">
+    <v-toolbar color="teal" dark max-width="1200" style="margin: 0 auto" flat>
+      <v-col cols="auto" :class="lg ? 'pl-0' : 'px-0'" v-if="!xs">
         <v-btn text class="subtitle-1" to="/">
           <v-icon left large class="mr-4">mdi-book-open-outline</v-icon>
           BookShelf
         </v-btn>
       </v-col>
-      <bs-xs-search v-if="xsScreen"></bs-xs-search>
-      <v-col
-        :cols="$mq | mq({ xs: '', lg: 4 })"
-        v-else-if="userIsAuthenticated"
-      >
+      <bs-xs-search v-if="xs"></bs-xs-search>
+      <v-col :cols="$mq | mq({ xs: '', lg: 4 })" v-if="user">
         <bs-search-bar @minimized="searchbarMinimized = true"></bs-search-bar>
       </v-col>
-      <v-spacer v-if="!userIsAuthenticated || lgScreen || mdScreen"></v-spacer>
+      <v-spacer v-else></v-spacer>
       <bs-content-links></bs-content-links>
-      <v-spacer v-if="user && (lgScreen || mdScreen)"></v-spacer>
       <v-col
         cols="auto"
         class="text-center"
-        :class="!lgScreen ? 'px-0' : ''"
+        :class="mdH ? 'px-2' : 'px-0'"
         v-if="user"
       >
         <bs-profile-menu></bs-profile-menu>
@@ -34,7 +30,7 @@ import headerLogic from "../../mixins/headerLogic";
 import mediaQueryLogic from "../../mixins/mediaQueryLogic";
 import ProfileMenu from "./headerComponents/ProfileMenu.vue";
 import ContentLinks from "./headerComponents/ContentLinks.vue";
-import XsSearchWrapper from "./headerComponents/XsSearchWrapper.vue";
+import SearchWrapper from "./headerComponents/SearchWrapper.vue";
 import SearchBar from "./headerComponents/SearchBar";
 export default {
   mixins: [headerLogic, mediaQueryLogic],
@@ -42,8 +38,8 @@ export default {
     "bs-search-bar": SearchBar,
     "bs-profile-menu": ProfileMenu,
     "bs-content-links": ContentLinks,
-    "bs-xs-search": XsSearchWrapper
-  }
+    "bs-xs-search": SearchWrapper,
+  },
 };
 </script>
 

@@ -3,26 +3,31 @@
     <v-container v-if="records">
       <v-card-title class="py-0">User Feed</v-card-title>
       <v-container
-        :class="smScreen ||xsScreen? 'py-2':'py-0'"
+        :class="sm || xs ? 'py-2' : 'py-0'"
         v-for="(records, name) in activeRecords"
         :key="name"
       >
-        <v-row
-          :align="smScreen || xsScreen? 'center' :'baseline'"
-          :no-gutters="smScreen || xsScreen"
-        >
-          <v-col :cols="smScreen? '12':'auto'" style="min-width:180px">
-            <v-card-text class="py-1 text-h6 font-weight-regular">{{ getDate(name) }}</v-card-text>
+        <v-row :align="sm || xs ? 'center' : 'baseline'" :no-gutters="sm || xs">
+          <v-col :cols="sm ? '12' : 'auto'" style="min-width: 180px">
+            <v-card-text class="py-1 text-h6 font-weight-regular">{{
+              getDate(name)
+            }}</v-card-text>
           </v-col>
           <v-col cols="auto">
-            <bs-user-record v-for="(record, index) in records" :key="index" :record="record"></bs-user-record>
+            <bs-user-record
+              v-for="(record, index) in records"
+              :key="index"
+              :record="record"
+            ></bs-user-record>
           </v-col>
         </v-row>
         <v-divider></v-divider>
       </v-container>
       <v-row justify="end">
         <v-col cols="auto" class="pr-6">
-          <a class="highlight" @click="toggleFeed()">{{showingMore ? "Hide" : "Show all"}}</a>
+          <a class="highlight" @click="toggleFeed()">{{
+            showingMore ? "Hide" : "Show all"
+          }}</a>
         </v-col>
       </v-row>
     </v-container>

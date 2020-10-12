@@ -32,6 +32,10 @@ const routes = [
     beforeEnter: authGuard,
   },
   {
+    path: "/home*",
+    redirect: "/home",
+  },
+  {
     path: "/register",
     name: "register",
     component: Register,

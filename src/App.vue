@@ -6,14 +6,14 @@
 </template>
 
 <script>
-import ResponsiveHeader from "./components/header/ResponsiveHeader";
+import Header from "./components/header/Header";
 export default {
   name: "BookShelfApp",
   components: {
-    "bs-header": ResponsiveHeader
+    "bs-header": Header,
   },
   data() {
     return {};
-  }
+  },
 };
 </script>
