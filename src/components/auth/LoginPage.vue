@@ -3,9 +3,6 @@
     <template v-slot:title>
       <v-card-title>Sign In </v-card-title>
     </template>
-    <template v-slot:text>
-      <v-card-text class="body-1 pb-1">Sign in with:</v-card-text>
-    </template>
   </bs-auth>
 </template>
 

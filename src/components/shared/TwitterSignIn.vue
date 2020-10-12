@@ -1,10 +1,10 @@
 <template>
   <v-btn dark color="#42A5F5" @click="signInWithTwitter">
     <img width="38" style="padding-right: 10px" :src="twitterIcon" />
-    <span class="text-capitalize">Twitter</span>
-    <!-- <span class="text-capitalize"
-                      >Login <span class="text-lowercase">via</span> Twitter
-                    </span> -->
+    <!-- <span class="text-capitalize">Twitter</span> -->
+    <span class="text-capitalize"
+      >Login <span class="text-lowercase">via</span> Twitter
+    </span>
   </v-btn>
 </template>
 

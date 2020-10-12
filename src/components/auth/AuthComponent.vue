@@ -5,10 +5,6 @@
         <v-card>
           <v-container>
             <slot name="title"></slot>
-            <v-col class="py-0">
-              <v-divider></v-divider>
-            </v-col>
-            <slot name="text"></slot>
             <v-container>
               <v-row>
                 <v-col cols="auto" class="py-0">
@@ -49,11 +45,16 @@
                   @dismissed="dismissError"
                 ></app-alert>
               </v-col>
-              <v-col class="pt-0">
-                <v-btn class="mr-3" :loading="loading" @click="submit()"
-                  >Submit</v-btn
-                >
-              </v-col>
+              <v-row justify="end">
+                <v-col class="pt-0" cols="auto">
+                  <v-btn
+                    class="mr-3 text-capitalize"
+                    :loading="loading"
+                    @click="submit()"
+                    >{{ loginInfo }}</v-btn
+                  >
+                </v-col>
+              </v-row>
             </v-form>
           </v-container>
         </v-card>

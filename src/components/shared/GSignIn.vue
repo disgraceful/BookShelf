@@ -1,7 +1,10 @@
 <template>
   <v-btn id="customBtn" color="#fff">
     <img src="https://img.icons8.com/color/28/000000/google-logo.png" />
-    <span class="text-capitalize"> Google </span>
+    <!-- <span class="text-capitalize"> Google </span> -->
+    <span class="text-capitalize"
+      >Login <span class="text-lowercase">via</span> Google
+    </span>
   </v-btn>
 </template>
 
