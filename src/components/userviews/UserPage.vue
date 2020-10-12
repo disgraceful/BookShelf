@@ -2,13 +2,13 @@
   <v-card flat>
     <v-container v-if="userBooks && tabItems">
       <v-card-title class="py-0">{{ user.email }}</v-card-title>
-      <v-row :justify="$mq !== 'xs' ? 'start' : 'center'">
+      <v-row :justify="xs ? 'start' : 'center'">
         <v-col cols="auto" class="pa-5">
           <bs-progress
             :progress="{
               value: tabItems[3].books.length,
               max: 20,
-              text: 'Books',
+              text: 'Books finished',
               color: '#cc0000',
               bgcolor: '#ff9999',
             }"
@@ -19,7 +19,7 @@
             :progress="{
               value: pagesReadTotal,
               max: 5000,
-              text: 'Pages',
+              text: 'Pages read',
               color: '#009878',
               bgcolor: '#99ffcc',
             }"
@@ -29,10 +29,13 @@
       <v-divider></v-divider>
       <v-col class="py-0">
         <bs-user-tabs
-          v-if="$mq === 'md' || $mq === 'lg'"
+          v-if="mdH && tabItems"
           :tabItems="tabItems"
         ></bs-user-tabs>
-        <bs-user-panels v-if="tabItems" :tabItems="tabItems"></bs-user-panels>
+        <bs-user-panels
+          v-else-if="tabItems"
+          :tabItems="tabItems"
+        ></bs-user-panels>
       </v-col>
     </v-container>
     <bs-loader v-if="loading"></bs-loader>
@@ -45,8 +48,19 @@ import UserProgress from "./UserProgress";
 import UserTabs from "./UserBookTabs";
 import UserPanels from "./UserBookPanels";
 import { ServiceFactory } from "../../services/serviceFactory";
+import mediaQueryLogic from "../../mixins/mediaQueryLogic";
 const userService = ServiceFactory.get("user");
+
 export default {
+  mixins: [mediaQueryLogic],
+  props: ["id"],
+  components: {
+    "bs-user-tabs": UserTabs,
+    "bs-user-panels": UserPanels,
+    "bs-progress": UserProgress,
+    "bs-loader": Preloader,
+  },
+
   data() {
     return {
       tab: 0,
@@ -57,21 +71,17 @@ export default {
         prevValue + +curValue.userData.pagesRead,
     };
   },
-  props: ["id"],
+
   computed: {
     user() {
       return this.$store.getters.getAuthUser;
     },
+
     pagesReadTotal() {
       return this.userBooks.reduce(this.countPages, 0);
     },
   },
-  components: {
-    "bs-user-tabs": UserTabs,
-    "bs-user-panels": UserPanels,
-    "bs-progress": UserProgress,
-    "bs-loader": Preloader,
-  },
+
   created() {
     this.loading = true;
     this.tabItems = null;
