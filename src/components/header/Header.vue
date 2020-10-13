@@ -8,10 +8,10 @@
         </v-btn>
       </v-col>
       <bs-xs-search v-if="xs"></bs-xs-search>
-      <v-col :cols="$mq | mq({ xs: '', lg: 4 })" v-if="user">
+      <v-col :cols="$mq | mq({ xs: '', lg: 4 })" v-if="user && !xs">
         <bs-search-bar @minimized="searchbarMinimized = true"></bs-search-bar>
       </v-col>
-      <v-spacer v-else></v-spacer>
+      <v-spacer v-if="lg"></v-spacer>
       <bs-content-links></bs-content-links>
       <v-col
         cols="auto"

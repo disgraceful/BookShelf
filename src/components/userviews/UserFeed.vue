@@ -1,6 +1,6 @@
 <template>
   <v-card flat>
-    <v-container v-if="records">
+    <v-container v-if="!noFeed">
       <v-card-title class="py-0">User Feed</v-card-title>
       <v-container
         :class="sm || xs ? 'py-2' : 'py-0'"
@@ -37,9 +37,9 @@
 <script>
 import moment from "moment";
 import UserRecord from "./UserRecord.vue";
+import mediaQuery from "../../mixins/mediaQueryLogic";
 import { ServiceFactory } from "../../services/serviceFactory";
 const feedService = ServiceFactory.get("feed");
-import mediaQuery from "../../mixins/mediaQueryLogic";
 
 export default {
   components: { "bs-user-record": UserRecord },
@@ -52,6 +52,13 @@ export default {
       showingMore: false,
       activeRecords: null,
     };
+  },
+
+  computed: {
+    noFeed() {
+      if (!this.records) return false;
+      return Object.keys(this.records).length === 0;
+    },
   },
   methods: {
     getDate(date) {
@@ -82,6 +89,7 @@ export default {
     this.loading = true;
     const response = await feedService.getUserFeed();
     this.records = response.body;
+    console.log(this.records);
     this.getFreshRecords();
     this.length = Object.keys(this.records).length;
     this.loading = false;

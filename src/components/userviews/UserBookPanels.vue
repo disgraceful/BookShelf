@@ -37,7 +37,6 @@
 </template>
 
 <script>
-import PanelContent from "./UserPanelContent";
 import HorizontalBook from "../bookviews/HorizontalBookView";
 export default {
   data() {

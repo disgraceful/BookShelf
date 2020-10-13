@@ -15,5 +15,8 @@ export default {
     mdH() {
       return this.$mq === "md" || this.$mq === "lg";
     },
+    smL() {
+      return this.$mq === "sm" || this.$mq === "xs";
+    },
   },
 };

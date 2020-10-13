@@ -30,10 +30,8 @@
 <script>
 import HorizontalBook from "../bookviews/HorizontalBookView";
 export default {
-  data() {
-    return {
-      tab: 0,
-    };
+  components: {
+    "bs-horizontal-book": HorizontalBook,
   },
   props: {
     tabItems: {
@@ -41,9 +39,13 @@ export default {
       required: true,
     },
   },
-  components: {
-    "bs-horizontal-book": HorizontalBook,
+
+  data() {
+    return {
+      tab: 0,
+    };
   },
+
   methods: {
     getBooks(tab) {
       return this.tabItems[tab].books;

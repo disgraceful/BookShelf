@@ -1,12 +1,12 @@
 <template>
   <v-card flat>
-    <v-container v-if="userBooks && tabItems">
+    <v-container v-if="tabItems && !error">
       <v-card-title class="py-0">{{ user.email }}</v-card-title>
-      <v-row :justify="xs ? 'start' : 'center'">
+      <v-row :justify="!xs ? 'start' : 'center'">
         <v-col cols="auto" class="pa-5">
           <bs-progress
             :progress="{
-              value: tabItems[3].books.length,
+              value: booksByStatus('finished').length,
               max: 20,
               text: 'Books finished',
               color: '#cc0000',
@@ -27,18 +27,19 @@
         </v-col>
       </v-row>
       <v-divider></v-divider>
-      <v-col class="py-0">
-        <bs-user-tabs
-          v-if="mdH && tabItems"
-          :tabItems="tabItems"
-        ></bs-user-tabs>
-        <bs-user-panels
-          v-else-if="tabItems"
-          :tabItems="tabItems"
-        ></bs-user-panels>
+      <v-col class="pa-0">
+        <v-card-text v-if="noBooks" class="text-h6 font-weight-regular"
+          >Looks like you have no books in your library. Use search to find what
+          you like!</v-card-text
+        >
+        <template v-else>
+          <bs-user-tabs v-if="mdH" :tabItems="tabItems"></bs-user-tabs>
+          <bs-user-panels v-else :tabItems="tabItems"></bs-user-panels>
+        </template>
       </v-col>
     </v-container>
     <bs-loader v-if="loading"></bs-loader>
+    <bs-error-page v-if="error"></bs-error-page>
   </v-card>
 </template>
 
@@ -47,8 +48,9 @@ import Preloader from "../shared/Preloader";
 import UserProgress from "./UserProgress";
 import UserTabs from "./UserBookTabs";
 import UserPanels from "./UserBookPanels";
-import { ServiceFactory } from "../../services/serviceFactory";
+import ErrorPage from "../shared/ErrorPage";
 import mediaQueryLogic from "../../mixins/mediaQueryLogic";
+import { ServiceFactory } from "../../services/serviceFactory";
 const userService = ServiceFactory.get("user");
 
 export default {
@@ -59,6 +61,7 @@ export default {
     "bs-user-panels": UserPanels,
     "bs-progress": UserProgress,
     "bs-loader": Preloader,
+    "bs-error-page": ErrorPage,
   },
 
   data() {
@@ -69,6 +72,7 @@ export default {
       userBooks: null,
       countPages: (prevValue, curValue) =>
         prevValue + +curValue.userData.pagesRead,
+      error: null,
     };
   },
 
@@ -80,9 +84,24 @@ export default {
     pagesReadTotal() {
       return this.userBooks.reduce(this.countPages, 0);
     },
+
+    noBooks() {
+      if (!this.userBooks) return false;
+      return this.userBooks.length < 1;
+    },
+  },
+
+  methods: {
+    booksByStatus(status) {
+      if (!this.userBooks) {
+        return [];
+      }
+      return this.userBooks.filter((book) => book.userData.status === status);
+    },
   },
 
   created() {
+    this.error = null;
     this.loading = true;
     this.tabItems = null;
     this.userBooks = null;
@@ -93,32 +112,27 @@ export default {
         this.tabItems = [
           {
             name: "Reading",
-            books: this.userBooks.filter(
-              (book) => book.userData.status === "reading"
-            ),
+            books: this.booksByStatus("reading"),
           },
           {
             name: "2Read",
-            books: this.userBooks.filter(
-              (book) => book.userData.status === "2read"
-            ),
+            books: this.booksByStatus("2read"),
           },
           {
             name: "Stopped",
-            books: this.userBooks.filter(
-              (book) => book.userData.status === "stopped"
-            ),
+            books: this.booksByStatus("stopped"),
           },
           {
             name: "Finished",
-            books: this.userBooks.filter(
-              (book) => book.userData.status === "finished"
-            ),
+            books: this.booksByStatus("finished"),
           },
         ];
         this.loading = false;
       })
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        console.error(error);
+        this.error = error;
+      });
   },
 };
 </script>
