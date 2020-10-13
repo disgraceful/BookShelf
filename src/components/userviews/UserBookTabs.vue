@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import HorizontalBook from "../bookviews/HorizontalBookView";
+import HorizontalBook from "../bookviews/HorizontalBook";
 export default {
   components: {
     "bs-horizontal-book": HorizontalBook,

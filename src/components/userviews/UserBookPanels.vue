@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import HorizontalBook from "../bookviews/HorizontalBookView";
+import HorizontalBook from "../bookviews/HorizontalBook";
 export default {
   data() {
     return {
