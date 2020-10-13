@@ -1,41 +1,39 @@
 <template>
   <v-card flat>
     <v-container v-if="!noFeed" class="py-0">
-      <v-card-title class="py-0" :class="mdH ? 'px-2' : ''"
+      <v-card-title v-if="mdH" class="py-0" :class="mdH ? 'px-2' : ''"
         >User Feed</v-card-title
       >
-      <v-container
-        :class="smL ? 'py-2' : 'py-0'"
-        class="px-0"
+      <v-row
+        :align="smL ? 'center' : 'baseline'"
+        :no-gutters="smL"
         v-for="(records, name) in activeRecords"
         :key="name"
       >
-        <v-row :align="smL ? 'center' : 'baseline'" :no-gutters="smL">
-          <v-col :cols="sm ? '12' : 'auto'" style="min-width: 180px">
-            <v-card-text
-              :class="mdH ? 'px-2' : ''"
-              class="py-1 text-h6 font-weight-regular"
-              >{{ getDate(name) }}</v-card-text
-            >
-          </v-col>
-          <v-col cols="auto" class="px-2">
-            <bs-user-record
-              v-for="(record, index) in records"
-              :key="index"
-              :record="record"
-            ></bs-user-record>
-          </v-col>
-        </v-row>
-        <v-divider></v-divider>
-      </v-container>
-      <v-row justify="end">
-        <v-col cols="auto" class="pr-6">
-          <a class="highlight" @click="toggleFeed()">{{
-            showingMore ? "Hide" : "Show all"
-          }}</a>
+        <v-col :cols="sm ? '12' : 'auto'" class="py-0" style="min-width: 180px">
+          <v-card-text
+            :class="mdH ? 'px-2' : ''"
+            class="py-0 text-h6 font-weight-regular"
+            >{{ getDate(name) }}</v-card-text
+          >
+        </v-col>
+        <v-col cols="auto" class="pa-2">
+          <bs-user-record
+            v-for="(record, index) in records"
+            :key="index"
+            :record="record"
+          ></bs-user-record>
         </v-col>
       </v-row>
+      <v-divider></v-divider>
     </v-container>
+    <v-row justify="end">
+      <v-col cols="auto" class="pr-6">
+        <a class="highlight" @click="toggleFeed()">{{
+          showingMore ? "Hide" : "Show all"
+        }}</a>
+      </v-col>
+    </v-row>
   </v-card>
 </template>
 
