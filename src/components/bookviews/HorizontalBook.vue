@@ -8,7 +8,7 @@
       <v-col cols="auto">
         <v-img :src="book.imageUrl" height="120" width="80"></v-img>
       </v-col>
-      <v-col cols="auto" class="pa-1" style="max-width: 220px">
+      <v-col cols="auto" class="pa-1" style="width: 220px">
         <v-card-text class="pa-1 subtitle-1">
           <bs-book-links :id="book.id">{{ shrinkedDescription }}</bs-book-links>
         </v-card-text>

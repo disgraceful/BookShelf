@@ -17,7 +17,7 @@
           >
         </v-col>
       </v-row>
-      <v-divider v-if="getBooks(tab).length > 0"></v-divider>
+      <v-divider></v-divider>
       <v-row v-for="(book, i) in getBooks(tab)" :key="book.id">
         <bs-horizontal-book :book="book">
           <v-divider v-if="i < getBooks(tab).length"></v-divider>

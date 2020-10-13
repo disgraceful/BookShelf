@@ -1,19 +1,24 @@
 <template>
   <v-card flat>
-    <v-container v-if="!noFeed">
-      <v-card-title class="py-0">User Feed</v-card-title>
+    <v-container v-if="!noFeed" class="py-0">
+      <v-card-title class="py-0" :class="mdH ? 'px-2' : ''"
+        >User Feed</v-card-title
+      >
       <v-container
-        :class="sm || xs ? 'py-2' : 'py-0'"
+        :class="smL ? 'py-2' : 'py-0'"
+        class="px-0"
         v-for="(records, name) in activeRecords"
         :key="name"
       >
-        <v-row :align="sm || xs ? 'center' : 'baseline'" :no-gutters="sm || xs">
+        <v-row :align="smL ? 'center' : 'baseline'" :no-gutters="smL">
           <v-col :cols="sm ? '12' : 'auto'" style="min-width: 180px">
-            <v-card-text class="py-1 text-h6 font-weight-regular">{{
-              getDate(name)
-            }}</v-card-text>
+            <v-card-text
+              :class="mdH ? 'px-2' : ''"
+              class="py-1 text-h6 font-weight-regular"
+              >{{ getDate(name) }}</v-card-text
+            >
           </v-col>
-          <v-col cols="auto">
+          <v-col cols="auto" class="px-2">
             <bs-user-record
               v-for="(record, index) in records"
               :key="index"

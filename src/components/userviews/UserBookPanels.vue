@@ -31,7 +31,7 @@
           </bs-horizontal-book>
         </v-col>
       </template>
-      <v-divider v-if="i < tabItems.length - 1"></v-divider>
+      <v-divider></v-divider>
     </v-container>
   </v-container>
 </template>
