@@ -25,10 +25,9 @@
       </v-hover>
 
       <template v-if="expanded === true && tab === i">
-        <v-col v-for="(book, i) in item.books" :key="book.id" class="pt-0">
-          <bs-horizontal-book :book="book">
-            <v-divider v-if="i < item.books.length - 1"></v-divider>
-          </bs-horizontal-book>
+        <v-col v-for="(book, i) in item.books" :key="book.id" class="py-0">
+          <bs-horizontal-book :book="book"> </bs-horizontal-book>
+          <v-divider v-if="i < item.books.length - 1"></v-divider>
         </v-col>
       </template>
       <v-divider></v-divider>

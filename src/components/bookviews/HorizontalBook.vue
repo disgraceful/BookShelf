@@ -1,9 +1,10 @@
 <template>
-  <v-container class="py-0">
+  <v-container :class="!mdH ? 'px-5' : 'pa-0'">
     <v-row
       align="center"
       :justify="smL ? 'center' : 'start'"
       :style="wrapperStyle"
+      :dense="smL"
     >
       <v-col cols="auto">
         <v-img :src="book.imageUrl" height="120" width="80"></v-img>
@@ -40,7 +41,6 @@
         <v-progress-linear :value="pagesProgress"></v-progress-linear>
       </v-col>
     </v-row>
-    <slot></slot>
   </v-container>
 </template>
 

@@ -1,6 +1,6 @@
 <template>
-  <v-card flat>
-    <v-container v-if="!noFeed" class="py-0">
+  <v-card flat v-if="!noFeed">
+    <v-container class="py-0">
       <v-card-title v-if="mdH" class="py-0" :class="mdH ? 'px-2' : ''"
         >User Feed</v-card-title
       >
@@ -26,14 +26,14 @@
         </v-col>
       </v-row>
       <v-divider></v-divider>
+      <v-row justify="end">
+        <v-col cols="auto" class="">
+          <a class="highlight" @click="toggleFeed()">{{
+            showingMore ? "Hide" : "Show all"
+          }}</a>
+        </v-col>
+      </v-row>
     </v-container>
-    <v-row justify="end">
-      <v-col cols="auto" class="pr-6">
-        <a class="highlight" @click="toggleFeed()">{{
-          showingMore ? "Hide" : "Show all"
-        }}</a>
-      </v-col>
-    </v-row>
   </v-card>
 </template>
 
@@ -88,14 +88,20 @@ export default {
         .forEach((key) => (this.activeRecords[key] = this.records[key]));
     },
   },
-  async created() {
+  created() {
     this.loading = true;
-    const response = await feedService.getUserFeed();
-    this.records = response.body;
-    console.log(this.records);
-    this.getFreshRecords();
-    this.length = Object.keys(this.records).length;
-    this.loading = false;
+    feedService
+      .getUserFeed()
+      .then((response) => {
+        this.records = response.body;
+        this.getFreshRecords();
+        this.length = Object.keys(this.records).length;
+        this.loading = false;
+      })
+      .catch((error) => {
+        this.$emit("error", error);
+        this.loading = false;
+      });
   },
 };
 </script>

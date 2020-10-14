@@ -1,22 +1,35 @@
 <template>
   <v-card flat>
-    <v-container class="page-container">
-      <bs-user-page></bs-user-page>
-      <bs-user-feed></bs-user-feed>
+    <bs-error-page v-if="error" :error="error"></bs-error-page>
+    <v-container class="page-container" v-else>
+      <bs-user-page @error="handleError(event)"></bs-user-page>
+      <bs-user-feed @error="handleError(event)"></bs-user-feed>
     </v-container>
   </v-card>
 </template>
 
 <script>
+import ErrorPage from "./shared/ErrorPage";
 import UserPage from "./userviews/UserPage";
 import UserFeed from "./userviews/UserFeed";
+
 export default {
-  data() {
-    return {};
-  },
   components: {
     "bs-user-page": UserPage,
     "bs-user-feed": UserFeed,
+    "bs-error-page": ErrorPage,
+  },
+
+  data() {
+    return {
+      error: null,
+    };
+  },
+  methods: {
+    handleError(error) {
+      console.log(error);
+      this.error = error.body;
+    },
   },
 };
 </script>

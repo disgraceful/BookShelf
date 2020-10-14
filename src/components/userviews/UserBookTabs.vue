@@ -18,11 +18,11 @@
         </v-col>
       </v-row>
       <v-divider></v-divider>
-      <v-row v-for="(book, i) in getBooks(tab)" :key="book.id">
-        <bs-horizontal-book :book="book">
-          <v-divider v-if="i < getBooks(tab).length"></v-divider>
-        </bs-horizontal-book>
-      </v-row>
+      <v-col v-for="(book, i) in getBooks(tab)" :key="book.id" class="py-0">
+        <bs-horizontal-book :book="book"> </bs-horizontal-book>
+        <v-divider v-if="i < getBooks(tab).length - 1"></v-divider>
+      </v-col>
+      <v-divider v-if="getBooks(tab).length > 0"></v-divider>
     </v-tabs-items>
   </v-tabs>
 </template>
@@ -50,20 +50,22 @@ export default {
     getBooks(tab) {
       return this.tabItems[tab].books;
     },
+
     pagesRead(tab) {
       return this.tabItems[tab].books.reduce(
         (prevValue, curValue) => prevValue + +curValue.userData.pagesRead,
         0
       );
     },
+
     getTabPos() {
       const pos = this.tabItems.findIndex((item) => item.books.length > 0);
       return pos > 0 ? pos : 0;
     },
   },
+
   mounted() {
     this.tab = this.getTabPos();
-    console.log(this.tabItems);
   },
 };
 </script>

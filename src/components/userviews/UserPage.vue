@@ -1,6 +1,6 @@
 <template>
   <v-card flat>
-    <v-container v-if="tabItems && !error">
+    <v-container v-if="tabItems">
       <v-card-title class="py-0">{{ user.email }}</v-card-title>
       <v-row :justify="!xs ? 'start' : 'center'">
         <v-col cols="auto" class="pa-5">
@@ -39,7 +39,6 @@
       </v-col>
     </v-container>
     <bs-loader v-if="loading"></bs-loader>
-    <bs-error-page v-if="error"></bs-error-page>
   </v-card>
 </template>
 
@@ -48,7 +47,6 @@ import Preloader from "../shared/Preloader";
 import UserProgress from "./UserProgress";
 import UserTabs from "./UserBookTabs";
 import UserPanels from "./UserBookPanels";
-import ErrorPage from "../shared/ErrorPage";
 import mediaQueryLogic from "../../mixins/mediaQueryLogic";
 import { ServiceFactory } from "../../services/serviceFactory";
 const userService = ServiceFactory.get("user");
@@ -61,7 +59,6 @@ export default {
     "bs-user-panels": UserPanels,
     "bs-progress": UserProgress,
     "bs-loader": Preloader,
-    "bs-error-page": ErrorPage,
   },
 
   data() {
@@ -72,7 +69,6 @@ export default {
       userBooks: null,
       countPages: (prevValue, curValue) =>
         prevValue + +curValue.userData.pagesRead,
-      error: null,
     };
   },
 
@@ -131,7 +127,7 @@ export default {
       })
       .catch((error) => {
         console.error(error);
-        this.error = error;
+        this.$$emit("error", error);
       });
   },
 };

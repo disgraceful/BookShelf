@@ -38,6 +38,7 @@
       </v-row>
     </v-container>
     <bs-loader v-else></bs-loader>
+    <bs-error-page v-if="error" :error="error"></bs-error-page>
   </v-card>
 </template>
 
@@ -48,11 +49,13 @@ import { ServiceFactory } from "../../services/serviceFactory";
 const userService = ServiceFactory.get("user");
 import mediaQuery from "../../mixins/mediaQueryLogic";
 import genresForChart from "../../mixins/genresForChart";
+import ErrorPage from "../shared/ErrorPage";
 export default {
   mixins: [mediaQuery, genresForChart],
   components: {
     "bs-genre-chart": PieChart,
     "bs-loader": Loader,
+    "bs-error-page": ErrorPage,
   },
 
   data() {
@@ -61,6 +64,7 @@ export default {
       chartOptions: null,
       books: null,
       loading: false,
+      error: null,
     };
   },
 
@@ -111,17 +115,16 @@ export default {
       .then((chart) => {
         this.chartData = chart.chartData;
         this.chartOptions = chart.options;
-        console.log(chart);
         return userService.getAllUserBooks();
       })
       .then((response) => {
-        console.log(response);
         this.books = response.body;
         this.loading = false;
       })
       .catch((error) => {
         console.log(error);
-        //handle error
+        this.error = error;
+        this.loading = false;
       });
   },
 };
