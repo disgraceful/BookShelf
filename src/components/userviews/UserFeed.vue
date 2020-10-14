@@ -4,27 +4,29 @@
       <v-card-title v-if="mdH" class="py-0" :class="mdH ? 'px-2' : ''"
         >User Feed</v-card-title
       >
-      <v-row
-        :align="smL ? 'center' : 'baseline'"
-        :no-gutters="smL"
-        v-for="(records, name) in activeRecords"
-        :key="name"
-      >
-        <v-col :cols="sm ? '12' : 'auto'" class="py-0" style="min-width: 180px">
-          <v-card-text
-            :class="mdH ? 'px-2' : ''"
-            class="py-0 text-h6 font-weight-regular"
-            >{{ getDate(name) }}</v-card-text
+      <v-col v-for="(records, name, i) in activeRecords" :key="name">
+        <v-row :align="smL ? 'center' : 'baseline'" :no-gutters="smL">
+          <v-col
+            :cols="sm ? '12' : 'auto'"
+            class="py-0"
+            style="min-width: 180px"
           >
-        </v-col>
-        <v-col cols="auto" class="pa-2">
-          <bs-user-record
-            v-for="(record, index) in records"
-            :key="index"
-            :record="record"
-          ></bs-user-record>
-        </v-col>
-      </v-row>
+            <v-card-text
+              :class="mdH ? 'px-2' : ''"
+              class="py-0 text-h6 font-weight-regular"
+              >{{ getDate(name) }}</v-card-text
+            >
+          </v-col>
+          <v-col cols="auto" class="pa-2">
+            <bs-user-record
+              v-for="(record, index) in records"
+              :key="index"
+              :record="record"
+            ></bs-user-record>
+          </v-col>
+        </v-row>
+        <v-divider v-if="i < feedLength - 1"></v-divider>
+      </v-col>
       <v-divider></v-divider>
       <v-row justify="end">
         <v-col cols="auto" class="">
@@ -61,6 +63,10 @@ export default {
     noFeed() {
       if (!this.records) return false;
       return Object.keys(this.records).length === 0;
+    },
+
+    feedLength() {
+      return this.activeRecords ? Object.keys(this.activeRecords).length : 0;
     },
   },
   methods: {
