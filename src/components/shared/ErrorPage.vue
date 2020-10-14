@@ -16,6 +16,6 @@
 
 <script>
 export default {
-  props: { error: Object }
+  props: ["error"],
 };
 </script>
