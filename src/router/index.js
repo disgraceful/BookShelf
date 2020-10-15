@@ -46,7 +46,7 @@ const routes = [
     component: Login,
   },
   {
-    path: "/book/:id",
+    path: "/book/:id/:search?",
     name: "book",
     props: true,
     component: BookPage,

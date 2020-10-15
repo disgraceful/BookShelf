@@ -168,7 +168,7 @@ export default {
 
   watch: {
     $route(to, from) {
-      if (to.path.includes("/book") || to.path === from.path) {
+      if (to.params.id !== to.params.id || to.params.search) {
         this.getBook();
       }
     },
