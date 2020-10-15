@@ -4,7 +4,11 @@
       <v-card-title v-if="mdH" class="py-0" :class="mdH ? 'px-2' : ''"
         >User Feed</v-card-title
       >
-      <v-col v-for="(records, name, i) in activeRecords" :key="name">
+      <v-col
+        v-for="(records, name, i) in activeRecords"
+        :key="name"
+        class="py-1"
+      >
         <v-row :align="smL ? 'center' : 'baseline'" :no-gutters="smL">
           <v-col
             :cols="sm ? '12' : 'auto'"
@@ -29,7 +33,7 @@
       </v-col>
       <v-divider></v-divider>
       <v-row justify="end">
-        <v-col cols="auto" class="">
+        <v-col cols="auto">
           <a class="highlight" @click="toggleFeed()">{{
             showingMore ? "Hide" : "Show all"
           }}</a>

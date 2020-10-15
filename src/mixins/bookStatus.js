@@ -36,7 +36,6 @@ export default {
     },
 
     handleCollection(status) {
-      console.log(status, this.book.userData.status);
       if (this.book.userData.status === status) return;
       const statusHandler = this.getStatusHandler(status);
       if (!statusHandler) return;
@@ -55,8 +54,7 @@ export default {
     },
 
     async addToUserCollection(status) {
-      if (!this.isLegitStatus(status) || this.book.userData.status === status)
-        return;
+      if (!this.isLegitStatus(status) || this.book.userData.status === status) return;
       try {
         const result = await userService.addToUserCollection(this.book, status);
         console.log(result);

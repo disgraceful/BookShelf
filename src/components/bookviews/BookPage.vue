@@ -1,24 +1,35 @@
 <template>
   <v-card flat>
     <v-container v-if="book && !error" class="pa-6 page-container">
-      <v-row dense :justify="$mq === 'xs' ? 'center' : 'space-around'">
-        <v-col :cols="$mq | mq({ xs: '2', sm: 3 })" style="min-width:240px">
+      <v-row dense :justify="xs ? 'center' : 'space-around'">
+        <v-col :cols="$mq | mq({ xs: 2, sm: 3 })" style="min-width: 240px">
           <v-col>
-            <div style="position:relative">
+            <div style="position: relative">
               <v-img :src="book.imageUrl || defaultImg" content></v-img>
               <v-tooltip bottom content-class="tooltip">
                 <template v-slot:activator="{ on }">
-                  <v-btn fab small absolute top right v-on="on" color="white" @click="favorite">
+                  <v-btn
+                    fab
+                    small
+                    absolute
+                    top
+                    right
+                    v-on="on"
+                    color="white"
+                    @click="favorite"
+                  >
                     <v-icon :color="book.userData.isFavorited ? 'red' : 'grey'">
                       {{
-                      book.userData.isFavorited
-                      ? "mdi-heart"
-                      : "mdi-heart-outline"
+                        book.userData.isFavorited
+                          ? "mdi-heart"
+                          : "mdi-heart-outline"
                       }}
                     </v-icon>
                   </v-btn>
                 </template>
-                <span v-text="book.userData.isFavorited ? 'Unfavorite' : 'Favorite'"></span>
+                <span
+                  v-text="book.userData.isFavorited ? 'Unfavorite' : 'Favorite'"
+                ></span>
               </v-tooltip>
             </div>
           </v-col>
@@ -26,12 +37,17 @@
             class="py-0"
             v-if="
               book.userData.status !== 'not reading' &&
-                book.userData.status !== '2read'
+              book.userData.status !== '2read'
             "
           >
-            <v-rating v-model="book.userData.rating" hover medium @input="update"></v-rating>
+            <v-rating
+              v-model="book.userData.rating"
+              hover
+              medium
+              @input="update"
+            ></v-rating>
           </v-col>
-          <v-col class="pb-0" v-if="$mq === 'sm' || $mq === 'xs'">
+          <v-col class="pb-0" v-if="!mdH">
             <v-select
               background-color="teal"
               dark
@@ -41,33 +57,48 @@
               item-value="status"
               :menu-props="{ offsetY: true }"
               solo
-              @input="handleCollection(book.userData.statusTemp)"
+              @input="handleCollection(statusTemp)"
             ></v-select>
           </v-col>
         </v-col>
         <v-col :cols="$mq | mq({ xs: 'auto', sm: '', md: 8, lg: 9 })">
           <bs-book-info :book="book"></bs-book-info>
-          <v-divider v-if="$mq !== 'sm' && $mq !== 'xs'"></v-divider>
-          <v-toolbar flat dense v-if="$mq !== 'sm' && $mq !== 'xs'">
+          <v-divider v-if="mdH"></v-divider>
+          <v-toolbar flat dense v-if="mdH">
             <v-toolbar-items>
               <template v-for="(item, index) in avaliableStatus">
                 <v-btn
                   text
                   :key="item.status"
-                  :class="[
+                  :class="
                     item.status === book.userData.status ? activeClass : ''
-                  ]"
+                  "
                   @click="handleCollection(item.status)"
-                >{{ item.text }}</v-btn>
-                <v-divider vertical :key="index" v-if="index < avaliableStatus.length - 1"></v-divider>
+                  >{{ item.text }}</v-btn
+                >
+                <v-divider
+                  vertical
+                  :key="index"
+                  v-if="index < avaliableStatus.length - 1"
+                ></v-divider>
               </template>
             </v-toolbar-items>
           </v-toolbar>
-          <v-dialog v-model="finishDialog" max-width="600">
-            <bs-finish-dialog :book="book" @posted="finishBook"></bs-finish-dialog>
-          </v-dialog>
-          <v-row class="pt-10" v-if="book.userData.status === 'reading'">
-            <v-col>
+
+          <bs-finish-dialog
+            :dialog="finishDialog"
+            @input="finishDialog = $event"
+            :book="book"
+            @posted="finishBook"
+          ></bs-finish-dialog>
+
+          <v-row
+            class="pt-10"
+            v-if="book.userData.status === 'reading'"
+            :justify="mdH ? 'start' : 'center'"
+            :no-gutters="!mdH"
+          >
+            <v-col :cols="mdH ? '' : 12">
               <v-slider
                 label="I'm on page: "
                 min="0"
@@ -78,7 +109,9 @@
               ></v-slider>
             </v-col>
             <v-col cols="auto">
-              <v-btn depressed color="teal" class="white--text" @click="update">Update progress</v-btn>
+              <v-btn depressed color="teal" class="white--text" @click="update"
+                >Update progress</v-btn
+              >
             </v-col>
           </v-row>
         </v-col>
@@ -90,7 +123,7 @@
       </v-row>
     </v-container>
     <bs-loader v-if="loading && !error"></bs-loader>
-    <component v-if="error" :is="errorComponent" :error="error"></component>
+    <bs-error-page v-if="error" :error="error"></bs-error-page>
   </v-card>
 </template>
 
@@ -103,54 +136,62 @@ import UserBookActivity from "./UserBookActivity";
 import { ServiceFactory } from "../../services/serviceFactory";
 import bookStatus from "../../mixins/bookStatus";
 import bookLogic from "../../mixins/bookLogic";
+import mediaQuery from "../../mixins/mediaQueryLogic";
 const bookService = ServiceFactory.get("book");
 const uploadService = ServiceFactory.get("upload");
+const userService = ServiceFactory.get("user");
 
 export default {
   props: {
     id: String,
   },
-  mixins: [bookStatus, bookLogic],
+  mixins: [bookStatus, bookLogic, mediaQuery],
   components: {
     "bs-loader": Preloader,
-    "bs-error": ErrorPage,
+    "bs-error-page": ErrorPage,
     "bs-finish-dialog": FinishBookDialog,
     "bs-book-info": BookInfo,
     "bs-book-activity": UserBookActivity,
   },
+
   data() {
     return {
       book: null,
       statusTemp: null,
-      defaultImg: "../../assets/goodreads.png",
+      defaultImg: require("../../assets/goodreads.png"),
       activeClass: "active",
       loading: true,
-      error: false,
+      error: null,
       finishDialog: false,
     };
   },
 
   watch: {
     $route(to, from) {
+      //need to check what the fuck is this doing
       if (to.path.includes("/book") || to.path === from.path) {
         this.getBook();
       }
     },
   },
 
-  computed: {
-    errorComponent() {
-      return this.error ? "bs-error" : "";
-    },
-  },
-
   methods: {
-    async favorite() {
-      await this.favoriteBook();
+    favorite() {
+      userService
+        .setFavorite(this.book)
+        .then((response) => {
+          this.book.userData.isFavorited = response.body.userData.isFavorited;
+        })
+        .catch((error) => {
+          this.error = error.body;
+        });
     },
-    async update() {
-      console.log(this);
-      await this.updateBook();
+
+    update() {
+      userService.updateBook(this.book).catch((error) => {
+        console.log(error);
+        this.error = error.body;
+      });
     },
 
     async getBook() {
@@ -158,7 +199,6 @@ export default {
         this.book = null;
         this.loading = true;
         let response;
-        console.log(this.$props);
         if (isNaN(this.id)) {
           response = await uploadService.getPrivateBookById(this.id);
         } else {

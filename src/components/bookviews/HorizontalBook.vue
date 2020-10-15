@@ -71,7 +71,7 @@ export default {
 
     pagesStyle() {
       return {
-        flexBasis: this.pagesProgress > 37 ? `${this.pagesProgress}%` : "",
+        flexBasis: this.pagesProgress > 50 ? `${this.pagesProgress}%` : "",
       };
     },
 
