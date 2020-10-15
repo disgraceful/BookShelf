@@ -28,10 +28,7 @@
       class="pb-0 pt-1 text-subtitle-1"
       v-text="`Pages: ${book.pages}`"
     ></v-card-text>
-    <v-card-text
-      v-if="book.genres || book.genres.length < 1"
-      class="pb-0 pt-1 text-subtitle-1"
-    >
+    <v-card-text v-if="book.genres" class="pb-0 pt-1 text-subtitle-1">
       <span v-text="'Genres: '"></span>
       <span
         v-for="(genre, i) in book.genres"

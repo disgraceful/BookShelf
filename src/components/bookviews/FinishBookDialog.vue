@@ -2,7 +2,7 @@
   <v-dialog
     max-width="600"
     :value="dialog"
-    @input="inp($event)"
+    @input="$emit('input', $event)"
     @click:outside="reset()"
   >
     <v-card>
@@ -25,28 +25,16 @@
           <v-row class="px-3 pt-2">
             <v-col cols="auto" class="text-subtitle-1"> My rating: </v-col>
             <v-col cols="auto" class="pr-0 pl-0">
-              <v-hover v-slot:default="{ hover }" v-for="i in 5" :key="i">
-                <v-tooltip bottom color="#757575">
-                  <template v-slot:activator="{ on }">
-                    <v-icon
-                      color="primary"
-                      class="pl-1"
-                      v-on="on"
-                      @mouseover="hoverMe(i)"
-                      @mouseleave="unhoverMe"
-                      @click="clickMe"
-                    >
-                      {{
-                        hover || hovered >= i ? "mdi-star" : "mdi-star-outline"
-                      }}
-                    </v-icon>
-                  </template>
-                  <span>{{ ratingValues[i - 1] }}</span>
-                </v-tooltip>
-              </v-hover>
+              <bs-hover-rating
+                :rating="rating"
+                :values="ratingValues"
+                :cleared="cleared"
+                @input="rating = $event"
+                ref="rating"
+              ></bs-hover-rating>
             </v-col>
             <v-col class="pa-2">
-              <v-btn text @click="clear">Clear</v-btn>
+              <v-btn text @click="cleared = true">Clear</v-btn>
             </v-col>
           </v-row>
           <v-card-text class="text-subtitle-1 font-weight-regular px-3 py-2">
@@ -129,6 +117,7 @@
 
 <script>
 import moment from "moment";
+import HoverRating from "../shared/HoverRating";
 export default {
   props: {
     book: {
@@ -136,6 +125,10 @@ export default {
       required: true,
     },
     dialog: Boolean,
+  },
+
+  components: {
+    "bs-hover-rating": HoverRating,
   },
 
   data() {
@@ -154,9 +147,8 @@ export default {
         "Great book",
       ],
       dateRules: () => this.endDate >= this.startDate || "Enter correct date",
-      hovered: 0,
-      clicked: false,
       rating: 0,
+      cleared: false,
     };
   },
 
@@ -167,34 +159,8 @@ export default {
   },
 
   methods: {
-    inp(event) {
-      this.$emit("input", event);
-    },
-
     formatDate(date) {
       return date ? moment(date).format("MMMM Do YYYY") : "";
-    },
-
-    hoverMe(i) {
-      this.hovered = i;
-    },
-
-    unhoverMe() {
-      if (this.clicked) {
-        this.hovered = this.rating || 0;
-      } else {
-        this.hovered = 0;
-      }
-    },
-
-    clickMe() {
-      this.clicked = true;
-      this.rating = this.hovered;
-    },
-
-    clear() {
-      this.hovered = 0;
-      this.clicked = false;
     },
 
     post() {
@@ -210,8 +176,7 @@ export default {
 
     reset() {
       this.rating = this.book.userData.rating;
-      this.hovered = this.rating;
-      this.clicked = this.book.userData.rating > 0;
+      this.cleared = false;
       this.notes = "";
     },
   },

@@ -87,8 +87,8 @@
 
           <bs-finish-dialog
             :dialog="finishDialog"
-            @input="finishDialog = $event"
             :book="book"
+            @input="finishDialog = $event"
             @posted="finishBook"
           ></bs-finish-dialog>
 

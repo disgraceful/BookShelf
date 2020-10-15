@@ -57,7 +57,6 @@ export default {
       if (!this.isLegitStatus(status) || this.book.userData.status === status) return;
       try {
         const result = await userService.addToUserCollection(this.book, status);
-        console.log(result);
         this.book.userData.status = result.body.userData.status;
       } catch (error) {
         console.log(error);
