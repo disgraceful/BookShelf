@@ -33,8 +33,16 @@
           you like!</v-card-text
         >
         <template v-else>
-          <bs-user-tabs v-if="mdH" :tabItems="tabItems"></bs-user-tabs>
-          <bs-user-panels v-else :tabItems="tabItems"></bs-user-panels>
+          <bs-user-tabs
+            v-if="mdH"
+            :tabItems="tabItems"
+            @error="handleError(event)"
+          ></bs-user-tabs>
+          <bs-user-panels
+            v-else
+            :tabItems="tabItems"
+            @error="handleError(event)"
+          ></bs-user-panels>
         </template>
       </v-col>
     </v-container>
@@ -94,6 +102,10 @@ export default {
       }
       return this.userBooks.filter((book) => book.userData.status === status);
     },
+
+    handleError(error) {
+      this.$emit("error", error);
+    },
   },
 
   created() {
@@ -127,7 +139,7 @@ export default {
       })
       .catch((error) => {
         console.error(error);
-        this.$$emit("error", error);
+        this.$$emit("error", error.body);
       });
   },
 };

@@ -4,17 +4,7 @@ const userService = ServiceFactory.get("user");
 export default {
   methods: {
     favoriteBook(book) {
-      return userService.setFavorite(book);
-      // try {
-      //   const response = await userService.setFavorite(this.book);
-      //   console.log(response);
-      //   if (response) {
-      //     this.book.userData.isFavorited = response.body.userData.isFavorited;
-      //   }
-      // } catch (error) {
-      //   console.log(error);
-      //   this.error = error.body;
-      // }
+      return userService.setFavorite(book); // DONT NEED
     },
 
     async updateBook() {

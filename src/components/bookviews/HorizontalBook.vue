@@ -47,9 +47,10 @@
 <script>
 import AuthorLinksHelper from "../author/AuthorLinksHelper";
 import BookLinksHelper from "./BookLinkHelper";
-import bookLogic from "../../mixins/bookLogic";
 import shrinkDesc from "../../mixins/shrinkDescription";
 import mediaQuery from "../../mixins/mediaQueryLogic";
+import { ServiceFactory } from "../../services/serviceFactory";
+const userService = ServiceFactory.get("user");
 export default {
   props: {
     book: {
@@ -57,7 +58,7 @@ export default {
       required: true,
     },
   },
-  mixins: [bookLogic, shrinkDesc, mediaQuery],
+  mixins: [shrinkDesc, mediaQuery],
   components: {
     "bs-author-links": AuthorLinksHelper,
     "bs-book-links": BookLinksHelper,
@@ -83,7 +84,10 @@ export default {
 
   methods: {
     update() {
-      this.updateBook();
+      userService.updateBook(this.book).catch((error) => {
+        console.log(error);
+        this.$emit("error", error.body);
+      });
     },
   },
 

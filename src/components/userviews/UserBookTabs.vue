@@ -19,7 +19,8 @@
       </v-row>
       <v-divider></v-divider>
       <v-col v-for="(book, i) in getBooks(tab)" :key="book.id" class="py-0">
-        <bs-horizontal-book :book="book"> </bs-horizontal-book>
+        <bs-horizontal-book :book="book" @error="handleError(event)">
+        </bs-horizontal-book>
         <v-divider v-if="i < getBooks(tab).length - 1"></v-divider>
       </v-col>
       <v-divider v-if="getBooks(tab).length > 0"></v-divider>
@@ -61,6 +62,10 @@ export default {
     getTabPos() {
       const pos = this.tabItems.findIndex((item) => item.books.length > 0);
       return pos > 0 ? pos : 0;
+    },
+
+    handleError(error) {
+      this.$emit("error", error);
     },
   },
 

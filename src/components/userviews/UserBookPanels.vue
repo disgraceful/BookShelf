@@ -26,7 +26,8 @@
 
       <template v-if="expanded === true && tab === i">
         <v-col v-for="(book, i) in item.books" :key="book.id" class="py-0">
-          <bs-horizontal-book :book="book"> </bs-horizontal-book>
+          <bs-horizontal-book :book="book" @error="handleError(event)">
+          </bs-horizontal-book>
           <v-divider v-if="i < item.books.length - 1"></v-divider>
         </v-col>
       </template>
@@ -60,6 +61,10 @@ export default {
     expand(tab) {
       this.tab = tab;
       this.expanded = !this.expanded;
+    },
+
+    handleError(error) {
+      this.$emit("error", error);
     },
   },
 };
