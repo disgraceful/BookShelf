@@ -17,7 +17,7 @@ export default {
     };
   },
   methods: {
-    async getChartData(token) {
+    async getChartData() {
       const response = await userService.getUserGenres();
       const genres = response.body;
       const sorted = Object.keys(genres).sort(function(a, b) {

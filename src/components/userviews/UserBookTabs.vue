@@ -17,23 +17,22 @@
           >
         </v-col>
       </v-row>
-      <v-divider v-if="getBooks(tab).length > 0"></v-divider>
-      <v-row v-for="(book, i) in getBooks(tab)" :key="book.id">
-        <bs-horizontal-book :book="book">
-          <v-divider v-if="i < getBooks(tab).length"></v-divider>
+      <v-divider></v-divider>
+      <v-col v-for="(book, i) in getBooks(tab)" :key="book.id" class="py-0">
+        <bs-horizontal-book :book="book" @error="handleError(event)">
         </bs-horizontal-book>
-      </v-row>
+        <v-divider v-if="i < getBooks(tab).length - 1"></v-divider>
+      </v-col>
+      <v-divider v-if="getBooks(tab).length > 0"></v-divider>
     </v-tabs-items>
   </v-tabs>
 </template>
 
 <script>
-import HorizontalBook from "../bookviews/HorizontalBookView";
+import HorizontalBook from "../bookviews/HorizontalBook";
 export default {
-  data() {
-    return {
-      tab: 0,
-    };
+  components: {
+    "bs-horizontal-book": HorizontalBook,
   },
   props: {
     tabItems: {
@@ -41,27 +40,37 @@ export default {
       required: true,
     },
   },
-  components: {
-    "bs-horizontal-book": HorizontalBook,
+
+  data() {
+    return {
+      tab: 0,
+    };
   },
+
   methods: {
     getBooks(tab) {
       return this.tabItems[tab].books;
     },
+
     pagesRead(tab) {
       return this.tabItems[tab].books.reduce(
         (prevValue, curValue) => prevValue + +curValue.userData.pagesRead,
         0
       );
     },
+
     getTabPos() {
       const pos = this.tabItems.findIndex((item) => item.books.length > 0);
       return pos > 0 ? pos : 0;
     },
+
+    handleError(error) {
+      this.$emit("error", error);
+    },
   },
+
   mounted() {
     this.tab = this.getTabPos();
-    console.log(this.tabItems);
   },
 };
 </script>

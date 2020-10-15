@@ -1,10 +1,7 @@
 <template>
-  <bs-auth loginInfo="SignUp" :onSubmit="signUp">
+  <bs-auth loginInfo="Sign up" :onSubmit="signUp">
     <template v-slot:title>
-      <v-card-title>Create new Account </v-card-title>
-    </template>
-    <template v-slot:text>
-      <v-card-text class="body-1 pb-1">Sign up with:</v-card-text>
+      <v-card-title class="pb-0">Create new account </v-card-title>
     </template>
   </bs-auth>
 </template>

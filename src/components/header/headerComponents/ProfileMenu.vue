@@ -1,7 +1,7 @@
 <template>
   <v-menu v-model="menuActive" offset-y>
     <template v-slot:activator="{ on }">
-      <v-btn text v-on="on" v-if="lgScreen">
+      <v-btn text v-on="on" v-if="lg">
         <v-icon left> mdi-account</v-icon>
         {{ username }}
         <v-icon
@@ -29,6 +29,6 @@
 import headerLogic from "../../../mixins/headerLogic";
 import mediaQueryLogic from "../../../mixins/mediaQueryLogic";
 export default {
-  mixins: [headerLogic, mediaQueryLogic]
+  mixins: [headerLogic, mediaQueryLogic],
 };
 </script>

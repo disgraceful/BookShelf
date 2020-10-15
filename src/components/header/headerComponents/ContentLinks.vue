@@ -1,5 +1,5 @@
 <template>
-  <v-toolbar-items v-if="!userIsAuthenticated || lgScreen || mdScreen">
+  <v-toolbar-items v-if="!user || lg || md">
     <div
       class="link-wrapper"
       v-for="(link, index) in headerLinks"
@@ -31,7 +31,7 @@
 import headerLogic from "../../../mixins/headerLogic";
 import mediaQueryLogic from "../../../mixins/mediaQueryLogic";
 export default {
-  mixins: [headerLogic, mediaQueryLogic]
+  mixins: [headerLogic, mediaQueryLogic],
 };
 </script>
 

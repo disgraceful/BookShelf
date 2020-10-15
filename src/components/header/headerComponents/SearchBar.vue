@@ -12,7 +12,12 @@
         @focus="visibleResults = true"
       >
         <template v-slot:append>
-          <v-progress-circular v-if="loading" size="24" color="white" indeterminate></v-progress-circular>
+          <v-progress-circular
+            v-if="loading"
+            size="24"
+            color="white"
+            indeterminate
+          ></v-progress-circular>
           <v-icon v-else @click="minimize">mdi-magnify</v-icon>
         </template>
       </v-text-field>
@@ -27,13 +32,23 @@
           <v-divider></v-divider>
         </template>
         <template v-else v-for="(item, index) in searchResults">
-          <v-list-item :key="item.title" :to="{ name: 'book', params: { id: item.id } }">
+          <v-list-item
+            :key="item.title"
+            :to="{
+              name: 'book',
+              params: { id: item.id, search: 'true' },
+            }"
+          >
             <v-list-item-avatar tile height="56px" width="46px">
               <v-img :src="item.imageUrl"></v-img>
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title>{{ item.title }} {{ item.series }}</v-list-item-title>
-              <v-list-item-subtitle v-text="`by ${item.author}`"></v-list-item-subtitle>
+              <v-list-item-title
+                >{{ item.title }} {{ item.series }}</v-list-item-title
+              >
+              <v-list-item-subtitle
+                v-text="`by ${item.author}`"
+              ></v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
           <v-divider :key="index"></v-divider>
@@ -53,7 +68,7 @@ import {
   map,
   flatMap,
   takeUntil,
-  catchError
+  catchError,
 } from "rxjs/operators";
 const bookService = ServiceFactory.get("book");
 
@@ -65,19 +80,19 @@ export default {
       loading: false,
       destroyed$: new Subject(),
       visibleResults: true,
-      error: null
+      error: null,
     };
   },
   computed: {
     searchActive() {
       return this.searchResults.length > 0 && this.searchQuery.length > 0;
-    }
+    },
   },
   watch: {
     $route() {
       this.searchQuery = "";
       this.searchResults = [];
-    }
+    },
   },
   methods: {
     clearSearch() {
@@ -85,7 +100,7 @@ export default {
     },
     minimize() {
       this.$emit("minimized");
-    }
+    },
   },
   directives: { ClickOutside },
   mounted() {
@@ -95,8 +110,8 @@ export default {
         takeUntil(this.destroyed$),
         debounceTime(500),
         distinctUntilChanged(),
-        map(input => input.target.value),
-        flatMap(text => {
+        map((input) => input.target.value),
+        flatMap((text) => {
           if (text) {
             this.loading = true;
             this.error = null;
@@ -112,7 +127,7 @@ export default {
           return curThread;
         })
       )
-      .subscribe(response => {
+      .subscribe((response) => {
         this.loading = false;
         if (response.body && response.body.length > 0) {
           this.searchResults = response.body.slice(0, 4);
@@ -124,7 +139,7 @@ export default {
   beforeDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
-  }
+  },
 };
 </script>
 

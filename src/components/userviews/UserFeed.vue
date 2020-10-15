@@ -1,28 +1,42 @@
 <template>
-  <v-card flat>
-    <v-container v-if="records">
-      <v-card-title class="py-0">User Feed</v-card-title>
-      <v-container
-        :class="smScreen ||xsScreen? 'py-2':'py-0'"
-        v-for="(records, name) in activeRecords"
-        :key="name"
+  <v-card flat v-if="!noFeed">
+    <v-container class="py-0">
+      <v-card-title v-if="mdH" class="py-0" :class="mdH ? 'px-2' : ''"
+        >User Feed</v-card-title
       >
-        <v-row
-          :align="smScreen || xsScreen? 'center' :'baseline'"
-          :no-gutters="smScreen || xsScreen"
-        >
-          <v-col :cols="smScreen? '12':'auto'" style="min-width:180px">
-            <v-card-text class="py-1 text-h6 font-weight-regular">{{ getDate(name) }}</v-card-text>
+      <v-col
+        v-for="(records, name, i) in activeRecords"
+        :key="name"
+        class="py-1"
+      >
+        <v-row :align="smL ? 'center' : 'baseline'" :no-gutters="smL">
+          <v-col
+            :cols="sm ? '12' : 'auto'"
+            class="py-0"
+            style="min-width: 180px"
+          >
+            <v-card-text
+              :class="mdH ? 'px-2' : ''"
+              class="py-0 text-h6 font-weight-regular"
+              >{{ getDate(name) }}</v-card-text
+            >
           </v-col>
-          <v-col cols="auto">
-            <bs-user-record v-for="(record, index) in records" :key="index" :record="record"></bs-user-record>
+          <v-col cols="auto" class="pa-2">
+            <bs-user-record
+              v-for="(record, index) in records"
+              :key="index"
+              :record="record"
+            ></bs-user-record>
           </v-col>
         </v-row>
-        <v-divider></v-divider>
-      </v-container>
+        <v-divider v-if="i < feedLength - 1"></v-divider>
+      </v-col>
+      <v-divider></v-divider>
       <v-row justify="end">
-        <v-col cols="auto" class="pr-6">
-          <a class="highlight" @click="toggleFeed()">{{showingMore ? "Hide" : "Show all"}}</a>
+        <v-col cols="auto">
+          <a class="highlight" @click="toggleFeed()">{{
+            showingMore ? "Hide" : "Show all"
+          }}</a>
         </v-col>
       </v-row>
     </v-container>
@@ -32,9 +46,9 @@
 <script>
 import moment from "moment";
 import UserRecord from "./UserRecord.vue";
+import mediaQuery from "../../mixins/mediaQueryLogic";
 import { ServiceFactory } from "../../services/serviceFactory";
 const feedService = ServiceFactory.get("feed");
-import mediaQuery from "../../mixins/mediaQueryLogic";
 
 export default {
   components: { "bs-user-record": UserRecord },
@@ -47,6 +61,17 @@ export default {
       showingMore: false,
       activeRecords: null,
     };
+  },
+
+  computed: {
+    noFeed() {
+      if (!this.records) return false;
+      return Object.keys(this.records).length === 0;
+    },
+
+    feedLength() {
+      return this.activeRecords ? Object.keys(this.activeRecords).length : 0;
+    },
   },
   methods: {
     getDate(date) {
@@ -73,13 +98,20 @@ export default {
         .forEach((key) => (this.activeRecords[key] = this.records[key]));
     },
   },
-  async created() {
+  created() {
     this.loading = true;
-    const response = await feedService.getUserFeed();
-    this.records = response.body;
-    this.getFreshRecords();
-    this.length = Object.keys(this.records).length;
-    this.loading = false;
+    feedService
+      .getUserFeed()
+      .then((response) => {
+        this.records = response.body;
+        this.getFreshRecords();
+        this.length = Object.keys(this.records).length;
+        this.loading = false;
+      })
+      .catch((error) => {
+        this.$emit("error", error);
+        this.loading = false;
+      });
   },
 };
 </script>

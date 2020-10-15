@@ -15,9 +15,9 @@ const authGuard = (to, from, next) => {
   if (localStorage.getItem("user")) {
     next();
   } else {
-    // next({
-    //   name: "login",
-    // });
+    next({
+      name: "login",
+    });
   }
 };
 
@@ -32,6 +32,10 @@ const routes = [
     beforeEnter: authGuard,
   },
   {
+    path: "/home*",
+    redirect: "/home",
+  },
+  {
     path: "/register",
     name: "register",
     component: Register,
@@ -42,7 +46,7 @@ const routes = [
     component: Login,
   },
   {
-    path: "/book/:id",
+    path: "/book/:id/:search?",
     name: "book",
     props: true,
     component: BookPage,
