@@ -38,20 +38,22 @@
 <script>
 import HorizontalBook from "../bookviews/HorizontalBook";
 export default {
-  data() {
-    return {
-      tab: 0,
-      expanded: false,
-    };
-  },
   props: {
     tabItems: {
       type: Array,
       required: true,
     },
   },
+
   components: {
     "bs-horizontal-book": HorizontalBook,
+  },
+
+  data() {
+    return {
+      tab: 0,
+      expanded: false,
+    };
   },
 
   methods: {

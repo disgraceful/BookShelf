@@ -3,7 +3,7 @@
     <v-container v-if="books && !error">
       <v-card-title class="text-h5 py-2">Favorites</v-card-title>
       <v-divider></v-divider>
-      <v-row v-if="!noFavorites">
+      <v-row v-if="!noFavorites" :justify="xs ? 'center' : 'start'">
         <v-col cols="auto" v-for="(book, i) in favorites" :key="book.id">
           <bs-display-book :book="book">
             <template v-slot:actions>
@@ -14,8 +14,8 @@
                 top
                 right
                 color="white"
-                :loading="loading && bookIndex == i + 1"
-                @click="favorite(book, i + 1)"
+                :loading="loading && bookIndex == i"
+                @click="favorite(book, i)"
               >
                 <v-icon :color="book.userData.isFavorited ? 'red' : 'grey'">{{
                   book.userData.isFavorited ? "mdi-heart" : "mdi-heart-outline"
@@ -30,7 +30,7 @@
         pages to mark your favorites!</v-card-text
       >
     </v-container>
-    <bs-loader v-if="loading && bookIndex <= 0"></bs-loader>
+    <bs-loader v-if="loading && bookIndex < 0"></bs-loader>
     <bs-error-page v-if="error" :error="error"></bs-error-page>
   </v-card>
 </template>
@@ -40,9 +40,11 @@ import GenericDisplayBook from "../bookviews/GenericDisplayBook";
 import Loader from "../shared/Preloader";
 import bookLogic from "../../mixins/bookLogic";
 import ErrorPage from "../shared/ErrorPage";
+import mediaQuery from "../../mixins/mediaQueryLogic";
 import { ServiceFactory } from "../../services/serviceFactory";
 const userService = ServiceFactory.get("user");
 export default {
+  mixins: [mediaQuery],
   components: {
     "bs-display-book": GenericDisplayBook,
     "bs-loader": Loader,
@@ -54,7 +56,7 @@ export default {
       books: null,
       loading: true,
       error: null,
-      bookIndex: 0,
+      bookIndex: -1,
     };
   },
 
@@ -80,13 +82,13 @@ export default {
           let res = response.body;
           let index = this.books.findIndex((b) => b.id === res.id);
           this.books.splice(index, 1, res);
-          this.bookIndex = 0;
+          this.bookIndex = -1;
           this.loading = false;
         })
         .catch((error) => {
           console.log(error);
           this.error = error.body;
-          this.bookIndex = 0;
+          this.bookIndex = -1;
           this.loading = false;
         });
     },
