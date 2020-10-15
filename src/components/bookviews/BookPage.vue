@@ -168,7 +168,6 @@ export default {
 
   watch: {
     $route(to, from) {
-      //need to check what the fuck is this doing
       if (to.path.includes("/book") || to.path === from.path) {
         this.getBook();
       }

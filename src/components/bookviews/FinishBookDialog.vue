@@ -22,6 +22,7 @@
             ></span>
           </v-card-text>
           <v-divider></v-divider>
+
           <v-row class="px-3 pt-2">
             <v-col cols="auto" class="text-subtitle-1"> My rating: </v-col>
             <v-col cols="auto" class="pr-0 pl-0">
@@ -37,10 +38,10 @@
               <v-btn text @click="cleared = true">Clear</v-btn>
             </v-col>
           </v-row>
+
           <v-card-text class="text-subtitle-1 font-weight-regular px-3 py-2">
             What do you think?
           </v-card-text>
-
           <v-textarea
             v-model="notes"
             outlined
