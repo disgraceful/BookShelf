@@ -56,6 +56,7 @@ export default {
   data() {
     return {
       loading: false,
+      error: null,
       records: null,
       length: 0,
       showingMore: false,
@@ -98,15 +99,6 @@ export default {
         .filter((key, index) => index < 3)
         .forEach((key) => (this.activeRecords[key] = this.records[key]));
     },
-
-    sortedRecords(records) {
-      console.log(records);
-      records.sort((a, b) => {
-        // console.log(a, b);
-        return a.timestamp.seconds - b.timestamp.seconds;
-      });
-      return records;
-    },
   },
 
   created() {
@@ -121,7 +113,8 @@ export default {
         this.loading = false;
       })
       .catch((error) => {
-        this.$emit("error", error);
+        this.$emit("error", error.body);
+        this.error = error.body;
         this.loading = false;
       });
   },
