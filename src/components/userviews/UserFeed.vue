@@ -1,5 +1,5 @@
 <template>
-  <v-card flat v-if="!noFeed || error">
+  <v-card flat v-if="!noFeed && !error">
     <v-container class="py-0">
       <v-card-title v-if="mdH" class="py-0" :class="mdH ? 'px-2' : ''"
         >User Feed</v-card-title
