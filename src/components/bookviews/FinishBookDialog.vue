@@ -13,13 +13,16 @@
           </v-card-title>
           <v-card-text class="text-subtitle-1 pb-1">
             <span>by </span>
-            <span
-              v-for="(author, i) in book.authors"
-              :key="i"
-              v-text="
-                i < book.authors.length - 1 ? `${author.name}, ` : author.name
-              "
-            ></span>
+            <span v-if="isPrivate">{{ book.authors }}</span>
+            <template v-else>
+              <span
+                v-for="(author, i) in book.authors"
+                :key="i"
+                v-text="
+                  i < book.authors.length - 1 ? `${author.name}, ` : author.name
+                "
+              ></span>
+            </template>
           </v-card-text>
           <v-divider></v-divider>
 
@@ -156,6 +159,10 @@ export default {
   computed: {
     getSeries() {
       return this.book.series ? this.book.series.fullName : "";
+    },
+
+    isPrivate() {
+      return !Array.isArray(this.book.authors);
     },
   },
 
