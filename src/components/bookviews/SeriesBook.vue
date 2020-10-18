@@ -2,7 +2,7 @@
   <v-card flat>
     <v-container class="px-5 py-0">
       <v-row>
-        <v-col cols="auto" style="max-width:130px">
+        <v-col cols="auto" style="max-width: 130px">
           <v-img :src="book.imageUrl" width="110px" height="180px"></v-img>
         </v-col>
         <v-col class="pa-3 pt-1">
@@ -47,7 +47,7 @@
             <v-col
               cols="auto"
               class="pb-0"
-              style="width:180px; margin-bottom:-10px"
+              style="width: 180px; margin-bottom: -10px"
             >
               <v-select
                 dense
@@ -96,28 +96,28 @@
 <script>
 import shrinkDescription from "../../mixins/shrinkDescription";
 import bookStatus from "../../mixins/bookStatus";
-import bookLogic from "../../mixins/bookLogic";
+// import bookLogic from "../../mixins/bookLogic";
 import FinishDialog from "./FinishBookDialog";
 export default {
   data() {
     return {
       showLength: 12,
       finishDialog: false,
-      statusTemp: null
+      statusTemp: null,
     };
   },
-  mixins: [shrinkDescription, bookStatus, bookLogic],
+  mixins: [shrinkDescription, bookStatus],
   components: { "bs-finish-dialog": FinishDialog },
   props: {
     book: {
       required: true,
-      type: Object
-    }
+      type: Object,
+    },
   },
   methods: {
     update() {
       this.updateBook();
-    }
+    },
   },
   mounted() {
     this.statusTemp = this.book.userData.status;
@@ -126,6 +126,6 @@ export default {
       this.showLength,
       this.showLength
     );
-  }
+  },
 };
 </script>

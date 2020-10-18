@@ -66,7 +66,6 @@
 
 <script>
 import bookStatus from "../../mixins/bookStatus";
-import bookLogic from "../../mixins/bookLogic";
 import mediaQuery from "../../mixins/mediaQueryLogic";
 import FinishDialog from "./FinishBookDialog";
 import AuthorLinks from "../author/AuthorLinksHelper";
@@ -74,7 +73,7 @@ import { ServiceFactory } from "../../services/serviceFactory";
 const userService = ServiceFactory.get("user");
 
 export default {
-  mixins: [bookStatus, bookLogic, mediaQuery],
+  mixins: [bookStatus, mediaQuery],
   props: {
     book: {
       required: true,

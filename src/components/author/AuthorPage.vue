@@ -117,7 +117,39 @@ export default {
       loading: true,
       series: null,
       error: null,
+      showBooks: 6,
+      showSeries: 5,
     };
+  },
+
+  methods: {
+    loadOtherBooks() {
+      Promise.all(
+        this.author.bookIds
+          .slice(this.showBooks)
+          .map((id) => bookService.getBookById(id))
+      )
+        .then((response) => {
+          this.books.push(...response.map((res) => res.body));
+        })
+        .catch((error) => {
+          this.error = error.body;
+        });
+    },
+
+    loadOtherSeries() {
+      Promise.all(
+        this.author.allSeries
+          .slice(this.showSeries)
+          .map((sery) => seriesService.getSeriesById(sery.id))
+      )
+        .then((response) => {
+          this.series.push(...response.map((res) => res.body));
+        })
+        .catch((error) => {
+          this.error = error.body;
+        });
+    },
   },
 
   async created() {
@@ -127,7 +159,9 @@ export default {
     this.generateDescription(this.author.about, 60, 90);
 
     Promise.all(
-      this.author.bookIds.slice(0, 6).map((id) => bookService.getBookById(id))
+      this.author.bookIds
+        .slice(0, this.showBooks)
+        .map((id) => bookService.getBookById(id))
     ).then((response) => {
       this.books = response.map((res) => res.body);
     });
@@ -135,9 +169,10 @@ export default {
     authorService
       .getAuthorSeries(this.id)
       .then((response) => {
+        this.author.allSeries = response.body;
         return Promise.all(
           response.body
-            .slice(0, 5)
+            .slice(0, this.showSeries)
             .map((series) => seriesService.getSeriesById(series.id))
         );
       })

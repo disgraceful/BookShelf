@@ -38,7 +38,6 @@
 <script>
 import GenericDisplayBook from "../bookviews/GenericDisplayBook";
 import Loader from "../shared/Preloader";
-import bookLogic from "../../mixins/bookLogic";
 import ErrorPage from "../shared/ErrorPage";
 import mediaQuery from "../../mixins/mediaQueryLogic";
 import { ServiceFactory } from "../../services/serviceFactory";
