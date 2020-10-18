@@ -1,46 +1,67 @@
 <template>
-  <v-card flat v-if="sery && books">
-    <v-container class="py-0">
-      <v-row>
-        <v-col :class="$mq !== 'xs' ? '' : 'text-center'" style="min-width:150px">
-          <v-card-text class="subtitle-1 font-weight-medium pa-0">
-            <router-link
-              class="link-inherit highlight"
-              :to="{ name: 'series', params: { id: sery.id } }"
-            >{{ sery.title }}</router-link>
-            ({{ sery.workCount }} books)
-          </v-card-text>
-          <v-card-text class="pa-0 pt-2 body-2">by {{ sery.author }}</v-card-text>
-          <v-card-text class="py-1 px-0 body-2">Average rating: {{ avgRating }}</v-card-text>
+  <v-card flat>
+    <v-row :dense="smL">
+      <v-col :class="!xs ? '' : 'text-center'" style="min-width: 250px">
+        <v-card-text class="text-subtitle-1 font-weight-medium pa-0">
+          <router-link
+            class="link-inherit highlight"
+            :to="{ name: 'series', params: { id: series.id } }"
+            >{{ series.title }}</router-link
+          >
+          ({{ series.workCount }} books)
+        </v-card-text>
+        <v-card-text class="pa-0 pt-2 text-body-2"
+          >by {{ series.author }}</v-card-text
+        >
+        <v-card-text v-if="books" class="py-1 px-0 text-body-2"
+          >Average rating: {{ avgRating }}</v-card-text
+        >
+      </v-col>
+      <v-col :cols="!smL ? 'auto' : '12'">
+        <v-row dense :justify="smL ? 'center' : 'end'" v-if="books">
+          <v-col cols="auto" v-for="book in books" :key="book.id">
+            <v-img :src="book.imageUrl" width="60" height="100"></v-img>
+          </v-col>
+        </v-row>
+        <v-col v-if="loading && !error">
+          <bs-loader
+            :options="{ wrapperClass: '', size: 40, width: 5 }"
+          ></bs-loader>
         </v-col>
-        <v-col cols="auto">
-          <v-row dense :justify="$mq === 'xs' ? 'start' : 'end'">
-            <v-col cols="auto" v-for="book in books" :key="book.id" class="pr-2">
-              <v-img :src="book.imageUrl" width="60" height="100"></v-img>
-            </v-col>
-          </v-row>
-        </v-col>
-      </v-row>
-      <v-divider></v-divider>
-    </v-container>
+      </v-col>
+    </v-row>
   </v-card>
 </template>
 
 <script>
+import Preloader from "../shared/Preloader";
+import mediaQuery from "../../mixins/mediaQueryLogic";
 import { ServiceFactory } from "../../services/serviceFactory";
 const seriesService = ServiceFactory.get("series");
 const bookService = ServiceFactory.get("book");
+
 export default {
+  mixins: [mediaQuery],
+  props: {
+    series: {
+      required: true,
+      type: Object,
+    },
+  },
+  components: {
+    "bs-loader": Preloader,
+  },
+
   data() {
     return {
-      sery: null,
-      books: null
+      books: null,
+      error: null,
+      loading: true,
+      displayBooks: 10,
     };
   },
+
   computed: {
-    user() {
-      return this.$store.getters.getAuthUser;
-    },
     avgRating() {
       return (
         this.books.reduce(
@@ -48,29 +69,36 @@ export default {
           0
         ) / this.books.length
       ).toFixed(2);
-    }
+    },
+
+    bookIndex() {
+      return this.allBooksShown
+        ? this.displayBooks
+        : this.series.bookIds.length;
+    },
+
+    allBooksShown() {
+      return this.series.bookIds.length > this.displayBooks;
+    },
   },
-  props: {
-    series: {
-      required: true,
-      type: Object
-    }
-  },
-  async created() {
-    seriesService
-      .getSeriesById(this.series.id)
-      .then(response => {
-        this.sery = response.body;
-        return Promise.all(
-          this.sery.bookIds.map(id => bookService.getBookById(id))
-        );
+
+  created() {
+    this.loading = true;
+    Promise.all(
+      this.series.bookIds
+        .slice(0, this.bookIndex)
+        .map((id) => bookService.getBookById(id))
+    )
+      .then((response) => {
+        this.books = response.map((res) => res.body);
+        this.loading = false;
       })
-      .then(response => {
-        this.books = response.map(res => res.body);
-      })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
+        this.error = error.body;
+        this.loading = false;
+        this.$emit("error", this.error);
       });
-  }
+  },
 };
 </script>

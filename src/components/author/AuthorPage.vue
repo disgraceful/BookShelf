@@ -36,14 +36,17 @@
             >
             <v-divider></v-divider>
             <v-col v-for="(book, i) in books" :key="book.id" class="py-0">
-              <bs-author-book :book="book"></bs-author-book>
+              <bs-author-book
+                :book="book"
+                @error="error = $event"
+              ></bs-author-book>
               <v-divider v-if="i < books.length - 1"></v-divider>
             </v-col>
             <v-divider></v-divider>
           </v-col>
         </v-row>
         <v-row justify="end">
-          <v-col cols="auto" class="pt-0">
+          <v-col cols="auto" class="pt-0 pr-3">
             <a class="highlight teal--text text--darken-1"
               >More books by {{ author.name }}</a
             >
@@ -54,21 +57,26 @@
       <template v-if="series && !error">
         <v-row v-if="series">
           <v-col>
-            <v-card-title class="text-h6 font-weight-regular pb-1"
+            <v-card-title class="text-h6 font-weight-regular py-1"
               >Series by {{ author.name }}</v-card-title
             >
             <v-divider></v-divider>
-            <bs-author-series
-              v-for="sery in series"
-              :series="sery"
-              :key="sery.id"
-            ></bs-author-series>
+            <v-col v-for="(sery, i) in series" :key="sery.id" class="py-0">
+              <bs-author-series
+                :series="sery"
+                @error="error = $event"
+              ></bs-author-series>
+              <v-divider v-if="i < series.length - 1"></v-divider>
+            </v-col>
+            <v-divider></v-divider>
           </v-col>
         </v-row>
         <v-row justify="end">
-          <a class="pa-2 highlight teal--text text--darken-1"
-            >More series by {{ author.name }}</a
-          >
+          <v-col cols="auto" class="pt-0 pr-3">
+            <a class="highlight teal--text text--darken-1"
+              >More books by {{ author.name }}</a
+            >
+          </v-col>
         </v-row>
       </template>
     </v-container>

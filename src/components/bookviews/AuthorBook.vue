@@ -1,6 +1,6 @@
 <template>
   <v-card flat>
-    <v-row class="px-2">
+    <v-row>
       <v-col cols="auto">
         <v-img :src="book.imageUrl" width="80" height="120px"></v-img>
       </v-col>
@@ -20,26 +20,28 @@
           {{ book.publishedYear }}
         </v-card-text>
       </v-col>
-      <v-col :cols="xs ? 12 : 'auto'">
-        <v-select
-          style="max-width: 180px"
-          dense
-          background-color="teal"
-          dark
-          v-model="statusTemp"
-          :items="avaliableStatus"
-          item-text="text"
-          item-value="status"
-          :menu-props="{ offsetY: true }"
-          solo
-          @input="handleCollection(statusTemp)"
-        ></v-select>
+      <v-col :cols="xs ? 12 : 'auto'" :class="smL ? 'pb-0' : ''">
+        <v-row justify="center">
+          <v-select
+            style="max-width: 180px"
+            dense
+            background-color="teal"
+            dark
+            v-model="statusTemp"
+            :items="avaliableStatus"
+            item-text="text"
+            item-value="status"
+            :menu-props="{ offsetY: true }"
+            solo
+            @input="handleCollection(statusTemp)"
+          ></v-select>
+        </v-row>
         <v-row
           v-if="book.userData.status !== 'not reading'"
           align="center"
           style="margin-top: -10px"
         >
-          <v-col class="text-center pa-0">
+          <v-col class="text-center pa-0 pb-2">
             {{ book.userData.rating > 0 ? "Your rating:" : "Rate:" }}
             <v-rating
               size="20"

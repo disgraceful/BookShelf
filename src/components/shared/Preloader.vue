@@ -1,8 +1,8 @@
 <template>
   <div :class="options.wrapperClass">
     <v-progress-circular
-      :indeterminate="options.isDetermined"
-      :color="options.color"
+      :indeterminate="options.isDetermined || true"
+      :color="options.color || 'teal'"
       :size="options.size"
       :width="options.width"
     ></v-progress-circular>
@@ -13,17 +13,17 @@ export default {
   props: {
     options: {
       type: Object,
-      default: function() {
+      default: function () {
         return {
           isDetermined: true,
           color: "teal",
           size: "100",
           width: "10",
-          wrapperClass: "loader-wrapper"
+          wrapperClass: "loader-wrapper",
         };
-      }
-    }
-  }
+      },
+    },
+  },
 };
 </script>
 
