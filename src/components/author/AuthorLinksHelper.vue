@@ -7,12 +7,10 @@
         v-for="(author, i) in authors"
         :key="i"
         :to="{ name: 'authors', params: { id: author.id } }"
-        v-text="
-            i < authors.length - 1 ? `${author.name}, ` : author.name
-          "
+        v-text="i < authors.length - 1 ? `${author.name}, ` : author.name"
       ></router-link>
     </template>
-    <template v-else>{{authors}}</template>
+    <template v-else>{{ authors }}</template>
   </v-card-text>
 </template>
 
@@ -27,6 +25,7 @@ export default {
       required: false,
     },
   },
+
   computed: {
     isAuthorsArray() {
       return Array.isArray(this.authors);

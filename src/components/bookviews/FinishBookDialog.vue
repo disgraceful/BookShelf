@@ -1,6 +1,6 @@
 <template>
   <v-dialog
-    max-width="600"
+    :max-width="width"
     :value="dialog"
     @input="$emit('input', $event)"
     @click:outside="reset()"
@@ -129,6 +129,10 @@ export default {
       required: true,
     },
     dialog: Boolean,
+    width: {
+      type: Number,
+      default: 600,
+    },
   },
 
   components: {
