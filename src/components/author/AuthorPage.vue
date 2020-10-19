@@ -3,6 +3,7 @@
     <v-container v-if="author && !error" class="page-container">
       <v-row :justify="xs ? 'center' : 'space-around'">
         <v-col
+          v-if="author.imageUrl"
           :cols="$mq | mq({ xs: 'auto' })"
           style="max-width: 280px; min-width: 240px"
           class="pa-4"
@@ -61,20 +62,26 @@
               >Series by {{ author.name }}</v-card-title
             >
             <v-divider></v-divider>
-            <v-col v-for="(sery, i) in series" :key="sery.id" class="py-0">
+            <v-col
+              v-for="(sery, i) in showingSeries"
+              :key="sery.id"
+              class="py-0"
+            >
               <bs-author-series
                 :series="sery"
                 @error="error = $event"
               ></bs-author-series>
-              <v-divider v-if="i < series.length - 1"></v-divider>
+              <v-divider v-if="i < showingSeries.length - 1"></v-divider>
             </v-col>
             <v-divider></v-divider>
           </v-col>
         </v-row>
         <v-row justify="end">
           <v-col cols="auto" class="pt-0 pr-3">
-            <a class="highlight teal--text text--darken-1"
-              >More books by {{ author.name }}</a
+            <a
+              class="highlight teal--text text--darken-1"
+              @click="showAllSeries = !showAllSeries"
+              >{{ showSeriesText }}</a
             >
           </v-col>
         </v-row>
@@ -119,24 +126,23 @@ export default {
       error: null,
       showBooks: 6,
       showSeries: 5,
+      showAllSeries: false,
     };
   },
 
-  methods: {
-    loadOtherBooks() {
-      Promise.all(
-        this.author.bookIds
-          .slice(this.showBooks)
-          .map((id) => bookService.getBookById(id))
-      )
-        .then((response) => {
-          this.books.push(...response.map((res) => res.body));
-        })
-        .catch((error) => {
-          this.error = error.body;
-        });
+  computed: {
+    showingSeries() {
+      return this.showAllSeries
+        ? this.series
+        : this.series.slice(0, this.showSeries);
     },
 
+    showSeriesText() {
+      return this.showAllSeries ? "Less" : `More series by ${this.author.name}`;
+    },
+  },
+
+  methods: {
     loadOtherSeries() {
       Promise.all(
         this.author.allSeries
@@ -183,6 +189,9 @@ export default {
       .catch((error) => {
         console.log(error);
         this.loading = false;
+      })
+      .then(() => {
+        this.loadOtherSeries();
       });
   },
 };

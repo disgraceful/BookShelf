@@ -1,6 +1,6 @@
 <template>
   <v-card flat>
-    <v-row :dense="smL">
+    <v-row :dense="smL" class="fill-height" align="center">
       <v-col :class="!xs ? '' : 'text-center'" style="min-width: 250px">
         <v-card-text class="text-subtitle-1 font-weight-medium pa-0">
           <router-link
@@ -20,14 +20,29 @@
       <v-col :cols="!smL ? 'auto' : '12'">
         <v-row dense :justify="smL ? 'center' : 'end'" v-if="books">
           <v-col cols="auto" v-for="book in books" :key="book.id">
-            <v-img :src="book.imageUrl" width="60" height="100"></v-img>
+            <router-link :to="{ name: 'book', params: { id: book.id } }">
+              <v-img :src="book.imageUrl" width="60" height="100">
+                <template v-slot:placeholder>
+                  <v-row
+                    class="fill-height ma-0"
+                    align="center"
+                    justify="center"
+                  >
+                    <v-progress-circular
+                      indeterminate
+                      color="grey lighten-5"
+                    ></v-progress-circular>
+                  </v-row>
+                </template>
+              </v-img>
+            </router-link>
           </v-col>
         </v-row>
-        <v-col v-if="loading && !error">
+        <v-row v-if="loading && !error">
           <bs-loader
-            :options="{ wrapperClass: '', size: 40, width: 5 }"
+            :options="{ wrapperClass: '', size: 50, width: 5 }"
           ></bs-loader>
-        </v-col>
+        </v-row>
       </v-col>
     </v-row>
   </v-card>
