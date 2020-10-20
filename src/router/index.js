@@ -42,9 +42,17 @@ const routes = [
     component: Register,
   },
   {
+    path: "/register*",
+    redirect: "register",
+  },
+  {
     path: "/login",
     name: "login",
     component: Login,
+  },
+  {
+    path: "/login*",
+    redirect: "login",
   },
   {
     path: "/book/:id/:search?",
