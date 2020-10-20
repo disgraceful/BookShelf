@@ -48,8 +48,10 @@
         </v-row>
         <v-row justify="end">
           <v-col cols="auto" class="pt-0 pr-3">
-            <a class="highlight teal--text text--darken-1"
-              >More books by {{ author.name }}</a
+            <router-link
+              class="highlight teal--text"
+              :to="{ name: 'authorbooks', params: { id: author.id } }"
+              >More books by {{ author.name }}</router-link
             >
           </v-col>
         </v-row>

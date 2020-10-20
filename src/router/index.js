@@ -10,6 +10,7 @@ import AuthorPage from "../components/author/AuthorPage";
 import Favorites from "../components/userviews/Favorites.vue";
 import MyBooks from "../components/userviews/MyBooks";
 import ErrorPage from "../components/shared/ErrorPage";
+import AuthorAllBooks from "../components/author/AuthorAllBooks";
 
 Vue.use(VueRouter);
 const authGuard = (to, from, next) => {
@@ -87,6 +88,13 @@ const routes = [
     name: "authors",
     props: true,
     component: AuthorPage,
+    beforeEnter: authGuard,
+  },
+  {
+    path: "/author/:id/books",
+    name: "authorbooks",
+    props: true,
+    component: AuthorAllBooks,
     beforeEnter: authGuard,
   },
   {
