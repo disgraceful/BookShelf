@@ -1,6 +1,6 @@
 <template>
   <v-dialog
-    max-width="600"
+    :max-width="width"
     :value="dialog"
     @input="$emit('input', $event)"
     @click:outside="reset()"
@@ -13,19 +13,22 @@
           </v-card-title>
           <v-card-text class="text-subtitle-1 pb-1">
             <span>by </span>
-            <span
-              v-for="(author, i) in book.authors"
-              :key="i"
-              v-text="
-                i < book.authors.length - 1 ? `${author.name}, ` : author.name
-              "
-            ></span>
+            <span v-if="isPrivate">{{ book.authors }}</span>
+            <template v-else>
+              <span
+                v-for="(author, i) in book.authors"
+                :key="i"
+                v-text="
+                  i < book.authors.length - 1 ? `${author.name}, ` : author.name
+                "
+              ></span>
+            </template>
           </v-card-text>
           <v-divider></v-divider>
 
           <v-row class="px-3 pt-2">
             <v-col cols="auto" class="text-subtitle-1"> My rating: </v-col>
-            <v-col cols="auto" class="pr-0 pl-0">
+            <v-col cols="auto" class="px-0">
               <bs-hover-rating
                 :rating="rating"
                 :values="ratingValues"
@@ -126,6 +129,10 @@ export default {
       required: true,
     },
     dialog: Boolean,
+    width: {
+      type: Number,
+      default: 600,
+    },
   },
 
   components: {
@@ -157,6 +164,10 @@ export default {
     getSeries() {
       return this.book.series ? this.book.series.fullName : "";
     },
+
+    isPrivate() {
+      return !Array.isArray(this.book.authors);
+    },
   },
 
   methods: {
@@ -168,6 +179,7 @@ export default {
       if (this.$refs.form.validate()) {
         let post = this.book;
         this.book.userData.rating = this.rating;
+        post.userData.pagesRead = this.book.pages;
         post.userData.notes = this.notes;
         post.userData.startDate = this.startDate;
         post.userData.endDate = this.endDate;

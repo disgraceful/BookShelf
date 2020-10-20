@@ -2,7 +2,7 @@
   <v-card-text class="py-1 text-subtitle-1">
     <v-row align="center">
       <v-col cols="auto" class="py-0 px-0 pl-1" v-if="!record.data.rating">
-        <template>{{ record.message }}</template>
+        {{ record.message }}
       </v-col>
 
       <v-rating

@@ -135,7 +135,6 @@ import BookInfo from "./BookInfo";
 import UserBookActivity from "./UserBookActivity";
 import { ServiceFactory } from "../../services/serviceFactory";
 import bookStatus from "../../mixins/bookStatus";
-import bookLogic from "../../mixins/bookLogic";
 import mediaQuery from "../../mixins/mediaQueryLogic";
 const bookService = ServiceFactory.get("book");
 const uploadService = ServiceFactory.get("upload");
@@ -145,7 +144,7 @@ export default {
   props: {
     id: String,
   },
-  mixins: [bookStatus, bookLogic, mediaQuery],
+  mixins: [bookStatus, mediaQuery],
   components: {
     "bs-loader": Preloader,
     "bs-error-page": ErrorPage,

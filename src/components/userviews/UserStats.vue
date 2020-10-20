@@ -1,6 +1,6 @@
 <template>
   <v-card flat>
-    <v-container v-if="!loading">
+    <v-container v-if="!loading && !error">
       <v-card-title class="text-h5 py-2">User Statistics</v-card-title>
       <v-divider></v-divider>
       <v-card-text v-if="noBooks" class="text-h6 font-weight-regular"
@@ -37,7 +37,7 @@
         </v-col>
       </v-row>
     </v-container>
-    <bs-loader v-else></bs-loader>
+    <bs-loader v-if="loading && !error"></bs-loader>
     <bs-error-page v-if="error" :error="error"></bs-error-page>
   </v-card>
 </template>
@@ -50,6 +50,7 @@ const userService = ServiceFactory.get("user");
 import mediaQuery from "../../mixins/mediaQueryLogic";
 import genresForChart from "../../mixins/genresForChart";
 import ErrorPage from "../shared/ErrorPage";
+
 export default {
   mixins: [mediaQuery, genresForChart],
   components: {
@@ -123,7 +124,7 @@ export default {
       })
       .catch((error) => {
         console.log(error);
-        this.error = error;
+        this.error = error.body;
         this.loading = false;
       });
   },

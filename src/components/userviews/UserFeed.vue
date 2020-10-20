@@ -1,5 +1,5 @@
 <template>
-  <v-card flat v-if="!noFeed">
+  <v-card flat v-if="!noFeed && !error">
     <v-container class="py-0">
       <v-card-title v-if="mdH" class="py-0" :class="mdH ? 'px-2' : ''"
         >User Feed</v-card-title
@@ -56,6 +56,7 @@ export default {
   data() {
     return {
       loading: false,
+      error: null,
       records: null,
       length: 0,
       showingMore: false,
@@ -73,6 +74,7 @@ export default {
       return this.activeRecords ? Object.keys(this.activeRecords).length : 0;
     },
   },
+
   methods: {
     getDate(date) {
       const momentDate = moment(date, "DD MMM YYYY");
@@ -98,18 +100,21 @@ export default {
         .forEach((key) => (this.activeRecords[key] = this.records[key]));
     },
   },
+
   created() {
     this.loading = true;
     feedService
       .getUserFeed()
       .then((response) => {
         this.records = response.body;
+        console.log(this.records);
         this.getFreshRecords();
         this.length = Object.keys(this.records).length;
         this.loading = false;
       })
       .catch((error) => {
-        this.$emit("error", error);
+        this.$emit("error", error.body);
+        this.error = error.body;
         this.loading = false;
       });
   },

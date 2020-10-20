@@ -72,7 +72,8 @@ export default {
       try {
         this.finishDialog = false;
         this.book = eventBook;
-        this.book.userData.pagesRead = this.book.pages;
+        // this.book.userData.pagesRead = this.book.pages;
+        console.log(this.book);
         return await this.addToUserCollection("finished");
       } catch (error) {
         console.log(error);
