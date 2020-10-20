@@ -9,6 +9,7 @@ import SeriesPage from "../components/series/SeriesPage";
 import AuthorPage from "../components/author/AuthorPage";
 import Favorites from "../components/userviews/Favorites.vue";
 import MyBooks from "../components/userviews/MyBooks";
+import ErrorPage from "../components/shared/ErrorPage";
 
 Vue.use(VueRouter);
 const authGuard = (to, from, next) => {
@@ -85,6 +86,12 @@ const routes = [
     name: "mybooks",
     component: MyBooks,
     beforeEnter: authGuard,
+  },
+  {
+    path: "/*",
+    name: "notfound",
+    component: ErrorPage,
+    props: { error: { message: "Sorry, page were not found" } },
   },
 
   //component: () => import(/* webpackChunkName: "about" */ "../views/About.vue")
