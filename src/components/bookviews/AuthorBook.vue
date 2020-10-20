@@ -53,14 +53,12 @@
         </v-row>
       </v-col>
     </v-row>
-    <v-dialog v-model="finishDialog" max-width="600">
-      <bs-finish-dialog
-        :dialog="finishDialog"
-        :book="book"
-        @input="finishDialog = $event"
-        @posted="finishBook"
-      ></bs-finish-dialog>
-    </v-dialog>
+    <bs-finish-dialog
+      :dialog="finishDialog"
+      :book="book"
+      @input="finishDialog = $event"
+      @posted="finishBook"
+    ></bs-finish-dialog>
   </v-card>
 </template>
 

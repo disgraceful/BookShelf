@@ -28,7 +28,7 @@
 
           <v-row class="px-3 pt-2">
             <v-col cols="auto" class="text-subtitle-1"> My rating: </v-col>
-            <v-col cols="auto" class="pr-0 pl-0">
+            <v-col cols="auto" class="px-0">
               <bs-hover-rating
                 :rating="rating"
                 :values="ratingValues"
@@ -179,6 +179,7 @@ export default {
       if (this.$refs.form.validate()) {
         let post = this.book;
         this.book.userData.rating = this.rating;
+        post.userData.pagesRead = this.book.pages;
         post.userData.notes = this.notes;
         post.userData.startDate = this.startDate;
         post.userData.endDate = this.endDate;

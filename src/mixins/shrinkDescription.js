@@ -10,7 +10,7 @@ export default {
   },
   computed: {
     expandLink() {
-      return this.shrinked ? "...more" : "less";
+      return this.shrinked ? "more" : "less";
     },
     isShrinked() {
       return this.splitDescription.length > this.maxShowLength;
