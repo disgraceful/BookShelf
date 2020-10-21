@@ -34,7 +34,6 @@
                 :values="ratingValues"
                 :cleared="cleared"
                 @input="rating = $event"
-                ref="rating"
               ></bs-hover-rating>
             </v-col>
             <v-col class="pa-2">
@@ -46,68 +45,37 @@
             What do you think?
           </v-card-text>
           <v-textarea
-            v-model="notes"
+            v-model="book.userData.notes"
             outlined
             auto-grow
             label="Write your notes, review, etc (optional)"
-            class="px-3"
+            class="px-3 mb-n4"
           ></v-textarea>
           <v-card-text class="py-0 text-subtitle-1">
-            Reading dates (optional):
+            Reading dates:
           </v-card-text>
-          <v-row justify="space-between" class="pr-3 pl-3">
+          <v-row justify="space-between" class="px-3">
             <v-col cols="auto">
-              <v-menu
-                v-model="dialogMenu"
-                :close-on-content-click="false"
-                transition="scale-transition"
-                offset-y
-                min-width="250px"
+              <bs-time-picker
+                :date="startDate"
+                :rules="startDateRules"
+                @input="startDate = $event"
+                label="Start date"
+                prependIcon
+                clearable
               >
-                <template v-slot:activator="{ on }">
-                  <v-text-field
-                    :value="formatDate(startDate)"
-                    label="Start date "
-                    prepend-icon="mdi-calendar-range"
-                    autocomplete="off"
-                    clearable
-                    v-on="on"
-                  ></v-text-field>
-                </template>
-                <v-date-picker
-                  v-model="startDate"
-                  no-title
-                  @input="dialogMenu = false"
-                >
-                </v-date-picker>
-              </v-menu>
+              </bs-time-picker>
             </v-col>
             <v-col cols="auto">
-              <v-menu
-                v-model="dialogMenu2"
-                :close-on-content-click="false"
-                transition="scale-transition"
-                offset-y
-                min-width="250px"
+              <bs-time-picker
+                :date="endDate"
+                :rules="endDateRules"
+                @input="endDate = $event"
+                label="End date"
+                prependIcon
+                clearable
               >
-                <template v-slot:activator="{ on }">
-                  <v-text-field
-                    :value="formatDate(endDate)"
-                    label="End date"
-                    prepend-icon="mdi-calendar-range"
-                    autocomplete="off"
-                    v-on="on"
-                    clearable
-                    :rules="[dateRules]"
-                  ></v-text-field>
-                </template>
-                <v-date-picker
-                  v-model="endDate"
-                  no-title
-                  @input="dialogMenu2 = false"
-                >
-                </v-date-picker>
-              </v-menu>
+              </bs-time-picker>
             </v-col>
           </v-row>
           <v-card-actions class="justify-end">
@@ -122,6 +90,7 @@
 <script>
 import moment from "moment";
 import HoverRating from "../shared/HoverRating";
+import TimePicker from "../shared/TimePicker";
 export default {
   props: {
     book: {
@@ -137,14 +106,12 @@ export default {
 
   components: {
     "bs-hover-rating": HoverRating,
+    "bs-time-picker": TimePicker,
   },
 
   data() {
     return {
       formValid: false,
-      notes: "",
-      dialogMenu: false,
-      dialogMenu2: false,
       startDate: new Date().toISOString().substr(0, 10),
       endDate: new Date().toISOString().substr(0, 10),
       ratingValues: [
@@ -154,7 +121,9 @@ export default {
         "Good book",
         "Great book",
       ],
-      dateRules: () => this.endDate >= this.startDate || "Enter correct date",
+      errorMessage: "Something doesn't add up!",
+      endDateRules: () => this.endDate >= this.startDate || this.errorMessage,
+      startDateRules: () => this.startDate <= this.endDate || this.errorMessage,
       rating: 0,
       cleared: false,
     };
@@ -180,9 +149,13 @@ export default {
         let post = this.book;
         this.book.userData.rating = this.rating;
         post.userData.pagesRead = this.book.pages;
-        post.userData.notes = this.notes;
-        post.userData.startDate = this.startDate;
-        post.userData.endDate = this.endDate;
+        if (!post.userData.finishTimes) {
+          post.userData.finishTimes = [];
+        }
+        post.userData.finishTimes.push({
+          startDate: this.startDate,
+          endDate: this.endDate,
+        });
         this.$emit("posted", post);
       }
     },

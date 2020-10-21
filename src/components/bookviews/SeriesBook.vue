@@ -1,6 +1,6 @@
 <template>
   <v-card flat>
-    <v-row v-if="book" :justify="xs ? 'center' : ''">
+    <v-row v-if="book" :justify="xs ? 'center' : 'start'">
       <v-col :cols="xs ? 12 : 'auto'" style="max-width: 140px">
         <v-img :src="book.imageUrl" height="180px"></v-img>
       </v-col>

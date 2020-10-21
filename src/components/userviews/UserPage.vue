@@ -1,6 +1,6 @@
 <template>
   <v-card flat>
-    <v-container v-if="tabItems">
+    <v-container v-if="tabItems && !error">
       <v-card-title class="py-0">{{ user.email }}</v-card-title>
       <v-row :justify="!xs ? 'start' : 'center'">
         <v-col cols="auto" class="pa-5">
@@ -36,17 +36,17 @@
           <bs-user-tabs
             v-if="mdH"
             :tabItems="tabItems"
-            @error="handleError(event)"
+            @error="handleError($event)"
           ></bs-user-tabs>
           <bs-user-panels
             v-else
             :tabItems="tabItems"
-            @error="handleError(event)"
+            @error="handleError($event)"
           ></bs-user-panels>
         </template>
       </v-col>
     </v-container>
-    <bs-loader v-if="loading"></bs-loader>
+    <bs-loader v-if="loading && !error"></bs-loader>
   </v-card>
 </template>
 
@@ -75,6 +75,7 @@ export default {
       tabItems: null,
       loading: true,
       userBooks: null,
+      error: null,
       countPages: (prevValue, curValue) =>
         prevValue + +curValue.userData.pagesRead,
     };
@@ -103,8 +104,9 @@ export default {
       return this.userBooks.filter((book) => book.userData.status === status);
     },
 
-    handleError(error) {
-      this.$emit("error", error);
+    handleError(event) {
+      this.error = event;
+      this.$emit("error", this.error);
     },
   },
 
@@ -139,7 +141,9 @@ export default {
       })
       .catch((error) => {
         console.error(error);
-        this.$$emit("error", error.body);
+        this.error = error.body;
+        this.$emit("error", this.error);
+        this.loading = false;
       });
   },
 };

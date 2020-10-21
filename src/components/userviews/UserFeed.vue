@@ -55,7 +55,6 @@ export default {
   mixins: [mediaQuery],
   data() {
     return {
-      loading: false,
       error: null,
       records: null,
       length: 0,
@@ -66,7 +65,7 @@ export default {
 
   computed: {
     noFeed() {
-      if (!this.records) return false;
+      if (!this.records) return true;
       return Object.keys(this.records).length === 0;
     },
 
@@ -102,7 +101,6 @@ export default {
   },
 
   created() {
-    this.loading = true;
     feedService
       .getUserFeed()
       .then((response) => {
@@ -110,12 +108,12 @@ export default {
         console.log(this.records);
         this.getFreshRecords();
         this.length = Object.keys(this.records).length;
-        this.loading = false;
       })
       .catch((error) => {
-        this.$emit("error", error.body);
-        this.error = error.body;
-        this.loading = false;
+        this.error = error.body
+          ? error.body
+          : { message: "Connection to server failed. Please try later." };
+        this.$emit("error", this.error);
       });
   },
 };

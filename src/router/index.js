@@ -9,6 +9,8 @@ import SeriesPage from "../components/series/SeriesPage";
 import AuthorPage from "../components/author/AuthorPage";
 import Favorites from "../components/userviews/Favorites.vue";
 import MyBooks from "../components/userviews/MyBooks";
+import ErrorPage from "../components/shared/ErrorPage";
+import AuthorAllBooks from "../components/author/AuthorAllBooks";
 
 Vue.use(VueRouter);
 const authGuard = (to, from, next) => {
@@ -41,9 +43,17 @@ const routes = [
     component: Register,
   },
   {
+    path: "/register*",
+    redirect: "register",
+  },
+  {
     path: "/login",
     name: "login",
     component: Login,
+  },
+  {
+    path: "/login*",
+    redirect: "login",
   },
   {
     path: "/book/:id/:search?",
@@ -81,10 +91,23 @@ const routes = [
     beforeEnter: authGuard,
   },
   {
+    path: "/author/:id/books",
+    name: "authorbooks",
+    props: true,
+    component: AuthorAllBooks,
+    beforeEnter: authGuard,
+  },
+  {
     path: "/user/:id/mybooks",
     name: "mybooks",
     component: MyBooks,
     beforeEnter: authGuard,
+  },
+  {
+    path: "/*",
+    name: "notfound",
+    component: ErrorPage,
+    props: { error: { message: "Sorry, page were not found" } },
   },
 
   //component: () => import(/* webpackChunkName: "about" */ "../views/About.vue")

@@ -2,8 +2,8 @@
   <v-card flat>
     <bs-error-page v-if="error" :error="error"></bs-error-page>
     <v-container class="page-container" v-else>
-      <bs-user-page @error="handleError(event)"></bs-user-page>
-      <bs-user-feed @error="handleError(event)"></bs-user-feed>
+      <bs-user-page @error="error = $event"></bs-user-page>
+      <bs-user-feed @error="error = $event"></bs-user-feed>
     </v-container>
   </v-card>
 </template>
@@ -24,12 +24,6 @@ export default {
     return {
       error: null,
     };
-  },
-  methods: {
-    handleError(error) {
-      console.log(error);
-      this.error = error.body;
-    },
   },
 };
 </script>
