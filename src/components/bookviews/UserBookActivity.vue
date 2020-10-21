@@ -7,11 +7,32 @@
     <v-divider></v-divider>
     <v-row class="px-4" align="baseline">
       <v-col class="py-0" cols="auto">
-        <v-card-text class="text-subtitle-1 px-0 px-1 black--text">
-          Finished:
+        <v-card-text class="text-subtitle-1 px-0 black--text">
+          Reading history:
         </v-card-text>
       </v-col>
-      <v-col class="py-0" cols="auto" style="max-width: 180px">
+      <v-col>
+        <v-timeline dense>
+          <v-timeline-item
+            class="pb-3"
+            small
+            color="teal"
+            v-for="(times, i) in historyEntries"
+            :key="i"
+          >
+            {{ formatDate(times.startDate) }} --
+            {{ formatDate(times.endDate) }}</v-timeline-item
+          >
+          <v-timeline-item class="pb-3" small color="grey" v-if="toMuchHistory">
+            <a
+              class="highlight teal--text"
+              @click="historyExpanded = !historyExpanded"
+              >{{ historyLink }}
+            </a></v-timeline-item
+          >
+        </v-timeline>
+      </v-col>
+      <!-- <v-col class="py-0" cols="auto" style="max-width: 180px">
         <bs-time-picker
           :date="userData.startDate"
           :error="dateError"
@@ -28,8 +49,7 @@
           :error="dateError"
           @input="userData.endDate = $event"
         ></bs-time-picker>
-      </v-col>
-      <v-form ref="form"></v-form>
+      </v-col> -->
     </v-row>
 
     <v-card-text
@@ -70,7 +90,7 @@ export default {
     },
   },
   components: {
-    "bs-time-picker": TimePickerVue,
+    // "bs-time-picker": TimePickerVue,
   },
 
   data() {
@@ -78,29 +98,27 @@ export default {
       userData: null,
       reviewActive: false,
       oldReview: "",
-      dateError: null,
+      historyExpanded: false,
+      // endDateRules: () => this.endDate >= this.startDate || this.errorMessage,
+      // startDateRules: () => this.startDate <= this.endDate || this.errorMessage,
     };
   },
 
-  watch: {
-    ["userData.startDate"](val) {
-      if (this.userData.endDate < val) {
-        this.dateError = { startDate: true };
-      } else {
-        this.dateError = null;
-      }
-    },
-
-    ["userData.endDate"](val) {
-      if (this.userData.startDate > val) {
-        this.dateError = { endDate: true };
-      } else {
-        this.dateError = null;
-      }
-    },
-  },
-
   computed: {
+    historyEntries() {
+      return !this.historyExpanded
+        ? this.userData.finishTimes.slice(0, 1)
+        : this.userData.finishTimes;
+    },
+
+    toMuchHistory() {
+      return this.userData.finishTimes.length > 1;
+    },
+
+    historyLink() {
+      return this.historyExpanded ? "Show less" : "Show more";
+    },
+
     btnText() {
       if (!this.reviewActive && this.userData.notes) return "Edit review";
       return this.reviewActive ? "Submit" : "Add Review";

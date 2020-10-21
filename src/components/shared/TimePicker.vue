@@ -11,6 +11,7 @@
         :value="formatDate()"
         :label="label"
         :prepend-icon="prependIcon ? 'mdi-calendar-range' : ''"
+        :rules="[dateRules, rules]"
         autocomplete="off"
         :clearable="clearable"
         v-on="on"
@@ -19,7 +20,7 @@
     <v-date-picker v-model="cmpDate" no-title @input="closeDialog">
     </v-date-picker>
   </v-menu>
-</template>
+</template> 
 
 <script>
 import moment from "moment";
@@ -29,12 +30,14 @@ export default {
     label: { type: String, default: "" },
     prependIcon: Boolean,
     clearable: Boolean,
+    rules: Function,
   },
 
   data() {
     return {
       cmpDate: "",
       dialogMenu: false,
+      dateRules: (value) => !!value || "Please enter date",
     };
   },
 
