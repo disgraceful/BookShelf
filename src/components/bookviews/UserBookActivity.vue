@@ -1,6 +1,5 @@
 <template>
   <v-card flat>
-    <!-- use v-row? -->
     <div class="d-flex flex-row justify-space-between align-baseline">
       <v-card-title class="pb-2 font-weight-regular">My Activity</v-card-title>
     </div>
@@ -21,42 +20,24 @@
             :key="i"
           >
             {{ formatDate(times.startDate) }} --
-            {{ formatDate(times.endDate) }}</v-timeline-item
-          >
+            {{ formatDate(times.endDate) }}
+          </v-timeline-item>
           <v-timeline-item class="pb-3" small color="grey" v-if="toMuchHistory">
             <a
               class="highlight teal--text"
               @click="historyExpanded = !historyExpanded"
               >{{ historyLink }}
-            </a></v-timeline-item
-          >
+            </a>
+          </v-timeline-item>
         </v-timeline>
       </v-col>
-      <!-- <v-col class="py-0" cols="auto" style="max-width: 180px">
-        <bs-time-picker
-          :date="userData.startDate"
-          :error="dateError"
-          @input="userData.startDate = $event"
-        >
-        </bs-time-picker>
-      </v-col>
-      <v-col class="py-0 px-1" cols="auto">
-        <span>-</span>
-      </v-col>
-      <v-col class="py-0" cols="auto" style="max-width: 180px">
-        <bs-time-picker
-          :date="userData.endDate"
-          :error="dateError"
-          @input="userData.endDate = $event"
-        ></bs-time-picker>
-      </v-col> -->
     </v-row>
 
     <v-card-text
       v-if="userData.notes && !reviewActive"
       class="pt-0 black--text text-subtitle-1"
-      >My review: {{ userData.notes }}</v-card-text
-    >
+      >My review: {{ userData.notes }}
+    </v-card-text>
     <v-row class="px-4 mb-n8" v-if="reviewActive">
       <v-col :cols="smL ? 12 : 6">
         <v-textarea outlined auto-grow rows="3" v-model="userData.notes">
@@ -78,7 +59,6 @@
 import moment from "moment";
 import { ServiceFactory } from "../../services/serviceFactory";
 import mediaQueryLogic from "../../mixins/mediaQueryLogic";
-import TimePickerVue from "../shared/TimePicker.vue";
 const userService = ServiceFactory.get("user");
 
 export default {
@@ -89,9 +69,6 @@ export default {
       type: Object,
     },
   },
-  components: {
-    // "bs-time-picker": TimePickerVue,
-  },
 
   data() {
     return {
@@ -99,8 +76,6 @@ export default {
       reviewActive: false,
       oldReview: "",
       historyExpanded: false,
-      // endDateRules: () => this.endDate >= this.startDate || this.errorMessage,
-      // startDateRules: () => this.startDate <= this.endDate || this.errorMessage,
     };
   },
 
