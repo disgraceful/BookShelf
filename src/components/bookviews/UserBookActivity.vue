@@ -1,36 +1,134 @@
 <template>
   <v-card flat>
+    <!-- use v-row? -->
     <div class="d-flex flex-row justify-space-between align-baseline">
-      <v-card-title class="font-weight-regular">My Activity</v-card-title>
-      <v-btn text>Edit</v-btn>
+      <v-card-title class="pb-2 font-weight-regular">My Activity</v-card-title>
     </div>
     <v-divider></v-divider>
-    <v-card-text class="black--text subtitle-1"
-      >Finished: {{ formatDate(userData.startDate) }} –
-      {{ formatDate(userData.endDate) }}</v-card-text
-    >
+    <v-row class="px-4" align="baseline">
+      <v-col class="py-0" cols="auto">
+        <v-card-text class="text-subtitle-1 px-0 px-1 black--text">
+          Finished:
+        </v-card-text>
+      </v-col>
+      <v-col class="py-0" cols="auto" style="max-width: 180px">
+        <bs-time-picker
+          :date="userData.startDate"
+          :error="dateError"
+          @input="userData.startDate = $event"
+        >
+        </bs-time-picker>
+      </v-col>
+      <v-col class="py-0 px-1" cols="auto">
+        <span>-</span>
+      </v-col>
+      <v-col class="py-0" cols="auto" style="max-width: 180px">
+        <bs-time-picker
+          :date="userData.endDate"
+          :error="dateError"
+          @input="userData.endDate = $event"
+        ></bs-time-picker>
+      </v-col>
+      <v-form ref="form"></v-form>
+    </v-row>
+
     <v-card-text
-      v-if="userData.notes && userData.notes !== ''"
-      class="pt-0 black--text subtitle-1"
+      v-if="userData.notes && !reviewActive"
+      class="pt-0 black--text text-subtitle-1"
       >My review: {{ userData.notes }}</v-card-text
     >
-    <v-btn text v-else>Add Review</v-btn>
+    <v-row class="px-4 mb-n8" v-if="reviewActive">
+      <v-col :cols="smL ? 12 : 6">
+        <v-textarea outlined auto-grow rows="3" v-model="userData.notes">
+        </v-textarea>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col class="py-0" cols="auto">
+        <v-btn text @click="editReview">{{ btnText }}</v-btn>
+      </v-col>
+      <v-col class="py-0" cols="auto" v-if="reviewActive">
+        <v-btn text @click="reviewActive = false">Cancel</v-btn>
+      </v-col>
+    </v-row>
   </v-card>
 </template>
 
 <script>
 import moment from "moment";
+import { ServiceFactory } from "../../services/serviceFactory";
+import mediaQueryLogic from "../../mixins/mediaQueryLogic";
+import TimePickerVue from "../shared/TimePicker.vue";
+const userService = ServiceFactory.get("user");
+
 export default {
+  mixins: [mediaQueryLogic],
   props: {
-    userData: {
+    book: {
       required: true,
-      type: Object
-    }
+      type: Object,
+    },
   },
+  components: {
+    "bs-time-picker": TimePickerVue,
+  },
+
+  data() {
+    return {
+      userData: null,
+      reviewActive: false,
+      oldReview: "",
+      dateError: null,
+    };
+  },
+
+  watch: {
+    ["userData.startDate"](val) {
+      if (this.userData.endDate < val) {
+        this.dateError = { startDate: true };
+      } else {
+        this.dateError = null;
+      }
+    },
+
+    ["userData.endDate"](val) {
+      if (this.userData.startDate > val) {
+        this.dateError = { endDate: true };
+      } else {
+        this.dateError = null;
+      }
+    },
+  },
+
+  computed: {
+    btnText() {
+      if (!this.reviewActive && this.userData.notes) return "Edit review";
+      return this.reviewActive ? "Submit" : "Add Review";
+    },
+  },
+
   methods: {
+    editReview() {
+      this.reviewActive = true;
+      if (this.userData.notes && this.userData.notes !== this.oldReview) {
+        userService
+          .updateBook(this.book)
+          .then(() => {
+            this.reviewActive = false;
+            this.oldReview = this.userData.notes;
+          })
+          .catch((error) => this.$emit("error", error.body));
+      }
+    },
+
     formatDate(date) {
       return date ? moment(date).format("MMMM Do YYYY") : "";
-    }
-  }
+    },
+  },
+
+  created() {
+    this.userData = this.book.userData;
+    this.oldReview = this.userData.notes;
+  },
 };
 </script>

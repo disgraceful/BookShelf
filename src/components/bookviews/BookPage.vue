@@ -118,7 +118,7 @@
       </v-row>
       <v-row v-if="book.userData.status === 'finished'">
         <v-col>
-          <bs-book-activity :userData="book.userData"></bs-book-activity>
+          <bs-book-activity :book="book"></bs-book-activity>
         </v-col>
       </v-row>
     </v-container>

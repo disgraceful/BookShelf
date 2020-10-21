@@ -34,7 +34,6 @@
                 :values="ratingValues"
                 :cleared="cleared"
                 @input="rating = $event"
-                ref="rating"
               ></bs-hover-rating>
             </v-col>
             <v-col class="pa-2">
