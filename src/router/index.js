@@ -1,16 +1,17 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "../components/HomePage";
 import Register from "../components/auth/RegisterPage";
 import Login from "../components/auth/LoginPage";
-import BookPage from "../components/bookviews/BookPage";
-import UserStats from "../components/userviews/UserStats";
-import SeriesPage from "../components/series/SeriesPage";
-import AuthorPage from "../components/author/AuthorPage";
-import Favorites from "../components/userviews/Favorites.vue";
-import MyBooks from "../components/userviews/MyBooks";
-import ErrorPage from "../components/shared/ErrorPage";
-import AuthorAllBooks from "../components/author/AuthorAllBooks";
+
+const Home = () => import("../components/HomePage.vue");
+const BookPage = () => import("../components/bookviews/BookPage.vue");
+const UserStats = () => import("../components/userviews/UserStats.vue");
+const AuthorPage = () => import("../components/author/AuthorPage.vue");
+const SeriesPage = () => import("../components/series/SeriesPage.vue");
+const Favorites = () => import("../components/userviews/Favorites.vue");
+const MyBooks = () => import("../components/userviews/MyBooks");
+const ErrorPage = () => import("../components/shared/ErrorPage");
+const AuthorAllBooks = () => import("../components/author/AuthorAllBooks");
 
 Vue.use(VueRouter);
 const authGuard = (to, from, next) => {

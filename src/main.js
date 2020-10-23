@@ -26,5 +26,3 @@ new Vue({
     this.$store.dispatch("getSavedUser");
   },
 }).$mount("#app");
-
-console.log(process.env);
