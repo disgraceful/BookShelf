@@ -44,9 +44,7 @@ export default {
       gapi.load("auth2", () => {
         // Retrieve the singleton for the GoogleAuth library and set up the client.
         this.auth2 = gapi.auth2.init({
-          client_id:
-            //ummm prolly should add this to .env file or something...
-            "463636811603-dujav8toqr9ijfek13vfclg723dnqrfe.apps.googleusercontent.com",
+          client_id: process.env.VUE_APP_GOOGLE_CLIENT,
           cookiepolicy: "single_host_origin",
           scope: "profile email",
         });
