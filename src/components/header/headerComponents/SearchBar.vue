@@ -39,8 +39,8 @@
               params: { id: item.id, search: 'true' },
             }"
           >
-            <v-list-item-avatar tile height="56px" width="46px">
-              <v-img :src="item.imageUrl"></v-img>
+            <v-list-item-avatar tile height="60" width="40">
+              <bs-img :url="item.imageUrl" height="60" width="45"></bs-img>
             </v-list-item-avatar>
             <v-list-item-content>
               <v-list-item-title
@@ -70,9 +70,11 @@ import {
   takeUntil,
   catchError,
 } from "rxjs/operators";
+import PlaceholderImg from "../../shared/PlaceholderImg.vue";
 const bookService = ServiceFactory.get("book");
 
 export default {
+  components: { "bs-img": PlaceholderImg },
   data() {
     return {
       searchQuery: "",

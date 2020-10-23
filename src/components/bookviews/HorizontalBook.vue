@@ -7,7 +7,7 @@
       :dense="smL"
     >
       <v-col cols="auto">
-        <v-img :src="book.imageUrl" height="120" width="80"></v-img>
+        <bs-img :url="book.imageUrl" width="80" height="120"></bs-img>
       </v-col>
       <v-col cols="auto" class="pa-1" style="width: 220px">
         <v-card-text class="pa-1 subtitle-1">
@@ -50,6 +50,7 @@ import BookLinksHelper from "./BookLinkHelper";
 import shrinkDesc from "../../mixins/shrinkDescription";
 import mediaQuery from "../../mixins/mediaQueryLogic";
 import { ServiceFactory } from "../../services/serviceFactory";
+import PlaceholderImg from "../shared/PlaceholderImg.vue";
 const userService = ServiceFactory.get("user");
 export default {
   props: {
@@ -62,6 +63,7 @@ export default {
   components: {
     "bs-author-links": AuthorLinksHelper,
     "bs-book-links": BookLinksHelper,
+    "bs-img": PlaceholderImg,
   },
 
   computed: {

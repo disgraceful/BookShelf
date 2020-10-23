@@ -2,7 +2,7 @@
   <v-card flat>
     <v-row v-if="book" :justify="xs ? 'center' : 'start'">
       <v-col :cols="xs ? 12 : 'auto'" style="max-width: 140px">
-        <v-img :src="book.imageUrl" height="180px"></v-img>
+        <bs-img :url="book.imageUrl" height="180"></bs-img>
       </v-col>
       <v-col class="py-2 px-3" :cols="xs ? 'auto' : ''">
         <v-card-title class="pa-0">
@@ -90,6 +90,7 @@ import bookStatus from "../../mixins/bookStatus";
 import FinishDialog from "./FinishBookDialog";
 import mediaQueryLogic from "../../mixins/mediaQueryLogic";
 import AuthorLinksHelper from "../author/AuthorLinksHelper.vue";
+import PlaceholderImg from "../shared/PlaceholderImg.vue";
 const bookService = ServiceFactory.get("book");
 const userService = ServiceFactory.get("user");
 
@@ -104,6 +105,7 @@ export default {
   components: {
     "bs-finish-dialog": FinishDialog,
     "bs-author-links": AuthorLinksHelper,
+    "bs-img": PlaceholderImg,
   },
 
   data() {

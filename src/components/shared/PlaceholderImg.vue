@@ -11,7 +11,7 @@
       >
         <v-progress-circular
           indeterminate
-          color="grey lighten-5"
+          color="grey lighten-2"
         ></v-progress-circular>
       </v-row>
     </template>
@@ -22,8 +22,8 @@
 export default {
   props: {
     url: { type: String, required: true },
-    width: { type: Number, default: 60 },
-    height: { type: Number, default: 100 },
+    width: { type: [Number, String], default: 60 },
+    height: { type: [Number, String], default: 100 },
   },
 
   computed: {
