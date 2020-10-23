@@ -24,6 +24,11 @@
         <v-divider v-if="i < getBooks(tab).length - 1"></v-divider>
       </v-col>
       <v-divider v-if="getBooks(tab).length > 0"></v-divider>
+      <v-row justify="end" v-if="showLink(tab)">
+        <v-col class="pb-0" cols="auto" @click="showBooks = !showBooks">
+          <a class="highlight">{{ showLinkText }}</a>
+        </v-col>
+      </v-row>
     </v-tabs-items>
   </v-tabs>
 </template>
@@ -44,12 +49,29 @@ export default {
   data() {
     return {
       tab: 0,
+      showBooksNum: 10,
+      showBooks: false,
     };
   },
 
+  computed: {
+    showLinkText() {
+      return this.showBooks ? "Show less" : "Show more";
+    },
+  },
+
   methods: {
+    showLink(tab) {
+      return this.tabItems[tab].books.length > this.showBooksNum;
+    },
+
     getBooks(tab) {
-      return this.tabItems[tab].books;
+      let books = this.tabItems[tab].books;
+      if (books.length > this.showBooksNum && !this.showBooks) {
+        return books.slice(0, this.showBooksNum);
+      } else {
+        return books;
+      }
     },
 
     pagesRead(tab) {
