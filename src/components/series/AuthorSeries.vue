@@ -21,20 +21,7 @@
         <v-row dense :justify="smL ? 'center' : 'end'" v-if="books">
           <v-col cols="auto" v-for="book in books" :key="book.id">
             <router-link :to="{ name: 'book', params: { id: book.id } }">
-              <v-img :src="book.imageUrl" width="60" height="100">
-                <template v-slot:placeholder>
-                  <v-row
-                    class="fill-height ma-0"
-                    align="center"
-                    justify="center"
-                  >
-                    <v-progress-circular
-                      indeterminate
-                      color="grey lighten-5"
-                    ></v-progress-circular>
-                  </v-row>
-                </template>
-              </v-img>
+              <bs-img :url="book.imageUrl"></bs-img>
             </router-link>
           </v-col>
         </v-row>
@@ -52,6 +39,7 @@
 import Preloader from "../shared/Preloader";
 import mediaQuery from "../../mixins/mediaQueryLogic";
 import { ServiceFactory } from "../../services/serviceFactory";
+import PlaceholderImg from "../shared/PlaceholderImg.vue";
 const seriesService = ServiceFactory.get("series");
 const bookService = ServiceFactory.get("book");
 
@@ -65,6 +53,7 @@ export default {
   },
   components: {
     "bs-loader": Preloader,
+    "bs-img": PlaceholderImg,
   },
 
   data() {

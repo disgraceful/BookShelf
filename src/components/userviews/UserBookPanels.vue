@@ -68,7 +68,7 @@ export default {
     return {
       tab: 0,
       expanded: false,
-      showBooksNum: 1,
+      showBooksNum: 5,
       showBooks: false,
     };
   },
