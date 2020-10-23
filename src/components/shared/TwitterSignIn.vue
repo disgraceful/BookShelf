@@ -1,13 +1,8 @@
 <template>
-  <v-btn
-    dark
-    color="#42A5F5"
-    @click="signInWithTwitter"
-    :loading="loading && sameProvider"
-  >
+  <v-btn dark color="#42A5F5" @click="signInWithTwitter" :loading="loading && sameProvider">
     <img width="38" style="padding-right: 10px" :src="twitterIcon" />
     <!-- <span class="text-capitalize">Twitter</span> -->
-    <span class="text-none">{{ text }} via Twitter </span>
+    <span class="text-none">{{ text }} via Twitter</span>
   </v-btn>
 </template>
 
@@ -59,4 +54,3 @@ export default {
   },
 };
 </script>
-

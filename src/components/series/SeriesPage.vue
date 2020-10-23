@@ -13,11 +13,9 @@
       </v-row>
       <v-row justify="end">
         <v-col cols="auto" class="pr-3">
-          <a
-            class="text-highlight teal--text"
-            @click="showBooks = !showBooks"
-            >{{ showLinkText }}</a
-          >
+          <a class="text-highlight teal--text" @click="showBooks = !showBooks">
+            {{ showLinkText }}
+          </a>
         </v-col>
       </v-row>
     </v-container>
@@ -61,9 +59,7 @@ export default {
 
   computed: {
     books() {
-      return this.showBooks
-        ? this.series.bookIds
-        : this.series.bookIds.slice(0, this.showBooksNum);
+      return this.showBooks ? this.series.bookIds : this.series.bookIds.slice(0, this.showBooksNum);
     },
 
     showLinkText() {

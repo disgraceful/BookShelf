@@ -8,44 +8,21 @@
               <v-img :src="book.imageUrl || defaultImg" content></v-img>
               <v-tooltip bottom content-class="tooltip">
                 <template v-slot:activator="{ on }">
-                  <v-btn
-                    fab
-                    small
-                    absolute
-                    top
-                    right
-                    v-on="on"
-                    color="white"
-                    @click="favorite"
-                  >
+                  <v-btn fab small absolute top right v-on="on" color="white" @click="favorite">
                     <v-icon :color="book.userData.isFavorited ? 'red' : 'grey'">
-                      {{
-                        book.userData.isFavorited
-                          ? "mdi-heart"
-                          : "mdi-heart-outline"
-                      }}
+                      {{ book.userData.isFavorited ? "mdi-heart" : "mdi-heart-outline" }}
                     </v-icon>
                   </v-btn>
                 </template>
-                <span
-                  v-text="book.userData.isFavorited ? 'Unfavorite' : 'Favorite'"
-                ></span>
+                <span v-text="book.userData.isFavorited ? 'Unfavorite' : 'Favorite'"></span>
               </v-tooltip>
             </div>
           </v-col>
           <v-col
             class="py-0"
-            v-if="
-              book.userData.status !== 'not reading' &&
-              book.userData.status !== '2read'
-            "
+            v-if="book.userData.status !== 'not reading' && book.userData.status !== '2read'"
           >
-            <v-rating
-              v-model="book.userData.rating"
-              hover
-              medium
-              @input="update"
-            ></v-rating>
+            <v-rating v-model="book.userData.rating" hover medium @input="update"></v-rating>
           </v-col>
           <v-col class="pb-0" v-if="!mdH">
             <v-select
@@ -70,12 +47,11 @@
                 <v-btn
                   text
                   :key="item.status"
-                  :class="
-                    item.status === book.userData.status ? activeClass : ''
-                  "
+                  :class="item.status === book.userData.status ? activeClass : ''"
                   @click="handleCollection(item.status)"
-                  >{{ item.text }}</v-btn
                 >
+                  {{ item.text }}
+                </v-btn>
                 <v-divider
                   vertical
                   :key="index"
@@ -109,9 +85,9 @@
               ></v-slider>
             </v-col>
             <v-col cols="auto">
-              <v-btn depressed color="teal" class="white--text" @click="update"
-                >Update progress</v-btn
-              >
+              <v-btn depressed color="teal" class="white--text" @click="update">
+                Update progress
+              </v-btn>
             </v-col>
           </v-row>
         </v-col>

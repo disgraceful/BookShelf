@@ -8,26 +8,22 @@
     <v-card>
       <v-form ref="form" v-model="formValid">
         <v-container>
-          <v-card-title class="pb-0"
-            >{{ book.title }} {{ getSeries }}
-          </v-card-title>
+          <v-card-title class="pb-0">{{ book.title }} {{ getSeries }}</v-card-title>
           <v-card-text class="text-subtitle-1 pb-1">
-            <span>by </span>
+            <span>by</span>
             <span v-if="isPrivate">{{ book.authors }}</span>
             <template v-else>
               <span
                 v-for="(author, i) in book.authors"
                 :key="i"
-                v-text="
-                  i < book.authors.length - 1 ? `${author.name}, ` : author.name
-                "
+                v-text="i < book.authors.length - 1 ? `${author.name}, ` : author.name"
               ></span>
             </template>
           </v-card-text>
           <v-divider></v-divider>
 
           <v-row class="px-3 pt-2">
-            <v-col cols="auto" class="text-subtitle-1"> My rating: </v-col>
+            <v-col cols="auto" class="text-subtitle-1">My rating:</v-col>
             <v-col cols="auto" class="px-0">
               <bs-hover-rating
                 :rating="rating"
@@ -63,8 +59,7 @@
                 label="Start date"
                 prependIcon
                 clearable
-              >
-              </bs-time-picker>
+              ></bs-time-picker>
             </v-col>
             <v-col cols="auto">
               <bs-time-picker
@@ -74,8 +69,7 @@
                 label="End date"
                 prependIcon
                 clearable
-              >
-              </bs-time-picker>
+              ></bs-time-picker>
             </v-col>
           </v-row>
           <v-card-actions class="justify-end">
@@ -114,13 +108,7 @@ export default {
       formValid: false,
       startDate: new Date().toISOString().substr(0, 10),
       endDate: new Date().toISOString().substr(0, 10),
-      ratingValues: [
-        "Not worth",
-        "Mediocre",
-        "Okay book",
-        "Good book",
-        "Great book",
-      ],
+      ratingValues: ["Not worth", "Mediocre", "Okay book", "Good book", "Great book"],
       errorMessage: "Something doesn't add up!",
       startDateRules: () => this.startDate <= this.endDate || this.errorMessage,
       endDateRules: () => this.endDate >= this.startDate || this.errorMessage,

@@ -25,23 +25,19 @@
                   <bs-time-picker
                     v-if="editActive"
                     :date="times.startDate"
-                    :rules="
-                      startDateRules.call(this, formatDate(times.endDate))
-                    "
+                    :rules="startDateRules.call(this, formatDate(times.endDate))"
                     @input="times.startDate = $event"
                   ></bs-time-picker>
                   <template v-else>
                     {{ formatDate(times.startDate) }}
                   </template>
                 </v-col>
-                <v-col cols="auto" class="py-0"> – </v-col>
+                <v-col cols="auto" class="py-0">–</v-col>
                 <v-col cols="auto" class="py-0" style="max-width: 180px">
                   <bs-time-picker
                     v-if="editActive"
                     :date="times.endDate"
-                    :rules="
-                      endDateRules.call(this, formatDate(times.startDate))
-                    "
+                    :rules="endDateRules.call(this, formatDate(times.startDate))"
                     @input="times.endDate = $event"
                   ></bs-time-picker>
                   <template v-else>
@@ -51,10 +47,8 @@
               </v-row>
             </v-timeline-item>
             <v-timeline-item small color="grey" v-if="toMuchHistory">
-              <a
-                class="highlight teal--text"
-                @click="historyExpanded = !historyExpanded"
-                >{{ historyLink }}
+              <a class="highlight teal--text" @click="historyExpanded = !historyExpanded">
+                {{ historyLink }}
               </a>
             </v-timeline-item>
           </v-timeline>
@@ -66,8 +60,9 @@
               editActive = true;
               historyExpanded = true;
             "
-            >Edit</v-btn
           >
+            Edit
+          </v-btn>
         </v-col>
         <template v-else>
           <v-col cols="auto">
@@ -80,22 +75,20 @@
                 editActive = false;
                 historyExpanded = false;
               "
-              >Cancel</v-btn
             >
+              Cancel
+            </v-btn>
           </v-col>
         </template>
       </v-row>
     </v-form>
 
-    <v-card-text
-      v-if="userData.notes && !reviewActive"
-      class="pt-0 black--text text-subtitle-1"
-      >My review: {{ userData.notes }}
+    <v-card-text v-if="userData.notes && !reviewActive" class="pt-0 black--text text-subtitle-1">
+      My review: {{ userData.notes }}
     </v-card-text>
     <v-row class="px-4 mb-n8" v-if="reviewActive">
       <v-col :cols="smL ? 12 : 6">
-        <v-textarea outlined auto-grow rows="3" v-model="userData.notes">
-        </v-textarea>
+        <v-textarea outlined auto-grow rows="3" v-model="userData.notes"></v-textarea>
       </v-col>
     </v-row>
     <v-row>

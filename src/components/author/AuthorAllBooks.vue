@@ -1,27 +1,18 @@
 <template>
   <v-card flat>
     <v-container v-if="bookIds && author && !error" class="page-container">
-      <v-card-title class="text-h5 px-0 pb-1"
-        >{{ author.name }}'s books</v-card-title
-      >
+      <v-card-title class="text-h5 px-0 pb-1">{{ author.name }}'s books</v-card-title>
       <v-divider></v-divider>
       <v-row justify="start">
-        <v-col
-          class="py-0"
-          cols="12"
-          v-for="bookId in visibleBooks"
-          :key="bookId"
-        >
+        <v-col class="py-0" cols="12" v-for="bookId in visibleBooks" :key="bookId">
           <bs-series-book :id="bookId" @error="error = $event"></bs-series-book>
         </v-col>
       </v-row>
       <v-row justify="end">
         <v-col cols="auto" class="pr-3">
-          <a
-            class="text-highlight teal--text"
-            @click="showMoreBooks = !showMoreBooks"
-            >{{ showLinkText }}</a
-          >
+          <a class="text-highlight teal--text" @click="showMoreBooks = !showMoreBooks">
+            {{ showLinkText }}
+          </a>
         </v-col>
       </v-row>
     </v-container>
@@ -60,9 +51,7 @@ export default {
 
   computed: {
     visibleBooks() {
-      return this.showMoreBooks
-        ? this.bookIds
-        : this.bookIds.slice(0, this.showBooksNum);
+      return this.showMoreBooks ? this.bookIds : this.bookIds.slice(0, this.showBooksNum);
     },
 
     showLinkText() {

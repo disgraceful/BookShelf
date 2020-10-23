@@ -13,8 +13,7 @@
             {{ book.title }} {{ book.series ? book.series.fullName : "" }}
           </router-link>
         </v-card-text>
-        <bs-author-links class="pa-0 pt-1 text-body-2" :authors="book.authors">
-        </bs-author-links>
+        <bs-author-links class="pa-0 pt-1 text-body-2" :authors="book.authors"></bs-author-links>
         <v-card-text class="pa-0">
           Goodreads rating: {{ book.goodreadsRating }} &bull; Published in
           {{ book.publishedYear }}
@@ -43,12 +42,7 @@
         >
           <v-col class="text-center pa-0 pb-2">
             {{ book.userData.rating > 0 ? "Your rating:" : "Rate:" }}
-            <v-rating
-              size="20"
-              hover
-              v-model="book.userData.rating"
-              @input="update"
-            ></v-rating>
+            <v-rating size="20" hover v-model="book.userData.rating" @input="update"></v-rating>
           </v-col>
         </v-row>
       </v-col>

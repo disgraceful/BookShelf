@@ -1,7 +1,7 @@
 <template>
   <v-btn dark color="#3F51B5" @click="checkLoginStatus()">
     <img width="28" :src="require('../../assets/facebook-32.png')" />
-    <span class="text-capitalize"> Facebook </span>
+    <span class="text-capitalize">Facebook</span>
   </v-btn>
   <!-- <div
     class="fb-login-button"
@@ -26,7 +26,7 @@ export default {
     checkLoginStatus() {
       try {
         console.log("happening");
-        this.fbObj.getLoginStatus(function (event) {
+        this.fbObj.getLoginStatus(function(event) {
           console.log(event);
           if (event.authResponse) {
             console.log(event.authResponse.accessToken);
@@ -59,7 +59,7 @@ export default {
 
   created() {
     this.initFBScript(document, "script", "facebook-jssdk");
-    window.fbAsyncInit = function () {
+    window.fbAsyncInit = function() {
       FB.init({
         appId: "634150080579005",
         cookie: true,

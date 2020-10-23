@@ -1,18 +1,11 @@
 <template>
   <v-card>
     <v-container class="px-7">
-      <v-card-title class="pb-0 px-0 text-uppercase"
-        >Upload private book</v-card-title
-      >
+      <v-card-title class="pb-0 px-0 text-uppercase">Upload private book</v-card-title>
       <v-form ref="form" v-model="valid" lazy-validation>
         <v-row justify="start">
           <v-col cols="auto">
-            <v-img
-              :src="imgPath"
-              max-height="200px"
-              width="150px"
-              contain
-            ></v-img>
+            <v-img :src="imgPath" max-height="200px" width="150px" contain></v-img>
           </v-col>
         </v-row>
         <v-file-input
@@ -23,16 +16,8 @@
           :rules="imgRules"
           accept="image/*"
         ></v-file-input>
-        <v-text-field
-          label="Title"
-          v-model="title"
-          :rules="titleRules"
-        ></v-text-field>
-        <v-text-field
-          label="Author"
-          v-model="author"
-          :rules="authorRules"
-        ></v-text-field>
+        <v-text-field label="Title" v-model="title" :rules="titleRules"></v-text-field>
+        <v-text-field label="Author" v-model="author" :rules="authorRules"></v-text-field>
         <v-text-field
           label="Pages"
           v-model="pages"
@@ -72,10 +57,7 @@ export default {
       cover: null,
       defaultImg: require("../../assets/goodreads.png"),
       imgRules: [
-        (value) =>
-          !value ||
-          value.type.includes("image") ||
-          "Please upload valid image file!",
+        (value) => !value || value.type.includes("image") || "Please upload valid image file!",
       ],
       titleRules: [(value) => !!value || "Book title is required"],
       authorRules: [(value) => !!value || "Author name is required"],
@@ -96,14 +78,10 @@ export default {
   },
   computed: {
     imgPath() {
-      return this.cover && this.cover.size > 0
-        ? URL.createObjectURL(this.cover)
-        : this.defaultImg;
+      return this.cover && this.cover.size > 0 ? URL.createObjectURL(this.cover) : this.defaultImg;
     },
     formValid() {
-      return (
-        this.title !== "" && this.author !== "" && +this.pages > 0 && this.valid
-      );
+      return this.title !== "" && this.author !== "" && +this.pages > 0 && this.valid;
     },
   },
   methods: {
@@ -138,4 +116,3 @@ export default {
   },
 };
 </script>
-

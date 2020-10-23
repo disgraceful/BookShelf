@@ -6,11 +6,9 @@
         <slot name="actions"></slot>
       </div>
       <v-card-text class="px-0 pb-1 subtitle-2" style="max-width: 140px">
-        <router-link
-          class="link-inherit highlight"
-          :to="{ name: 'book', params: { id: book.id } }"
-          >{{ book.title }}</router-link
-        >
+        <router-link class="link-inherit highlight" :to="{ name: 'book', params: { id: book.id } }">
+          {{ book.title }}
+        </router-link>
       </v-card-text>
       <bs-author-links
         :authors="book.authors"

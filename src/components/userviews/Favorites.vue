@@ -17,18 +17,18 @@
                 :loading="loading && bookIndex == i"
                 @click="favorite(book, i)"
               >
-                <v-icon :color="book.userData.isFavorited ? 'red' : 'grey'">{{
-                  book.userData.isFavorited ? "mdi-heart" : "mdi-heart-outline"
-                }}</v-icon>
+                <v-icon :color="book.userData.isFavorited ? 'red' : 'grey'">
+                  {{ book.userData.isFavorited ? "mdi-heart" : "mdi-heart-outline" }}
+                </v-icon>
               </v-btn>
             </template>
           </bs-display-book>
         </v-col>
       </v-row>
-      <v-card-text v-if="noFavorites" class="text-h6 font-weight-regular"
-        >Looks like you haven't favorite any books yet! Use heart button on book
-        pages to mark your favorites!</v-card-text
-      >
+      <v-card-text v-if="noFavorites" class="text-h6 font-weight-regular">
+        Looks like you haven't favorite any books yet! Use heart button on book pages to mark your
+        favorites!
+      </v-card-text>
     </v-container>
     <bs-loader v-if="loading && bookIndex < 0"></bs-loader>
     <bs-error-page v-if="error" :error="error"></bs-error-page>
@@ -61,9 +61,7 @@ export default {
 
   computed: {
     favorites() {
-      return this.books
-        ? this.books.filter((book) => book.userData.isFavorited)
-        : [];
+      return this.books ? this.books.filter((book) => book.userData.isFavorited) : [];
     },
 
     noFavorites() {

@@ -43,12 +43,8 @@
               <bs-img :url="item.imageUrl" height="60" width="45"></bs-img>
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title
-                >{{ item.title }} {{ item.series }}</v-list-item-title
-              >
-              <v-list-item-subtitle
-                v-text="`by ${item.author}`"
-              ></v-list-item-subtitle>
+              <v-list-item-title>{{ item.title }} {{ item.series }}</v-list-item-title>
+              <v-list-item-subtitle v-text="`by ${item.author}`"></v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
           <v-divider :key="index"></v-divider>

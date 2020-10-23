@@ -1,11 +1,6 @@
 <template>
   <v-container :class="!mdH ? 'px-5' : 'pa-0'">
-    <v-row
-      align="center"
-      :justify="smL ? 'center' : 'start'"
-      :style="wrapperStyle"
-      :dense="smL"
-    >
+    <v-row align="center" :justify="smL ? 'center' : 'start'" :style="wrapperStyle" :dense="smL">
       <v-col cols="auto">
         <bs-img :url="book.imageUrl" width="80" height="120"></bs-img>
       </v-col>
@@ -13,19 +8,11 @@
         <v-card-text class="pa-1 subtitle-1">
           <bs-book-links :id="book.id">{{ shrinkedDescription }}</bs-book-links>
         </v-card-text>
-        <bs-author-links
-          :authors="book.authors"
-          :classes="'pa-1 subtitle-1'"
-        ></bs-author-links>
+        <bs-author-links :authors="book.authors" :classes="'pa-1 subtitle-1'"></bs-author-links>
       </v-col>
       <v-spacer v-if="mdH"></v-spacer>
       <v-col class="text-center" :cols="smL ? '12' : 'auto'">
-        <v-rating
-          medium
-          v-model="book.userData.rating"
-          hover
-          @input="update"
-        ></v-rating>
+        <v-rating medium v-model="book.userData.rating" hover @input="update"></v-rating>
       </v-col>
       <v-spacer></v-spacer>
       <v-col cols="auto" style="min-width: 260px">

@@ -6,16 +6,15 @@
           <router-link
             class="link-inherit highlight"
             :to="{ name: 'series', params: { id: series.id } }"
-            >{{ series.title }}</router-link
           >
+            {{ series.title }}
+          </router-link>
           ({{ series.workCount }} books)
         </v-card-text>
-        <v-card-text class="pa-0 pt-2 text-body-2"
-          >by {{ series.author }}</v-card-text
-        >
-        <v-card-text v-if="books" class="py-1 px-0 text-body-2"
-          >Average rating: {{ avgRating }}</v-card-text
-        >
+        <v-card-text class="pa-0 pt-2 text-body-2">by {{ series.author }}</v-card-text>
+        <v-card-text v-if="books" class="py-1 px-0 text-body-2">
+          Average rating: {{ avgRating }}
+        </v-card-text>
       </v-col>
       <v-col :cols="!smL ? 'auto' : '12'">
         <v-row dense :justify="smL ? 'center' : 'end'" v-if="books">
@@ -26,9 +25,7 @@
           </v-col>
         </v-row>
         <v-row v-if="loading && !error">
-          <bs-loader
-            :options="{ wrapperClass: '', size: 50, width: 5 }"
-          ></bs-loader>
+          <bs-loader :options="{ wrapperClass: '', size: 50, width: 5 }"></bs-loader>
         </v-row>
       </v-col>
     </v-row>
@@ -68,17 +65,13 @@ export default {
   computed: {
     avgRating() {
       return (
-        this.books.reduce(
-          (prevValue, curValue) => prevValue + +curValue.goodreadsRating,
-          0
-        ) / this.books.length
+        this.books.reduce((prevValue, curValue) => prevValue + +curValue.goodreadsRating, 0) /
+        this.books.length
       ).toFixed(2);
     },
 
     bookIndex() {
-      return this.allBooksShown
-        ? this.displayBooks
-        : this.series.bookIds.length;
+      return this.allBooksShown ? this.displayBooks : this.series.bookIds.length;
     },
 
     allBooksShown() {
@@ -89,9 +82,7 @@ export default {
   created() {
     this.loading = true;
     Promise.all(
-      this.series.bookIds
-        .slice(0, this.bookIndex)
-        .map((id) => bookService.getBookById(id))
+      this.series.bookIds.slice(0, this.bookIndex).map((id) => bookService.getBookById(id))
     )
       .then((response) => {
         this.books = response.map((res) => res.body);

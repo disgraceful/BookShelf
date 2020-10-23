@@ -17,10 +17,9 @@
         v-on="on"
       ></v-text-field>
     </template>
-    <v-date-picker v-model="cmpDate" no-title @input="closeDialog">
-    </v-date-picker>
+    <v-date-picker v-model="cmpDate" no-title @input="closeDialog"></v-date-picker>
   </v-menu>
-</template> 
+</template>
 
 <script>
 import moment from "moment";

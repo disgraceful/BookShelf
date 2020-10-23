@@ -1,12 +1,10 @@
 <template>
   <div flat class="progress" :style="{ backgroundColor: progress.bgcolor }">
     <div class="progress-text">
-      <v-card-text class="display-3 pb-0 font-weight-regular">{{
-        progress.value
-      }}</v-card-text>
-      <v-card-text class="title text-lowercase pt-0 font-weight-regular">{{
-        progress.text
-      }}</v-card-text>
+      <v-card-text class="display-3 pb-0 font-weight-regular">{{ progress.value }}</v-card-text>
+      <v-card-text class="title text-lowercase pt-0 font-weight-regular">
+        {{ progress.text }}
+      </v-card-text>
     </div>
     <div class="filler" :style="fillerStyle"></div>
   </div>
@@ -17,8 +15,8 @@ export default {
   props: {
     progress: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   computed: {
     fillHeight() {
@@ -27,10 +25,10 @@ export default {
     fillerStyle() {
       return {
         height: `${this.fillHeight}%`,
-        backgroundColor: this.progress.color
+        backgroundColor: this.progress.color,
       };
-    }
-  }
+    },
+  },
 };
 </script>
 

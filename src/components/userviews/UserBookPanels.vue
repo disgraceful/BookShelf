@@ -3,9 +3,7 @@
     <v-container v-for="(item, i) in tabItems" :key="i" class="pa-0">
       <v-hover v-slot:default="{ hover }">
         <v-row
-          :style="
-            hover ? { backgroundColor: '#fafafa' } : { backgroundColor: '#fff' }
-          "
+          :style="hover ? { backgroundColor: '#fafafa' } : { backgroundColor: '#fff' }"
           justify="space-between"
           align="center"
           class="mx-0"
@@ -25,25 +23,15 @@
       </v-hover>
 
       <template v-if="isExpanded(i)">
-        <v-col
-          v-for="(book, i) in visibleBooks(item.books)"
-          :key="book.id"
-          class="py-0"
-        >
-          <bs-horizontal-book :book="book" @error="handleError(event)">
-          </bs-horizontal-book>
+        <v-col v-for="(book, i) in visibleBooks(item.books)" :key="book.id" class="py-0">
+          <bs-horizontal-book :book="book" @error="handleError(event)"></bs-horizontal-book>
           <v-divider v-if="i < visibleBooks(item.books).length - 1"></v-divider>
         </v-col>
       </template>
       <v-divider></v-divider>
-      <v-row
-        justify="end"
-        v-if="item.books.length > showBooksNum && isExpanded(i)"
-      >
+      <v-row justify="end" v-if="item.books.length > showBooksNum && isExpanded(i)">
         <v-col class="pb-0" cols="auto">
-          <a class="highlight" @click="showBooks = !showBooks">{{
-            showLinkText
-          }}</a>
+          <a class="highlight" @click="showBooks = !showBooks">{{ showLinkText }}</a>
         </v-col>
       </v-row>
     </v-container>

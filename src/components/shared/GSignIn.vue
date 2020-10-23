@@ -1,7 +1,7 @@
 <template>
   <v-btn id="customBtn" color="#fff" :loading="loading && sameProvider">
     <img src="https://img.icons8.com/color/28/000000/google-logo.png" />
-    <span class="text-none">{{ text }} via Google </span>
+    <span class="text-none">{{ text }} via Google</span>
   </v-btn>
 </template>
 

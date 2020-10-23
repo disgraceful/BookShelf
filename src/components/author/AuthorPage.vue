@@ -13,34 +13,25 @@
         <v-col :cols="$mq | mq({ xs: 'auto', sm: '' })">
           <v-card-title class="text-h5 py-1">{{ author.name }}</v-card-title>
           <v-divider></v-divider>
-          <v-card-text class="pb-0 text-body-1"
-            >Born: {{ author.bornDate }}</v-card-text
-          >
-          <v-card-text class="py-1 text-body-1"
-            >Died: {{ author.deathDate }}</v-card-text
-          >
+          <v-card-text class="pb-0 text-body-1">Born: {{ author.bornDate }}</v-card-text>
+          <v-card-text class="py-1 text-body-1">Died: {{ author.deathDate }}</v-card-text>
           <v-card-text class="pb-0 text-body-1 text-justify">
             {{ shrinkedDescription }}
-            <a
-              @click="shrinked = !shrinked"
-              v-if="splitDescription.length > 90"
-              >{{ expandLink }}</a
-            >
+            <a @click="shrinked = !shrinked" v-if="splitDescription.length > 90">
+              {{ expandLink }}
+            </a>
           </v-card-text>
         </v-col>
       </v-row>
       <template v-if="books && !error">
         <v-row>
           <v-col>
-            <v-card-title class="text-h6 font-weight-regular py-1"
-              >{{ author.name }}'s Books</v-card-title
-            >
+            <v-card-title class="text-h6 font-weight-regular py-1">
+              {{ author.name }}'s Books
+            </v-card-title>
             <v-divider></v-divider>
             <v-col v-for="(book, i) in books" :key="book.id" class="py-0">
-              <bs-author-book
-                :book="book"
-                @error="error = $event"
-              ></bs-author-book>
+              <bs-author-book :book="book" @error="error = $event"></bs-author-book>
               <v-divider v-if="i < books.length - 1"></v-divider>
             </v-col>
             <v-divider></v-divider>
@@ -51,8 +42,9 @@
             <router-link
               class="highlight teal--text"
               :to="{ name: 'authorbooks', params: { id: author.id } }"
-              >More books by {{ author.name }}</router-link
             >
+              More books by {{ author.name }}
+            </router-link>
           </v-col>
         </v-row>
       </template>
@@ -60,19 +52,12 @@
       <template v-if="series && !error">
         <v-row v-if="series">
           <v-col>
-            <v-card-title class="text-h6 font-weight-regular py-1"
-              >Series by {{ author.name }}</v-card-title
-            >
+            <v-card-title class="text-h6 font-weight-regular py-1">
+              Series by {{ author.name }}
+            </v-card-title>
             <v-divider></v-divider>
-            <v-col
-              v-for="(sery, i) in showingSeries"
-              :key="sery.id"
-              class="py-0"
-            >
-              <bs-author-series
-                :series="sery"
-                @error="error = $event"
-              ></bs-author-series>
+            <v-col v-for="(sery, i) in showingSeries" :key="sery.id" class="py-0">
+              <bs-author-series :series="sery" @error="error = $event"></bs-author-series>
               <v-divider v-if="i < showingSeries.length - 1"></v-divider>
             </v-col>
             <v-divider></v-divider>
@@ -80,11 +65,9 @@
         </v-row>
         <v-row justify="end">
           <v-col cols="auto" class="pt-0 pr-3">
-            <a
-              class="highlight teal--text text--darken-1"
-              @click="showAllSeries = !showAllSeries"
-              >{{ showSeriesText }}</a
-            >
+            <a class="highlight teal--text text--darken-1" @click="showAllSeries = !showAllSeries">
+              {{ showSeriesText }}
+            </a>
           </v-col>
         </v-row>
       </template>
@@ -134,9 +117,7 @@ export default {
 
   computed: {
     showingSeries() {
-      return this.showAllSeries
-        ? this.series
-        : this.series.slice(0, this.showSeries);
+      return this.showAllSeries ? this.series : this.series.slice(0, this.showSeries);
     },
 
     showSeriesText() {
@@ -167,9 +148,7 @@ export default {
     this.generateDescription(this.author.about, 60, 90);
 
     Promise.all(
-      this.author.bookIds
-        .slice(0, this.showBooks)
-        .map((id) => bookService.getBookById(id))
+      this.author.bookIds.slice(0, this.showBooks).map((id) => bookService.getBookById(id))
     ).then((response) => {
       this.books = response.map((res) => res.body);
     });

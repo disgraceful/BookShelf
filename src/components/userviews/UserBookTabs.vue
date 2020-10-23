@@ -12,15 +12,14 @@
           <v-card-title class="pa-2">{{ tabItems[tab].name }}</v-card-title>
         </v-col>
         <v-col cols="auto">
-          <v-card-title class="pa-2 font-weight-regular"
-            >read {{ pagesRead(tab) }} pages</v-card-title
-          >
+          <v-card-title class="pa-2 font-weight-regular">
+            read {{ pagesRead(tab) }} pages
+          </v-card-title>
         </v-col>
       </v-row>
       <v-divider></v-divider>
       <v-col v-for="(book, i) in getBooks(tab)" :key="book.id" class="py-0">
-        <bs-horizontal-book :book="book" @error="handleError(event)">
-        </bs-horizontal-book>
+        <bs-horizontal-book :book="book" @error="handleError(event)"></bs-horizontal-book>
         <v-divider v-if="i < getBooks(tab).length - 1"></v-divider>
       </v-col>
       <v-divider v-if="getBooks(tab).length > 0"></v-divider>
