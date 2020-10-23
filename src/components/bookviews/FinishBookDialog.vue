@@ -122,8 +122,8 @@ export default {
         "Great book",
       ],
       errorMessage: "Something doesn't add up!",
-      endDateRules: () => this.endDate >= this.startDate || this.errorMessage,
       startDateRules: () => this.startDate <= this.endDate || this.errorMessage,
+      endDateRules: () => this.endDate >= this.startDate || this.errorMessage,
       rating: 0,
       cleared: false,
     };
