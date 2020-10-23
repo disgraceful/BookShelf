@@ -2,7 +2,7 @@
   <v-card flat>
     <v-row>
       <v-col cols="auto">
-        <v-img :src="book.imageUrl" width="80" height="120px"></v-img>
+        <bs-img :url="book.imageUrl" width="80" height="120"></bs-img>
       </v-col>
       <v-col>
         <v-card-text class="pa-0 text-subtitle-1 font-weight-medium">
@@ -13,8 +13,7 @@
             {{ book.title }} {{ book.series ? book.series.fullName : "" }}
           </router-link>
         </v-card-text>
-        <bs-author-links class="pa-0 pt-1 text-body-2" :authors="book.authors">
-        </bs-author-links>
+        <bs-author-links class="pa-0 pt-1 text-body-2" :authors="book.authors"></bs-author-links>
         <v-card-text class="pa-0">
           Goodreads rating: {{ book.goodreadsRating }} &bull; Published in
           {{ book.publishedYear }}
@@ -43,12 +42,7 @@
         >
           <v-col class="text-center pa-0 pb-2">
             {{ book.userData.rating > 0 ? "Your rating:" : "Rate:" }}
-            <v-rating
-              size="20"
-              hover
-              v-model="book.userData.rating"
-              @input="update"
-            ></v-rating>
+            <v-rating size="20" hover v-model="book.userData.rating" @input="update"></v-rating>
           </v-col>
         </v-row>
       </v-col>
@@ -68,6 +62,7 @@ import mediaQuery from "../../mixins/mediaQueryLogic";
 import FinishDialog from "./FinishBookDialog";
 import AuthorLinks from "../author/AuthorLinksHelper";
 import { ServiceFactory } from "../../services/serviceFactory";
+import PlaceholderImg from "../shared/PlaceholderImg.vue";
 const userService = ServiceFactory.get("user");
 
 export default {
@@ -81,6 +76,7 @@ export default {
   components: {
     "bs-finish-dialog": FinishDialog,
     "bs-author-links": AuthorLinks,
+    "bs-img": PlaceholderImg,
   },
 
   data() {

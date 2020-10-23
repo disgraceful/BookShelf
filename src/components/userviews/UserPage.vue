@@ -28,21 +28,12 @@
       </v-row>
       <v-divider></v-divider>
       <v-col class="pa-0">
-        <v-card-text v-if="noBooks" class="text-h6 font-weight-regular"
-          >Looks like you have no books in your library. Use search to find what
-          you like!</v-card-text
-        >
+        <v-card-text v-if="noBooks" class="text-h6 font-weight-regular">
+          Looks like you have no books in your library. Use search to find what you like!
+        </v-card-text>
         <template v-else>
-          <bs-user-tabs
-            v-if="mdH"
-            :tabItems="tabItems"
-            @error="handleError($event)"
-          ></bs-user-tabs>
-          <bs-user-panels
-            v-else
-            :tabItems="tabItems"
-            @error="handleError($event)"
-          ></bs-user-panels>
+          <bs-user-tabs v-if="mdH" :tabItems="tabItems" @error="handleError($event)"></bs-user-tabs>
+          <bs-user-panels v-else :tabItems="tabItems" @error="handleError($event)"></bs-user-panels>
         </template>
       </v-col>
     </v-container>
@@ -76,8 +67,7 @@ export default {
       loading: true,
       userBooks: null,
       error: null,
-      countPages: (prevValue, curValue) =>
-        prevValue + +curValue.userData.pagesRead,
+      countPages: (prevValue, curValue) => prevValue + +curValue.userData.pagesRead,
     };
   },
 

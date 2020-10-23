@@ -1,11 +1,7 @@
 <template>
   <v-toolbar-items v-if="!user || lg || md">
-    <div
-      class="link-wrapper"
-      v-for="(link, index) in headerLinks"
-      :key="link.name"
-    >
-      <v-btn text v-text="link.name" :to="link.to"> </v-btn>
+    <div class="link-wrapper" v-for="(link, index) in headerLinks" :key="link.name">
+      <v-btn text v-text="link.name" :to="link.to"></v-btn>
       <v-divider vertical v-if="index < headerLinks.length - 1"></v-divider>
     </div>
   </v-toolbar-items>
@@ -13,12 +9,12 @@
     <v-menu offset-y>
       <template v-slot:activator="{ on }">
         <v-btn icon v-on="on">
-          <v-icon large> mdi-format-list-bulleted</v-icon>
+          <v-icon large>mdi-format-list-bulleted</v-icon>
         </v-btn>
       </template>
       <v-list>
-        <v-list-item v-for="item in headerLinks" :key="item.name"
-          ><router-link :to="item.to" class="link-inherit">
+        <v-list-item v-for="item in headerLinks" :key="item.name">
+          <router-link :to="item.to" class="link-inherit">
             {{ item.name }}
           </router-link>
         </v-list-item>

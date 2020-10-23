@@ -3,10 +3,10 @@
     <v-container v-if="!loading && !error">
       <v-card-title class="text-h5 py-2">User Statistics</v-card-title>
       <v-divider></v-divider>
-      <v-card-text v-if="noBooks" class="text-h6 font-weight-regular"
-        >Looks like you have no books in your library! Your stats will show up
-        when you start adding more books!</v-card-text
-      >
+      <v-card-text v-if="noBooks" class="text-h6 font-weight-regular">
+        Looks like you have no books in your library! Your stats will show up when you start adding
+        more books!
+      </v-card-text>
       <v-row :justify="mdH ? 'center' : 'start'" v-else>
         <v-col :cols="mdH ? 'auto' : 12">
           <div style="max-width: 350px">
@@ -19,17 +19,13 @@
         </v-col>
         <v-col :cols="mdH ? 6 : 12">
           <v-card-text class="red--text headline">
-            <span class="display-3 font-weight-medium">{{
-              readBooks.length
-            }}</span>
+            <span class="display-3 font-weight-medium">{{ readBooks.length }}</span>
             books and
             <span class="display-3 font-weight-medium">{{ pagesRead }}</span>
             pages read
           </v-card-text>
           <v-card-text class="grey--text headline">
-            <span class="display-3 font-weight-medium"
-              >{{ booksLeft.length }}
-            </span>
+            <span class="display-3 font-weight-medium">{{ booksLeft.length }}</span>
             books and
             <span class="display-3 font-weight-medium">{{ pagesLeft }}</span>
             pages left
@@ -88,9 +84,7 @@ export default {
     booksLeft() {
       if (!this.books) return [];
       return this.books.filter(
-        (book) =>
-          book.userData.status !== "finished" &&
-          book.userData.status !== "stopped"
+        (book) => book.userData.status !== "finished" && book.userData.status !== "stopped"
       );
     },
 

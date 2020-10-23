@@ -13,12 +13,7 @@
       </v-col>
       <v-spacer v-if="lg"></v-spacer>
       <bs-content-links></bs-content-links>
-      <v-col
-        cols="auto"
-        class="text-center"
-        :class="mdH ? 'px-2' : 'px-0'"
-        v-if="user"
-      >
+      <v-col cols="auto" class="text-center" :class="mdH ? 'px-2' : 'px-0'" v-if="user">
         <bs-profile-menu></bs-profile-menu>
       </v-col>
     </v-toolbar>

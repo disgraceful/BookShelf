@@ -1,31 +1,18 @@
 <template>
   <v-container :class="!mdH ? 'px-5' : 'pa-0'">
-    <v-row
-      align="center"
-      :justify="smL ? 'center' : 'start'"
-      :style="wrapperStyle"
-      :dense="smL"
-    >
+    <v-row align="center" :justify="smL ? 'center' : 'start'" :style="wrapperStyle" :dense="smL">
       <v-col cols="auto">
-        <v-img :src="book.imageUrl" height="120" width="80"></v-img>
+        <bs-img :url="book.imageUrl" width="80" height="120"></bs-img>
       </v-col>
       <v-col cols="auto" class="pa-1" style="width: 220px">
         <v-card-text class="pa-1 subtitle-1">
           <bs-book-links :id="book.id">{{ shrinkedDescription }}</bs-book-links>
         </v-card-text>
-        <bs-author-links
-          :authors="book.authors"
-          :classes="'pa-1 subtitle-1'"
-        ></bs-author-links>
+        <bs-author-links :authors="book.authors" :classes="'pa-1 subtitle-1'"></bs-author-links>
       </v-col>
       <v-spacer v-if="mdH"></v-spacer>
       <v-col class="text-center" :cols="smL ? '12' : 'auto'">
-        <v-rating
-          medium
-          v-model="book.userData.rating"
-          hover
-          @input="update"
-        ></v-rating>
+        <v-rating medium v-model="book.userData.rating" hover @input="update"></v-rating>
       </v-col>
       <v-spacer></v-spacer>
       <v-col cols="auto" style="min-width: 260px">
@@ -50,6 +37,7 @@ import BookLinksHelper from "./BookLinkHelper";
 import shrinkDesc from "../../mixins/shrinkDescription";
 import mediaQuery from "../../mixins/mediaQueryLogic";
 import { ServiceFactory } from "../../services/serviceFactory";
+import PlaceholderImg from "../shared/PlaceholderImg.vue";
 const userService = ServiceFactory.get("user");
 export default {
   props: {
@@ -62,6 +50,7 @@ export default {
   components: {
     "bs-author-links": AuthorLinksHelper,
     "bs-book-links": BookLinksHelper,
+    "bs-img": PlaceholderImg,
   },
 
   computed: {

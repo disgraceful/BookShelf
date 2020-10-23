@@ -1,25 +1,13 @@
 <template>
   <v-card flat v-if="!noFeed && !error">
     <v-container class="py-0">
-      <v-card-title v-if="mdH" class="py-0" :class="mdH ? 'px-2' : ''"
-        >User Feed</v-card-title
-      >
-      <v-col
-        v-for="(records, name, i) in activeRecords"
-        :key="name"
-        class="py-1"
-      >
+      <v-card-title v-if="mdH" class="py-0" :class="mdH ? 'px-2' : ''">User Feed</v-card-title>
+      <v-col v-for="(records, name, i) in activeRecords" :key="name" class="py-1">
         <v-row :align="smL ? 'center' : 'baseline'" :no-gutters="smL">
-          <v-col
-            :cols="sm ? '12' : 'auto'"
-            class="py-0"
-            style="min-width: 180px"
-          >
-            <v-card-text
-              :class="mdH ? 'px-2' : ''"
-              class="py-0 text-h6 font-weight-regular"
-              >{{ getDate(name) }}</v-card-text
-            >
+          <v-col :cols="sm ? '12' : 'auto'" class="py-0" style="min-width: 180px">
+            <v-card-text :class="mdH ? 'px-2' : ''" class="py-0 text-h6 font-weight-regular">
+              {{ getDate(name) }}
+            </v-card-text>
           </v-col>
           <v-col cols="auto" class="pa-2">
             <bs-user-record
@@ -34,9 +22,7 @@
       <v-divider></v-divider>
       <v-row justify="end">
         <v-col cols="auto">
-          <a class="highlight" @click="toggleFeed()">{{
-            showingMore ? "Hide" : "Show all"
-          }}</a>
+          <a class="highlight" @click="toggleFeed()">{{ showingMore ? "Hide" : "Show all" }}</a>
         </v-col>
       </v-row>
     </v-container>
@@ -79,7 +65,11 @@ export default {
       const momentDate = moment(date, "DD MMM YYYY");
       if (moment().isSame(momentDate, "days")) {
         return "Today";
-      } else if (moment().subtract(1, "days").isSame(momentDate, "days")) {
+      } else if (
+        moment()
+          .subtract(1, "days")
+          .isSame(momentDate, "days")
+      ) {
         return "Yesterday";
       }
       return date;
@@ -87,8 +77,7 @@ export default {
 
     toggleFeed() {
       this.showingMore = !this.showingMore;
-      if (this.showingMore && this.length > 3)
-        this.activeRecords = this.records;
+      if (this.showingMore && this.length > 3) this.activeRecords = this.records;
       else this.getFreshRecords();
     },
 

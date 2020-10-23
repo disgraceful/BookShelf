@@ -13,7 +13,7 @@ export default {
   props: {
     options: {
       type: Object,
-      default: function () {
+      default: function() {
         return {
           isDetermined: true,
           color: "teal",

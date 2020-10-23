@@ -2,7 +2,7 @@
   <v-card flat>
     <v-row v-if="book" :justify="xs ? 'center' : 'start'">
       <v-col :cols="xs ? 12 : 'auto'" style="max-width: 140px">
-        <v-img :src="book.imageUrl" height="180px"></v-img>
+        <bs-img :url="book.imageUrl" height="180"></bs-img>
       </v-col>
       <v-col class="py-2 px-3" :cols="xs ? 'auto' : ''">
         <v-card-title class="pa-0">
@@ -13,13 +13,10 @@
             {{ book.title }}
           </router-link>
         </v-card-title>
-        <bs-author-links
-          class="pa-0 text-subtitle-1"
-          :authors="book.authors"
-        ></bs-author-links>
+        <bs-author-links class="pa-0 text-subtitle-1" :authors="book.authors"></bs-author-links>
         <v-card-text class="pa-0 text-subtitle-1">
-          Goodreads rating: {{ book.goodreadsRating }} &bull;
-          {{ book.genres[0] }} &bull; Published in {{ book.publishedYear }}
+          Goodreads rating: {{ book.goodreadsRating }} &bull; {{ book.genres[0] }} &bull; Published
+          in {{ book.publishedYear }}
         </v-card-text>
         <v-card-text
           v-if="book.description"
@@ -27,13 +24,10 @@
           style="white-space: pre-line"
         >
           {{ shrinkedDescription }}
-          <a
-            @click="shrinked = !shrinked"
-            v-if="splitDescription.length > this.showLength"
-          >
-            {{ expandLink }}</a
-          ></v-card-text
-        >
+          <a @click="shrinked = !shrinked" v-if="splitDescription.length > this.showLength">
+            {{ expandLink }}
+          </a>
+        </v-card-text>
         <v-row align="center" :justify="xs ? 'center' : 'start'">
           <v-col :cols="xs ? 12 : 'auto'" class="pb-0 mb-n3">
             <v-select
@@ -56,18 +50,10 @@
             :class="xs ? 'py-0' : ''"
           >
             <v-row align="baseline" :justify="xs ? 'center' : 'start'">
-              <v-col
-                :cols="$mq | mq({ xs: 12, sm: 'auto' })"
-                class="pa-0 pl-3 text-center"
-              >
+              <v-col :cols="$mq | mq({ xs: 12, sm: 'auto' })" class="pa-0 pl-3 text-center">
                 {{ book.userData.rating > 0 ? "Your rating:" : "Rate:" }}
               </v-col>
-              <v-rating
-                size="20"
-                hover
-                v-model="book.userData.rating"
-                @input="update"
-              ></v-rating>
+              <v-rating size="20" hover v-model="book.userData.rating" @input="update"></v-rating>
             </v-row>
           </v-col>
         </v-row>
@@ -90,6 +76,7 @@ import bookStatus from "../../mixins/bookStatus";
 import FinishDialog from "./FinishBookDialog";
 import mediaQueryLogic from "../../mixins/mediaQueryLogic";
 import AuthorLinksHelper from "../author/AuthorLinksHelper.vue";
+import PlaceholderImg from "../shared/PlaceholderImg.vue";
 const bookService = ServiceFactory.get("book");
 const userService = ServiceFactory.get("user");
 
@@ -104,6 +91,7 @@ export default {
   components: {
     "bs-finish-dialog": FinishDialog,
     "bs-author-links": AuthorLinksHelper,
+    "bs-img": PlaceholderImg,
   },
 
   data() {

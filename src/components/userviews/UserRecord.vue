@@ -5,18 +5,10 @@
         {{ record.message }}
       </v-col>
 
-      <v-rating
-        v-else
-        readonly
-        v-model="record.data.rating"
-        dense
-        class="d-inline pb-1"
-      ></v-rating>
-      <router-link
-        :to="{ name: 'book', params: { id: record.data.id } }"
-        class="highlight px-2"
-        >{{ shrinkedDescription }}</router-link
-      >
+      <v-rating v-else readonly v-model="record.data.rating" dense class="d-inline pb-1"></v-rating>
+      <router-link :to="{ name: 'book', params: { id: record.data.id } }" class="highlight px-2">
+        {{ shrinkedDescription }}
+      </router-link>
     </v-row>
   </v-card-text>
 </template>

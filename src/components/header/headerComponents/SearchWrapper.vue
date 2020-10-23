@@ -7,10 +7,7 @@
       </v-btn>
     </v-col>
     <v-spacer v-if="searchbarMinimized"></v-spacer>
-    <v-col
-      :cols="$mq | mq({ xs: '', lg: 4 })"
-      v-if="user && !searchbarMinimized"
-    >
+    <v-col :cols="$mq | mq({ xs: '', lg: 4 })" v-if="user && !searchbarMinimized">
       <bs-search-bar @minimized="searchbarMinimized = true"></bs-search-bar>
     </v-col>
     <v-col cols="auto" class="pl-0" v-if="user && searchbarMinimized">

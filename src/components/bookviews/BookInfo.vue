@@ -7,13 +7,11 @@
       <router-link
         class="link-inherit highlight"
         :to="{ name: 'series', params: { id: book.series.id } }"
-        >{{ book.series.fullName }}</router-link
       >
+        {{ book.series.fullName }}
+      </router-link>
     </v-card-subtitle>
-    <bs-author-links
-      :authors="book.authors"
-      classes="pb-0 text-subtitle-1"
-    ></bs-author-links>
+    <bs-author-links :authors="book.authors" classes="pb-0 text-subtitle-1"></bs-author-links>
     <v-card-text
       v-if="book.goodreadsRating"
       class="py-0 text-subtitle-1"
@@ -24,10 +22,7 @@
       class="pb-0 pt-1 text-subtitle-1"
       v-text="`Published in: ${book.publishedYear}`"
     ></v-card-text>
-    <v-card-text
-      class="pb-0 pt-1 text-subtitle-1"
-      v-text="`Pages: ${book.pages}`"
-    ></v-card-text>
+    <v-card-text class="pb-0 pt-1 text-subtitle-1" v-text="`Pages: ${book.pages}`"></v-card-text>
     <v-card-text v-if="book.genres" class="pb-0 pt-1 text-subtitle-1">
       <span v-text="'Genres: '"></span>
       <span
@@ -42,11 +37,9 @@
       style="white-space: pre-line"
     >
       {{ shrinkedDescription }}
-      <a
-        @click="shrinked = !shrinked"
-        v-if="splitDescription.length > maxShowLength"
-        >{{ expandLink }}</a
-      >
+      <a @click="shrinked = !shrinked" v-if="splitDescription.length > maxShowLength">
+        {{ expandLink }}
+      </a>
     </v-card-text>
   </div>
 </template>
@@ -71,11 +64,7 @@ export default {
   },
 
   mounted() {
-    this.generateDescription(
-      this.book.description,
-      this.showLength,
-      this.maxShowLength
-    );
+    this.generateDescription(this.book.description, this.showLength, this.maxShowLength);
   },
 };
 </script>

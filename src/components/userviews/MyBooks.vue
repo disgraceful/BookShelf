@@ -3,17 +3,11 @@
     <v-container v-if="books && !error">
       <v-card-title class="text-h5 py-2">Uploaded Books</v-card-title>
       <v-divider></v-divider>
-      <v-card-text v-if="noBooks" class="text-h6 font-weight-regular"
-        >Looks like you haven't uploaded any books yet. Click upload
-        button!</v-card-text
-      >
+      <v-card-text v-if="noBooks" class="text-h6 font-weight-regular">
+        Looks like you haven't uploaded any books yet. Click upload button!
+      </v-card-text>
       <v-row v-else :justify="xs ? 'center' : 'start'" class="px-2">
-        <v-col
-          cols="auto"
-          class="px-1 py-0"
-          v-for="(book, i) in books"
-          :key="book.id"
-        >
+        <v-col cols="auto" class="px-1 py-0" v-for="(book, i) in books" :key="book.id">
           <v-hover v-slot:default="{ hover }">
             <bs-display-book :book="book">
               <template v-slot:actions>
@@ -42,10 +36,7 @@
       </v-col>
     </v-container>
     <v-dialog v-model="dialogActive" max-width="700">
-      <bs-upload-dialog
-        @uploaded="closeDialog()"
-        @error="handleError(event)"
-      ></bs-upload-dialog>
+      <bs-upload-dialog @uploaded="closeDialog()" @error="handleError(event)"></bs-upload-dialog>
     </v-dialog>
     <bs-loader v-if="loading && bookIndex < 0"></bs-loader>
     <bs-error-page v-if="error" :error="error"></bs-error-page>

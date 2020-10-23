@@ -14,11 +14,9 @@
                   <bs-twitter-signin :text="loginInfo"></bs-twitter-signin>
                 </v-col>
               </v-row>
-              <v-card-text
-                class="body-1 pt-0 px-1"
-                v-if="loading && provider !== 'email'"
-                >You will be redirected to the application now</v-card-text
-              >
+              <v-card-text class="body-1 pt-0 px-1" v-if="loading && provider !== 'email'">
+                You will be redirected to the application now
+              </v-card-text>
               <v-divider></v-divider>
             </v-container>
 
@@ -46,10 +44,7 @@
                 ></v-text-field>
               </v-col>
               <v-col v-if="error">
-                <app-alert
-                  :message="error.message"
-                  @dismissed="dismissError"
-                ></app-alert>
+                <app-alert :message="error.message" @dismissed="dismissError"></app-alert>
               </v-col>
               <v-row justify="end">
                 <v-col class="pt-0" cols="auto">
@@ -57,8 +52,9 @@
                     class="mr-3 text-capitalize"
                     :loading="loading && provider === 'email'"
                     @click="submit()"
-                    >{{ loginInfo }}</v-btn
                   >
+                    {{ loginInfo }}
+                  </v-btn>
                 </v-col>
               </v-row>
             </v-form>
@@ -97,8 +93,7 @@ export default {
       showPwd: false,
       rules: {
         required: (value) => !!value || "Field is required",
-        length: (value) =>
-          value.length >= 6 || "Passwords must be 6 characters or longer",
+        length: (value) => value.length >= 6 || "Passwords must be 6 characters or longer",
       },
     };
   },
