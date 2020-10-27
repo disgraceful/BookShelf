@@ -1,6 +1,6 @@
 # BookShelf
 
-This pet project is a web application for searching books, authors and series to read, rate them, favorite or put on different "shelves" - read later, currently reading, finished, etc. Users can write reviews and track their reading progress. Also application tracks user stats, in particular read genres, and displays them in a chart.
+This pet project is a web application for searching books, authors and series to read, rate them, favorite or put on different "shelves" - read later, currently reading, finished, etc. Users can write reviews and track their reading progress. Also application tracks user stats, in particular read genres, and displays them in a chart. Currently project is hosted via Firebase Hosting, [check it out here](https://bookshelf-a2203.web.app)
 
 ## Table of contents
 
@@ -53,6 +53,7 @@ npm run build
 - [x] User reading feed
 - [x] Add private books
 - [x] OAuth Authorization (Google + Twitter)
+- [x] Deploy
 
 ### To-do
 
@@ -60,7 +61,6 @@ npm run build
 - [ ] Advanced user stats
 - [ ] Advanced search
 - [ ] Language & Theme selection
-- [ ] Deploy
 
 ## Directories
 
