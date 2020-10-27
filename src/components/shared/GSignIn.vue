@@ -33,7 +33,6 @@ export default {
   methods: {
     signInWithGoogle(googleUser) {
       const id_token = googleUser.getAuthResponse().id_token;
-      console.log("ID Token: " + id_token);
 
       //send Id_token to the backend
       this.$store.dispatch("signInUserGoogle", { token: id_token });
