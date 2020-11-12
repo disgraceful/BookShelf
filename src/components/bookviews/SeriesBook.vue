@@ -2,7 +2,7 @@
   <v-card flat>
     <v-row v-if="book" :justify="xs ? 'center' : 'start'">
       <v-col :cols="xs ? 12 : 'auto'" style="max-width: 140px">
-        <bs-img :url="book.imageUrl" height="180"></bs-img>
+        <bs-img :url="book.imageUrl" height="180" width="110"></bs-img>
       </v-col>
       <v-col class="py-2 px-3" :cols="xs ? 'auto' : ''">
         <v-card-title class="pa-0">

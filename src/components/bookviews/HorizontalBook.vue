@@ -81,7 +81,7 @@ export default {
   },
 
   created() {
-    this.generateDescription(this.book.title, 10, 10);
+    this.generateDescription(this.book.title, 7, 7);
   },
 };
 </script>

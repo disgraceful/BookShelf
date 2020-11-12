@@ -8,7 +8,7 @@
           style="max-width: 280px; min-width: 240px"
           class="pa-4"
         >
-          <v-img :src="author.imageUrl"></v-img>
+          <v-img :src="author.imageUrl" class="elevation-2"></v-img>
         </v-col>
         <v-col :cols="$mq | mq({ xs: 'auto', sm: '' })">
           <v-card-title class="text-h5 py-1">{{ author.name }}</v-card-title>

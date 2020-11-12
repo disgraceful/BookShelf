@@ -33,7 +33,7 @@
     </v-card-text>
     <v-card-text
       v-if="book.description"
-      class="text-subtitle-1 text-justify"
+      class="text-subtitle-1 text-justify py-1"
       style="white-space: pre-line"
     >
       {{ shrinkedDescription }}

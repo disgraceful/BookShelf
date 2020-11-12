@@ -24,7 +24,7 @@ export default {
   },
   mixins: [shrinkDesc],
   created() {
-    this.generateDescription(this.record.data.title, 10, 10);
+    this.generateDescription(this.record.data.title, 7, 7);
   },
 };
 </script>

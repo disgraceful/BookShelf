@@ -5,7 +5,7 @@
         <v-col :cols="$mq | mq({ xs: 2, sm: 3 })" style="min-width: 240px">
           <v-col>
             <div style="position: relative">
-              <v-img :src="book.imageUrl || defaultImg" content></v-img>
+              <v-img :src="book.imageUrl || defaultImg" content class="elevation-2"></v-img>
               <v-tooltip bottom content-class="tooltip">
                 <template v-slot:activator="{ on }">
                   <v-btn fab small absolute top right v-on="on" color="white" @click="favorite">
@@ -39,7 +39,7 @@
           </v-col>
         </v-col>
         <v-col :cols="$mq | mq({ xs: 'auto', sm: '', md: 8, lg: 9 })">
-          <bs-book-info :book="book"></bs-book-info>
+          <bs-book-info :book="book" class="pb-2"></bs-book-info>
           <v-divider v-if="mdH"></v-divider>
           <v-toolbar flat dense v-if="mdH">
             <v-toolbar-items>
@@ -179,6 +179,7 @@ export default {
           response = await bookService.getBookById(this.id);
         }
         this.book = response.body;
+        this.book.pages = this.book.pages || 1;
         this.statusTemp = this.book.userData.status;
         this.loading = false;
       } catch (error) {

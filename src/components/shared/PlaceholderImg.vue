@@ -1,5 +1,5 @@
 <template>
-  <v-img :src="url" :width="width" :height="height">
+  <v-img :src="url" :width="width" :height="height" class="elevation-1">
     <template v-slot:placeholder>
       <slot name="placeholder"></slot>
 
