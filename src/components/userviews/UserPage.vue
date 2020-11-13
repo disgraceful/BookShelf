@@ -94,6 +94,27 @@ export default {
       return this.userBooks.filter((book) => book.userData.status === status);
     },
 
+    readingSort(a, b) {
+      let aRating = a.userData.rating;
+      let bRating = b.userData.rating;
+      let aPages = a.userData.pagesRead;
+      let bPages = b.userData.pagesRead;
+
+      if (aRating == bRating) {
+        return aPages < bPages ? 1 : aPages > bPages ? -1 : 0;
+      } else {
+        return aRating < bRating ? 1 : -1;
+      }
+    },
+
+    finishedSort(a, b) {
+      let aReadingHistory = a.userData.finishTimes;
+      let aDate = aReadingHistory[aReadingHistory.length - 1].endDate;
+      let bReadingHistory = b.userData.finishTimes;
+      let bDate = bReadingHistory[bReadingHistory.length - 1].endDate;
+      return aDate < bDate ? 1 : -1;
+    },
+
     handleError(event) {
       this.error = event;
       this.$emit("error", this.error);
@@ -112,7 +133,7 @@ export default {
         this.tabItems = [
           {
             name: "Reading",
-            books: this.booksByStatus("reading"),
+            books: this.booksByStatus("reading").sort(this.readingSort),
           },
           {
             name: "2Read",
@@ -120,11 +141,11 @@ export default {
           },
           {
             name: "Stopped",
-            books: this.booksByStatus("stopped"),
+            books: this.booksByStatus("stopped").sort(this.readingSort),
           },
           {
             name: "Finished",
-            books: this.booksByStatus("finished"),
+            books: this.booksByStatus("finished").sort(this.finishedSort),
           },
         ];
         this.loading = false;

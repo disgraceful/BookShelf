@@ -8,5 +8,4 @@ Vue.http.options.root =
     ? process.env.VUE_APP_SERVER_PROD
     : process.env.VUE_APP_SERVER_DEV;
 
-console.log(Vue.http.options.root);
 Vue.http.interceptors.push(interceptor);

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card-title class="py-2 text-h5 font-weight-medium">
+    <v-card-title class="py-2 text-h5 font-weight-medium no-break">
       {{ book.title }}
     </v-card-title>
     <v-card-subtitle v-if="book.series" class="text-h6 py-2">
@@ -68,3 +68,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.no-break {
+  word-break: keep-all;
+}
+</style>
