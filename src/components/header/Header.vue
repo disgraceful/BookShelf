@@ -11,7 +11,7 @@
       <v-col :cols="$mq | mq({ xs: '', lg: 4 })" v-if="user && !xs">
         <bs-search-bar @minimized="searchbarMinimized = true"></bs-search-bar>
       </v-col>
-      <v-spacer v-if="lg"></v-spacer>
+      <v-spacer v-if="lg || !user"></v-spacer>
       <bs-content-links></bs-content-links>
       <v-col cols="auto" class="text-center" :class="mdH ? 'px-2' : 'px-0'" v-if="user">
         <bs-profile-menu></bs-profile-menu>

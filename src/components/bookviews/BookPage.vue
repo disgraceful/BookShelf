@@ -85,7 +85,13 @@
               ></v-slider>
             </v-col>
             <v-col cols="auto">
-              <v-btn depressed color="teal" class="white--text" @click="update">
+              <v-btn
+                depressed
+                color="teal"
+                class="white--text"
+                :loading="updateInProgress"
+                @click="update"
+              >
                 Update progress
               </v-btn>
             </v-col>
@@ -136,6 +142,7 @@ export default {
       defaultImg: require("../../assets/goodreads.png"),
       activeClass: "active",
       loading: true,
+      updateInProgress: false,
       error: null,
       finishDialog: false,
     };
@@ -162,10 +169,15 @@ export default {
     },
 
     update() {
-      userService.updateBook(this.book).catch((error) => {
-        console.log(error);
-        this.error = error.body;
-      });
+      this.updateInProgress = true;
+      userService
+        .updateBook(this.book)
+        .then(() => (this.updateInProgress = false))
+        .catch((error) => {
+          console.log(error);
+          this.updateInProgress = false;
+          this.error = error.body;
+        });
     },
 
     async getBook() {

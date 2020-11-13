@@ -4,7 +4,7 @@
       <v-col :cols="xs ? 12 : 'auto'" style="max-width: 140px">
         <bs-img :url="book.imageUrl" height="180" width="110"></bs-img>
       </v-col>
-      <v-col class="py-2 px-3" :cols="xs ? 'auto' : ''">
+      <v-col class="py-2 px-3 d-flex flex-column" :cols="xs ? 'auto' : ''">
         <v-card-title class="pa-0">
           <router-link
             class="link-inherit highlight"
@@ -28,7 +28,7 @@
             {{ expandLink }}
           </a>
         </v-card-text>
-        <v-row align="center" :justify="xs ? 'center' : 'start'">
+        <v-row align="end" :justify="xs ? 'center' : 'start'">
           <v-col :cols="xs ? 12 : 'auto'" class="pb-0 mb-n3">
             <v-select
               style="max-width: 180px; margin: 0 auto"

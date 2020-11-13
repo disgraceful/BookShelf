@@ -5,7 +5,7 @@
         <v-col
           v-if="author.imageUrl"
           :cols="$mq | mq({ xs: 'auto' })"
-          style="max-width: 280px; min-width: 240px"
+          style="max-width: 260px; min-width: 220px"
           class="pa-4"
         >
           <v-img :src="author.imageUrl" class="elevation-2"></v-img>
@@ -13,13 +13,20 @@
         <v-col :cols="$mq | mq({ xs: 'auto', sm: '' })">
           <v-card-title class="text-h5 py-1">{{ author.name }}</v-card-title>
           <v-divider></v-divider>
-          <v-card-text class="pb-0 text-body-1">Born: {{ author.bornDate }}</v-card-text>
-          <v-card-text class="py-1 text-body-1">Died: {{ author.deathDate }}</v-card-text>
+          <v-card-text v-if="author.bornDate" class="pb-0 text-body-1">
+            Born: {{ author.bornDate }}
+          </v-card-text>
+          <v-card-text v-if="author.deathDate" class="py-1 text-body-1">
+            Died: {{ author.deathDate }}
+          </v-card-text>
           <v-card-text class="pb-0 text-body-1 text-justify">
             {{ shrinkedDescription }}
             <a @click="shrinked = !shrinked" v-if="splitDescription.length > 90">
               {{ expandLink }}
             </a>
+          </v-card-text>
+          <v-card-text v-if="noInfo" class="text-body-1 text-justify py-0">
+            Looks like there is no information avaliable about {{ author.name }}.
           </v-card-text>
         </v-col>
       </v-row>
@@ -63,7 +70,7 @@
             <v-divider></v-divider>
           </v-col>
         </v-row>
-        <v-row justify="end">
+        <v-row justify="end" v-if="series.length > showSeries">
           <v-col cols="auto" class="pt-0 pr-3">
             <a class="highlight teal--text text--darken-1" @click="showAllSeries = !showAllSeries">
               {{ showSeriesText }}
@@ -122,6 +129,10 @@ export default {
 
     showSeriesText() {
       return this.showAllSeries ? "Less" : `More series by ${this.author.name}`;
+    },
+
+    noInfo() {
+      return !(this.author.bornDate && this.author.deathDate && this.author.about);
     },
   },
 
